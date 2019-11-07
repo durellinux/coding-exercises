@@ -1,7 +1,6 @@
 package com.gianlucadurelli.crackingcodeinterview.fifthedition.tree;
 
 import java.util.Comparator;
-import java.util.Optional;
 
 public class BinaryTreeNode<T> {
     BinaryTreeNode<T> parent;
