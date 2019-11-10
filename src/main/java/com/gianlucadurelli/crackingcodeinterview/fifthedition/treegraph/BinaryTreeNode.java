@@ -1,4 +1,4 @@
-package com.gianlucadurelli.crackingcodeinterview.fifthedition.tree;
+package com.gianlucadurelli.crackingcodeinterview.fifthedition.treegraph;
 
 import java.util.Comparator;
 
@@ -42,5 +42,9 @@ public class BinaryTreeNode<T> {
         boolean isBinarySearchRight = right == null || right.isBinarySearch(comparator);
 
         return leftOk && rightOk && isBinarySearchLeft && isBinarySearchRight;
+    }
+
+    public BinaryTreeNode<T> getParent() {
+        return parent;
     }
 }

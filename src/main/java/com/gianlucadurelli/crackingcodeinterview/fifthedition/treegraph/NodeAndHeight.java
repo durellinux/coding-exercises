@@ -1,4 +1,4 @@
-package com.gianlucadurelli.crackingcodeinterview.fifthedition.tree;
+package com.gianlucadurelli.crackingcodeinterview.fifthedition.treegraph;
 
 class NodeAndHeight<T> {
     private BinaryTreeNode<T> node;
