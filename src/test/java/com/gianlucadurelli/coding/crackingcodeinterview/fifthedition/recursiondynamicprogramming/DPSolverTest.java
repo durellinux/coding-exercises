@@ -111,4 +111,55 @@ public class DPSolverTest {
         Assertions.assertThat(magicIterative.isPresent()).isFalse();
     }
 
+    @Test
+    public void Ex9_4_allSubsets() {
+        Set<Integer> set = Set.of(1, 2, 3);
+        List<Set<Integer>> subsets = solver.getAllSubsets(set);
+
+        System.out.println(subsets);
+    }
+
+    @Test
+    public void Ex9_5_stringPermutationsUniqueCharacters() {
+        assertPermutations("a");
+        assertPermutations("ab");
+        assertPermutations("abc");
+        assertPermutations("abcd");
+//        assertPermutations("abcde");
+//        assertPermutations("abcdef");
+//        assertPermutations("abcdefg");
+//        assertPermutations("abcdefgh");
+    }
+
+    private void assertPermutations(String string) {
+        long expectedPermutations = factorial(string.length());
+        Set<String> permutations = solver.computePermutations(string);
+        Assertions.assertThat(permutations.size()).isEqualTo(expectedPermutations);
+
+        System.out.println(permutations.size() + ": " + permutations);
+    }
+
+    private long factorial(int n) {
+        long fact = 1;
+        for (int i=1; i<=n; i++) {
+            fact *= i;
+        }
+
+        return fact;
+    }
+
+    @Test
+    public void Ex9_5_stringPermutationsRepeatedCharacters() {
+        assertPermutationsValues("aa", List.of("aa"));
+        assertPermutationsValues("aab", List.of("aab", "aba", "baa"));
+        assertPermutationsValues("aabb", List.of("aabb", "abab", "baab", "abba", "bbaa", "baba"));
+    }
+
+    private void assertPermutationsValues(String string, List<String> expectedPermutations) {
+        Set<String> permutations = solver.computePermutations(string);
+        Assertions.assertThat(permutations).containsExactlyInAnyOrderElementsOf(expectedPermutations);
+
+        System.out.println(permutations.size() + ": " + permutations);
+    }
+
 }
