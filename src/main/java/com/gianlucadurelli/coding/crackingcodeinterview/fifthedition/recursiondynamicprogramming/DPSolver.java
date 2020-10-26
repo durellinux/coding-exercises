@@ -1,6 +1,7 @@
 package com.gianlucadurelli.coding.crackingcodeinterview.fifthedition.recursiondynamicprogramming;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class DPSolver {
 
@@ -192,6 +193,8 @@ public class DPSolver {
         return Optional.empty();
     }
 
+    @Deprecated
+    // This is not the optimal general solution to the follow-up question
     public Optional<Integer> getMagicIndex(Integer[] array) {
         for (int i = 0; i<array.length; i++) {
             if (i == array[i]) {
@@ -202,4 +205,51 @@ public class DPSolver {
         return Optional.empty();
     }
 
+    public List<Set<Integer>> getAllSubsets(Set<Integer> set) {
+        HashMap<Integer, Set<Set<Integer>>> cache = new HashMap<>();
+        Set<Set<Integer>> solution0 = new HashSet<>();
+        solution0.add(new HashSet<>());
+        cache.put(0, solution0);
+
+        for(int i=1; i<=set.size(); i++) {
+            Set<Set<Integer>> currentSolution = new HashSet<>();
+            for (Set<Integer> previousSet: cache.get(i-1)) {
+                for (Integer value: set) {
+                    if (!previousSet.contains(value)) {
+                        Set<Integer> newSet = new HashSet<>(previousSet);
+                        newSet.add(value);
+                        currentSolution.add(newSet);
+                    }
+                }
+            cache.put(i, currentSolution);
+            }
+        }
+
+        List<Set<Integer>> solution = new LinkedList<>();
+        for (Set<Set<Integer>> sets: cache.values()) {
+            solution.addAll(sets);
+        }
+
+        return solution;
+    }
+
+    public Set<String> computePermutations(String string) {
+        return computePermutationsRecursive(string, "");
+    }
+
+    private Set<String> computePermutationsRecursive(String letters, String current) {
+        if (letters.length() == 0) {
+            return Set.of(current);
+        }
+
+        Set<String> solution = new HashSet<>();
+        for (char c: letters.toCharArray()) {
+            String newLetters = letters.replaceFirst(Character.toString(c), "");
+            String newCurrent = current + c;
+            Set<String> permutations = computePermutationsRecursive(newLetters, newCurrent);
+            solution.addAll(permutations);
+        }
+
+        return solution;
+    }
 }
