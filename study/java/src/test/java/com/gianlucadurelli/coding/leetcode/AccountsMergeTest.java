@@ -20,7 +20,7 @@ public class AccountsMergeTest {
 				List.of("John","johnnybravo@mail.com")
 		))).containsExactlyInAnyOrderElementsOf(
 				List.of(
-						List.of("John","john00@mail.com","john_newyork@mail.com","johnsmith@mail.com"),
+						List.of("John", "john00@mail.com", "john_newyork@mail.com", "johnsmith@mail.com"),
 						List.of("Mary","mary@mail.com"),
 						List.of("John","johnnybravo@mail.com")
 				)

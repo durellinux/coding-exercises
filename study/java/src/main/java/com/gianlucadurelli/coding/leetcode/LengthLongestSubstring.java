@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.leetcode;
 
+// https://leetcode.com/explore/interview/card/amazon/76/array-and-strings/2961/
 public class LengthLongestSubstring {
 	public int solve(String s) {
 		int[] chars = new int[128];

@@ -2,6 +2,7 @@ package com.gianlucadurelli.coding.leetcode;
 
 import java.util.*;
 
+// https://leetcode.com/explore/interview/card/amazon/76/array-and-strings/2970/
 public class GroupAnagrams {
 	public List<List<String>> groupAnagrams(String[] strs) {
 		HashMap<HashMap<Character, Integer>, List<String>> lettersToWords = new HashMap<>();
