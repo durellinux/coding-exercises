@@ -3,11 +3,13 @@ package com.gianlucadurelli.coding.solid.liskov;
 import static org.junit.Assert.*;
 
 import org.assertj.core.api.Assertions;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class RectangleTest {
 
   @Test
+  @Ignore
   public void computeArea() {
     // Given a rectangle of edges a and b
     Rectangle r = new Rectangle(1, 1);
