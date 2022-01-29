@@ -162,4 +162,65 @@ public class DPSolverTest {
         System.out.println(permutations.size() + ": " + permutations);
     }
 
+    // TODO: Check which number it is
+    @Test
+    public void Ex9_XXX_parenthesisLanguage() {
+        Assertions.assertThat(solver.generateValidParenthesesStrings(1)).containsExactlyInAnyOrder("()");
+        Assertions.assertThat(solver.generateValidParenthesesStrings(2)).containsExactlyInAnyOrder("(())", "()()");
+        Assertions.assertThat(solver.generateValidParenthesesStrings(3)).containsExactlyInAnyOrder("((()))", "()()()", "(())()", "()(())", "(()())");
+    }
+
+    // TODO: Check which number it is
+    @Test
+    public void Ex9_YYY_fillCanvas() {
+        Canvas canvas = new Canvas(new RgbColor[][]{
+                new RgbColor[] {RgbColor.WHITE, RgbColor.WHITE, RgbColor.RED, RgbColor.WHITE},
+                new RgbColor[] {RgbColor.WHITE, RgbColor.WHITE, RgbColor.RED, RgbColor.WHITE},
+                new RgbColor[] {RgbColor.WHITE, RgbColor.WHITE, RgbColor.BLACK, RgbColor.BLACK},
+                new RgbColor[] {RgbColor.WHITE, RgbColor.WHITE, RgbColor.BLACK, RgbColor.WHITE},
+        });
+
+        solver.fillCanvas(canvas, 0, 1, RgbColor.RED);
+
+        Canvas expectedCanvas = new Canvas(new RgbColor[][]{
+                new RgbColor[] {RgbColor.RED, RgbColor.RED, RgbColor.RED, RgbColor.WHITE},
+                new RgbColor[] {RgbColor.RED, RgbColor.RED, RgbColor.RED, RgbColor.WHITE},
+                new RgbColor[] {RgbColor.RED, RgbColor.RED, RgbColor.BLACK, RgbColor.BLACK},
+                new RgbColor[] {RgbColor.RED, RgbColor.RED, RgbColor.BLACK, RgbColor.WHITE},
+        });
+
+        Assertions.assertThat(canvas.getWidth()).isEqualTo(expectedCanvas.getWidth());
+        Assertions.assertThat(canvas.getHeight()).isEqualTo(expectedCanvas.getHeight());
+
+        for (int w=0; w<canvas.getWidth(); w++) {
+            for (int h = 0; h<canvas.getHeight(); h++) {
+                Assertions.assertThat(canvas.getPixel(h, w)).isEqualTo(expectedCanvas.getPixel(h, w));
+            }
+        }
+    }
+
+    // TODO: Check which number it is
+    @Test
+    public void Ex9_ZZZ_customMultiply() {
+        Assertions.assertThat(solver.multiply(3, 2)).isEqualTo(6);
+        Assertions.assertThat(solver.multiply(0, 2)).isEqualTo(0);
+        Assertions.assertThat(solver.multiply(2, 0)).isEqualTo(0);
+        Assertions.assertThat(solver.multiply(3, -4)).isEqualTo(-12);
+    }
+
+    // TODO: this should not be here but in medium/hard problems solver
+    @Test
+    public void xorTest() {
+        int a = 23;
+        int b = 35;
+
+        System.out.println("A: " + a + " - B:" + b);
+
+        a = a ^ b;
+        b = a ^ b;
+        a = b ^ a;
+
+
+        System.out.println("A: " + a + " - B:" + b);
+    }
 }

@@ -252,4 +252,90 @@ public class DPSolver {
 
         return solution;
     }
+
+    public List<String> generateValidParenthesesStrings(int pairs) {
+        return generateValidParenthesesStrings(pairs, 0, 0, "");
+    }
+
+    private List<String> generateValidParenthesesStrings(int maxPairs, int currentlyOpened, int currentlyClosed, String currentSolution) {
+        List<String> solutions = new LinkedList<>();
+
+        if (currentlyOpened == currentlyClosed && currentlyOpened == maxPairs) {
+            solutions.add(currentSolution);
+        }
+
+        if (currentlyOpened < maxPairs) {
+            String newOpenSolution = currentSolution + "(";
+            solutions.addAll(generateValidParenthesesStrings(maxPairs, currentlyOpened + 1, currentlyClosed, newOpenSolution));
+        }
+
+        if (currentlyClosed < currentlyOpened) {
+            String newCloseSolution = currentSolution + ")";
+            solutions.addAll(generateValidParenthesesStrings(maxPairs, currentlyOpened, currentlyClosed + 1, newCloseSolution));
+        }
+
+        return solutions;
+    }
+
+    // TODO: Test
+    //  2d array, point, new color
+    public void fillCanvas(Canvas canvas, int width, int height, RgbColor newColor) {
+        RgbColor initialColor = canvas.getPixel(height, width);
+        if (initialColor == null) {
+            return;
+        }
+
+        fillCanvas(canvas, width, height, newColor, initialColor);
+    }
+
+    public void fillCanvas(Canvas canvas, int width, int height, RgbColor newColor, RgbColor replaceColor) {
+
+        RgbColor currentColor = canvas.getPixel(height, width);
+        if (currentColor != null && currentColor.equals(replaceColor)) {
+            canvas.setPixel(height, width, newColor);
+
+            fillCanvas(canvas, width -1 , height, newColor, replaceColor);
+            fillCanvas(canvas, width - 1, height - 1, newColor, replaceColor);
+            fillCanvas(canvas, width, height - 1, newColor, replaceColor);
+            fillCanvas(canvas, width + 1, height - 1, newColor, replaceColor);
+            fillCanvas(canvas, width + 1, height, newColor, replaceColor);
+            fillCanvas(canvas, width + 1, height + 1, newColor, replaceColor);
+            fillCanvas(canvas, width, height + 1, newColor, replaceColor);
+            fillCanvas(canvas, width - 1, height + 1, newColor, replaceColor);
+        }
+    }
+
+    public int multiply(int a, int b) {
+        boolean isPositive = true;
+        if (a < 0) {
+            a = -a;
+            isPositive = !isPositive;
+        }
+
+        if (b < 0) {
+            b = -b;
+            isPositive = !isPositive;
+        }
+
+        int result = 0;
+
+        int operand = a;
+        int multiplier = b;
+        int shift = 0;
+
+        while (multiplier > 0) {
+            if ((multiplier & 1) > 0) {
+                result = result + (operand << shift);
+            }
+
+            shift += 1;
+            multiplier = multiplier >> 1;
+        }
+
+        if (isPositive) {
+            return result;
+        } else {
+            return -result;
+        }
+    }
 }
