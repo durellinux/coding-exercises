@@ -1,7 +1,7 @@
 using NUnit.Framework;
-using src.gianlucadurelli;
+using src.giuliarumi;
 
-namespace tests.gianlucadurelli
+namespace tests.giuliarumi
 {
     public class Tests
     {

@@ -1,6 +1,7 @@
-﻿namespace src.gianlucadurelli;
-
-public class Class1
+﻿namespace src.gianlucadurelli
 {
-    public string val = "val";
+    public class Class1
+    {
+        public string val = "val";
+    }
 }

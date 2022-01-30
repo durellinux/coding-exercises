@@ -1,6 +1,7 @@
-﻿namespace src.giuliarumi;
-
-public class Class1
+﻿namespace src.giuliarumi
 {
-    public string val = "val";
+    public class Class1
+    {
+        public string val = "val";
+    }
 }
