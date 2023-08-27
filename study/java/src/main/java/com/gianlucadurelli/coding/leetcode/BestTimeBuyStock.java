@@ -4,7 +4,28 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// https://leetcode.com/problems/best-time-to-buy-and-sell-stock/submissions/?envType=study-plan-v2&envId=top-interview-150
 public class BestTimeBuyStock {
+
+	public int maxProfit(int[] prices) {
+		if (prices == null || prices.length < 2) {
+			return 0;
+		}
+
+		int buyPrice = prices[0];
+		int maxProfit = 0;
+
+		for(int i = 1; i < prices.length; i++) {
+			if (prices[i] < buyPrice) {
+				buyPrice = prices[i];
+			} else {
+				int profit = prices[i] - buyPrice;
+				maxProfit = Math.max(maxProfit, profit);
+			}
+		}
+
+		return maxProfit;
+	}
 
 	class SolutionHelper {
 		int min;

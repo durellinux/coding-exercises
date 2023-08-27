@@ -24,4 +24,11 @@ public class BestTimeBuyStockTest {
 		Assertions.assertThat(result).isEqualTo(5);
 	}
 
+	@Test
+	public void example1() {
+		int[] prices = {7,1,5,3,6,4};
+		int result = solver.maxProfit(prices);
+		Assertions.assertThat(result).isEqualTo(5);
+	}
+
 }
