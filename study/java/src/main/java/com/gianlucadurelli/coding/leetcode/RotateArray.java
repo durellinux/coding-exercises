@@ -1,31 +1,9 @@
 package com.gianlucadurelli.coding.leetcode;
 
-import java.util.Arrays;
-import java.util.Map;
-
 // https://leetcode.com/problems/rotate-array/?envType=study-plan-v2&envId=top-interview-150
 public class RotateArray {
-    public void rotate(int[] nums, int K) {
-        if (nums == null || nums.length < 2) {
-            return;
-        }
 
-        int k = K % nums.length;
-        int firstIndex = nums.length - k;
-
-        for(int i = 0; i < firstIndex; i++) {
-            int swapPosition = i + firstIndex;
-            if (swapPosition >= nums.length) {
-                swapPosition = firstIndex + nums.length % firstIndex;
-            }
-
-            int tmp = nums[swapPosition];
-            nums[swapPosition] = nums[i];
-            nums[i] = tmp;
-        }
-    }
-
-    public void rotateV4(int[] nums, int k) {
+    public void rotate(int[] nums, int k) {
         if (nums == null || nums.length < 2) {
             return;
         }
