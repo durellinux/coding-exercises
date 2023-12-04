@@ -25,4 +25,17 @@ public class ScratchCardsTest extends TestCase {
             .isEqualTo(18519);
     }
 
+    @Test
+    public void test2() {
+        Assertions.assertThat(solver.solve2(SCRATCH_CARDS_TEST_1_INPUT))
+            .isEqualTo(30);
+    }
+
+    @Test
+    public void testSolution2() {
+        Assertions.assertThat(solver.solve2(SCRATCH_CARDS_INPUT))
+            .isEqualTo(11787590);
+    }
+
+
 }

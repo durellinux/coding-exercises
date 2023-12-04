@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -19,6 +20,42 @@ public class ScratchCards {
             if (myNumbers.size() > 0) {
                 result += (1L << (myNumbers.size() - 1));
             }
+        }
+
+        return result;
+    }
+
+    public long solve2(List<String> input) {
+        List<Integer> matchesPerCard = new ArrayList<>();
+
+        for (String card: input) {
+            List<List<Integer>> values = parseInput(card);
+            Set<Integer> winningNumbers = new HashSet<>(values.get(0));
+            Set<Integer> myNumbers = new HashSet<>(values.get(1));
+            myNumbers.retainAll(winningNumbers);
+
+            matchesPerCard.add(myNumbers.size());
+        }
+
+
+        Long[] numberOfCards = new Long[matchesPerCard.size()];
+
+        for(int c = 0; c < matchesPerCard.size(); c++) {
+            numberOfCards[c] = 1L;
+        }
+
+        for(int c = 0; c < matchesPerCard.size(); c++) {
+            int matches = matchesPerCard.get(c);
+            if (matches > 0) {
+                for (int c1 = 1; c1 < matches + 1; c1++) {
+                    numberOfCards[c + c1] += numberOfCards[c];
+                }
+            }
+        }
+
+        long result = 0;
+        for (Long cards: numberOfCards) {
+            result += cards;
         }
 
         return result;
