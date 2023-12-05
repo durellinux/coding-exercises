@@ -78,11 +78,33 @@ public class IfYouGiveASeedAFertilizer {
 
     private List<Interval> doMap(List<Interval> sources, Map<Long, ProblemEntry> nextMap) {
         List<Interval> nextValues = new ArrayList<>();
-        sources.sort(Comparator.comparingLong(i -> i.start));
 
+        sources.sort(Comparator.comparingLong(i -> i.start));
+        List<MapInterval> allMapIntervals = generateAllMapIntervals(nextMap);
+
+        Iterator<Interval> intervalIterator = sources.iterator();
+        Iterator<MapInterval> nextMapValueIterator = allMapIntervals.iterator();
+
+        MapInterval mapValue = nextMapValueIterator.next();
+        while(intervalIterator.hasNext()) {
+            Interval interval = intervalIterator.next();
+
+            while(interval != null) {
+
+                while(interval.start > mapValue.end) {
+                    mapValue = nextMapValueIterator.next();
+                }
+
+                interval = intersectIntervals(interval, mapValue, nextValues);
+            }
+        }
+
+        return nextValues;
+    }
+
+    private List<MapInterval> generateAllMapIntervals(Map<Long, ProblemEntry> nextMap) {
         List<MapInterval> tmpIntervals = new ArrayList<>(nextMap.values().stream().map(v -> new MapInterval(v.source, v.source + v.length - 1, v.destination)).toList());
         tmpIntervals.sort(Comparator.comparingLong(i -> i.start));
-
 
         List<MapInterval> allMapIntervals = new ArrayList<>();
         allMapIntervals.add(new MapInterval(Long.MIN_VALUE, tmpIntervals.get(0).start - 1, Long.MIN_VALUE));
@@ -98,27 +120,10 @@ public class IfYouGiveASeedAFertilizer {
         }
         allMapIntervals.add(new MapInterval(tmpIntervals.get(tmpIntervals.size() - 1).end + 1, Long.MAX_VALUE, tmpIntervals.get(tmpIntervals.size() - 1).end + 1));
 
-        Iterator<Interval> intervalIterator = sources.iterator();
-        Iterator<MapInterval> nextMapValueIterator = allMapIntervals.iterator();
-
-        MapInterval mapValue = nextMapValueIterator.next();
-        while(intervalIterator.hasNext()) {
-            Interval interval = intervalIterator.next();
-
-            while(interval != null) {
-
-                while(interval.start > mapValue.end) {
-                    mapValue = nextMapValueIterator.next();
-                }
-
-                interval = generateIntervals(interval, mapValue, nextValues);
-            }
-        }
-
-        return nextValues;
+        return allMapIntervals;
     }
 
-    Interval generateIntervals(Interval interval, MapInterval mapInterval, List<Interval> result) {
+    Interval intersectIntervals(Interval interval, MapInterval mapInterval, List<Interval> result) {
         if (interval.start >= mapInterval.start && interval.end <= mapInterval.end) {
             long startDestination = mapInterval.destinationStart + (interval.start - mapInterval.start);
             long endDestination = startDestination + (interval.end - interval.start);
