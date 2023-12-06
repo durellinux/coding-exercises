@@ -8,20 +8,19 @@ public class WaitForIt {
         long result = 1;
 
         for (int r = 0; r < times.size(); r++) {
-            long recordTime = times.get(r);
-            long recordDistance = distances.get(r);
+            long T = times.get(r);
+            long D = distances.get(r);
 
-            int winningCombinations = 0;
-            for (int t = 1; t < recordTime; t++) {
-                long movingTime = recordTime - t;
-                long newDistance = (long) t * movingTime;
+            double x1d = (T - Math.sqrt(T * T - 4 * D)) / 2;
+            double x2d = (T + Math.sqrt(T * T - 4 * D)) / 2;
 
-                if (newDistance > recordDistance) {
-                    winningCombinations++;
-                }
-            }
+            double xMin = Math.min(x1d, x2d);
+            double xMax = Math.max(x1d, x2d);
 
-            result *= winningCombinations;
+            long x1 = Double.valueOf(Math.floor(xMin)).longValue() + 1;
+            long x2 = Double.valueOf(Math.ceil(xMax)).longValue() - 1;
+
+            result *= (x2 - x1 + 1);
         }
 
         return result;
