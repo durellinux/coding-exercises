@@ -3,9 +3,9 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-public class CubeConundrumTest {
+public class Day2CubeConundrumTest {
 
-    public static final CubeConundrum solver = new CubeConundrum();
+    public static final Day2CubeConundrum solver = new Day2CubeConundrum();
 
     @Test
     public void test1() {

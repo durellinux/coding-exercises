@@ -8,9 +8,9 @@ import java.util.List;
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.HAUNTED_WASTELAND_INPUT_COMMANDS;
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.HAUNTED_WASTELAND_INPUT_MAP;
 
-public class HauntedWastelandTest {
+public class Day8HauntedWastelandTest {
 
-    private static final HauntedWasteland solver = new HauntedWasteland();
+    private static final Day8HauntedWasteland solver = new Day8HauntedWasteland();
 
     @Test
     public void test1() {

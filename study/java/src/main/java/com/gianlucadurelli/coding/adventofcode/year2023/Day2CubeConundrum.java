@@ -1,12 +1,11 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 // https://adventofcode.com/2023/day/2
-public class CubeConundrum {
+public class Day2CubeConundrum {
     public int solve1(List<String> input, Map<String, Integer> configuration) {
         int result = 0;
 

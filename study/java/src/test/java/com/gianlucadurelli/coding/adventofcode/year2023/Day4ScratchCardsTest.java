@@ -8,9 +8,9 @@ import junit.framework.TestCase;
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.SCRATCH_CARDS_INPUT;
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.SCRATCH_CARDS_TEST_1_INPUT;
 
-public class ScratchCardsTest extends TestCase {
+public class Day4ScratchCardsTest extends TestCase {
 
-    private static final ScratchCards solver = new ScratchCards();
+    private static final Day4ScratchCards solver = new Day4ScratchCards();
 
     @Test
     public void test1() {

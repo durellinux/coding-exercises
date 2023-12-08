@@ -2,8 +2,6 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.List;
 
-import javax.xml.stream.events.Characters;
-
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -18,9 +16,9 @@ import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023I
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.SEEDS_INPUT_TEMPERATURES;
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.SEEDS_INPUT_WATERS;
 
-public class IfYouGiveASeedAFertilizerTest extends TestCase {
+public class Day5IfYouGiveASeedAFertilizerTest extends TestCase {
 
-    public static final IfYouGiveASeedAFertilizer solver = new IfYouGiveASeedAFertilizer();
+    public static final Day5IfYouGiveASeedAFertilizer solver = new Day5IfYouGiveASeedAFertilizer();
 
     @Test
     public void test1() {

@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
 import java.util.function.Predicate;
 
-public class HauntedWasteland {
+public class Day8HauntedWasteland {
 
     public int solve1(String commandsString, List<String> map) {
         Map<String, List<String>> graph = buildGraph(map);

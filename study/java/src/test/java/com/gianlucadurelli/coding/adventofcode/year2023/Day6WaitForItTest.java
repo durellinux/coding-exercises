@@ -3,14 +3,11 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+public class Day6WaitForItTest {
 
-public class WaitForItTest {
-
-    private static final WaitForIt solver = new WaitForIt();
+    private static final Day6WaitForIt solver = new Day6WaitForIt();
 
     @Test
     public void test1() {

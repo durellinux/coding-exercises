@@ -5,11 +5,9 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
+public class Day3GearRatiosTest {
 
-public class GearRatiosTest {
-
-    public static final GearRatios solver = new GearRatios();
+    public static final Day3GearRatios solver = new Day3GearRatios();
 
     @Test
     public void test1() {

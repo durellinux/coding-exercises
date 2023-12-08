@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.*;
 
-public class CamelCards {
+public class Day7CamelCards {
     List<Character> symbols1 = List.of('2', '3', '4', '5', '6', '7', '8', '9', 'T', 'J', 'Q', 'K', 'A');
     List<Character> symbols2 = List.of('J', '2', '3', '4', '5', '6', '7', '8', '9', 'T', 'Q', 'K', 'A');
 

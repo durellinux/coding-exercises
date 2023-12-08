@@ -6,7 +6,7 @@ import java.util.Map;
 import java.util.Optional;
 
 // https://adventofcode.com/2023/day/1
-public class Trebuchet {
+public class Day1Trebuchet {
     private static final Map<String, Integer> stringValueMap = Map.of(
         "one", 1,
         "two", 2,

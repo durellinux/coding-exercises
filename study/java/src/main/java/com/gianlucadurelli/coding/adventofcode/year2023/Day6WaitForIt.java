@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.List;
 
-public class WaitForIt {
+public class Day6WaitForIt {
 
     public Long solve1(List<Long> times, List<Long> distances) {
         long result = 1;

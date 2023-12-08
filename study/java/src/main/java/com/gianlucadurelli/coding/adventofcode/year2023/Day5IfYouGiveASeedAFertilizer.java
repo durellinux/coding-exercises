@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.*;
 
-public class IfYouGiveASeedAFertilizer {
+public class Day5IfYouGiveASeedAFertilizer {
     private record ProblemEntry(long source, long destination, long length) {}
     private record Interval(long start, long end) {}
     private record MapInterval(long start, long end, long destinationStart) {}

@@ -7,9 +7,9 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class TrebuchetTest extends TestCase {
+public class Day1TrebuchetTest extends TestCase {
 
-    private static final Trebuchet solver = new Trebuchet();
+    private static final Day1Trebuchet solver = new Day1Trebuchet();
 
     @Test
     public void test1() {

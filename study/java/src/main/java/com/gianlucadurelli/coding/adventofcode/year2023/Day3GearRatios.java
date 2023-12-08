@@ -6,7 +6,7 @@ import java.util.*;
 // - List<Integer> numbers: Numbers founded in the input
 // - Integer[][] pointers: for each position of the input contains -1 if the position is not part to any number,
 //   the index of the corresponding number in numbers list otherwise.
-public class GearRatios {
+public class Day3GearRatios {
 
     public int solve1(List<String> input) {
         if (input == null || input.size() == 0) {

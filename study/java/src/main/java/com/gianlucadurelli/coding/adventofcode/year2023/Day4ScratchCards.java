@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class ScratchCards {
+public class Day4ScratchCards {
     public long solve1(List<String> input) {
         long result = 0;
 

@@ -7,9 +7,9 @@ import java.util.List;
 
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.CAMEL_CARDS_INPUT;
 
-public class CamelCardsTest {
+public class Day7CamelCardsTest {
 
-    private static final CamelCards solver = new CamelCards();
+    private static final Day7CamelCards solver = new Day7CamelCards();
 
     @Test
     public void test1() {
