@@ -16,10 +16,7 @@ public class Day10PipeMaze {
         Map<Point, Set<Point>> graph = new HashMap<>();
         List<List<String>> matrix = new ArrayList<>();
         Point startingPoint = parseInput(input, graph, matrix);
-
-        List<Point> spConnections = graph.get(startingPoint).stream().toList();
-        graph.get(spConnections.get(0)).remove(startingPoint);
-        graph.get(startingPoint).remove(spConnections.get(1));
+        removeStartingPointSymmetricConnections(startingPoint, graph);
 
         return detectLoop(startingPoint, graph).size() / 2;
     }
@@ -30,22 +27,11 @@ public class Day10PipeMaze {
         List<List<String>> matrix = new ArrayList<>();
         Point startingPoint = parseInput(input, graph, matrix);
 
-        List<Point> spConnections = graph.get(startingPoint).stream().toList();
-        graph.get(spConnections.get(0)).remove(startingPoint);
-        graph.get(startingPoint).remove(spConnections.get(1));
+        removeStartingPointSymmetricConnections(startingPoint, graph);
 
         List<Point> loop = detectLoop(startingPoint, graph);
-        Set<Point> loopPoints = new HashSet<>(loop);
 
-        for (int r = 0; r < matrix.size(); r++) {
-            for (int c = 0; c < matrix.get(0).size(); c++) {
-                Point p = new Point(r, c);
-                if (!loopPoints.contains(p)) {
-                    matrix.get(r).set(c, ".");
-                }
-            }
-        }
-
+        setToGroundAllNonLoopPoints(matrix, loop);
         matrix.get(startingPoint.x).set(startingPoint.y, startReplace);
 
         Set<String> horizontalConnections = new HashSet<>(eastConnections);
@@ -60,15 +46,7 @@ public class Day10PipeMaze {
         matrix = transpose(matrix);
 
         List<List<String>> finalMatrix = matrix;
-
-        Set<Point> groundPoints = new HashSet<>();
-        for (int r = 0; r < matrix.size(); r++) {
-            for (int c = 0; c < matrix.get(0).size(); c++) {
-                if (matrix.get(r).get(c).equals(".")) {
-                    groundPoints.add(new Point(r, c));
-                }
-            }
-        }
+        Set<Point> groundPoints = getAllGroundPoints(finalMatrix);
 
         int nestSize = 0;
         Set<Point> visitedGround = new HashSet<>();
@@ -88,6 +66,37 @@ public class Day10PipeMaze {
         }
 
         return nestSize;
+    }
+
+    private void removeStartingPointSymmetricConnections(Point startingPoint, Map<Point, Set<Point>> graph) {
+        List<Point> spConnections = graph.get(startingPoint).stream().toList();
+        graph.get(spConnections.get(0)).remove(startingPoint);
+        graph.get(startingPoint).remove(spConnections.get(1));
+    }
+
+    private void setToGroundAllNonLoopPoints(List<List<String>> matrix, List<Point> loop) {
+        Set<Point> loopPoints = new HashSet<>(loop);
+        for (int r = 0; r < matrix.size(); r++) {
+            for (int c = 0; c < matrix.get(0).size(); c++) {
+                Point p = new Point(r, c);
+                if (!loopPoints.contains(p)) {
+                    matrix.get(r).set(c, ".");
+                }
+            }
+        }
+    }
+
+    private Set<Point> getAllGroundPoints(List<List<String>> matrix) {
+        Set<Point> groundPoints = new HashSet<>();
+        for (int r = 0; r < matrix.size(); r++) {
+            for (int c = 0; c < matrix.get(0).size(); c++) {
+                if (matrix.get(r).get(c).equals(".")) {
+                    groundPoints.add(new Point(r, c));
+                }
+            }
+        }
+
+        return groundPoints;
     }
 
     private List<List<String>> expandMatrix(List<List<String>> matrix, Set<String> horizontalsTokens, Set<String> verticalTokens, String filler) {
