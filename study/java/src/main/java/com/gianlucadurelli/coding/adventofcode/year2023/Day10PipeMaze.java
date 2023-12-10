@@ -1,6 +1,7 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class Day10PipeMaze {
 
@@ -26,7 +27,7 @@ public class Day10PipeMaze {
         return detectLoop(startingPoint, graph).size() / 2;
     }
 
-    public int solve2(List<String> input) {
+    public int solve2(List<String> input, String startReplace) {
         Map<Point, Set<Point>> graph = new HashMap<>();
         List<List<String>> matrix = new ArrayList<>();
         Point startingPoint = parseInput(input, graph, matrix);
@@ -48,7 +49,20 @@ public class Day10PipeMaze {
         }
 
         // Hardcoded by looking at input
-        matrix.get(startingPoint.x).set(startingPoint.y, "F");
+        matrix.get(startingPoint.x).set(startingPoint.y, startReplace);
+
+        Set<String> horizontalConnections = new HashSet<>(eastConnections);
+        horizontalConnections.addAll(westConnections);
+
+        Set<String> verticalConnections = new HashSet<>(northConnections);
+        verticalConnections.addAll(southConnections);
+
+        matrix = expandMatrix(matrix, horizontalConnections, Set.of("|", "7", "F"), "|");
+        matrix = transpose(matrix);
+        matrix = expandMatrix(matrix, verticalConnections, Set.of("-", "F", "L"), "-");
+        matrix = transpose(matrix);
+
+        List<List<String>> finalMatrix = matrix;
 
         Set<Point> groundPoints = new HashSet<>();
         for (int r = 0; r < matrix.size(); r++) {
@@ -59,28 +73,73 @@ public class Day10PipeMaze {
             }
         }
 
-        printMatrix(matrix);
-
         int nestSize = 0;
         Set<Point> visitedGround = new HashSet<>();
         for (Point p: groundPoints) {
             if (!visitedGround.contains(p)) {
                 Set<Point> connectedGround = new HashSet<>();
-                boolean isInsideLoop = detectConnectedGround(p, connectedGround, matrix);
+                boolean isInsideLoop = detectConnectedGround(p, connectedGround, finalMatrix);
                 if (isInsideLoop) {
                     nestSize += connectedGround.size();
-                    connectedGround.forEach(g -> matrix.get(g.x).set(g.y, "I"));
+                    connectedGround.forEach(g -> finalMatrix.get(g.x).set(g.y, "I"));
                 } else {
-                    connectedGround.forEach(g -> matrix.get(g.x).set(g.y, "O"));
+                    connectedGround.forEach(g -> finalMatrix.get(g.x).set(g.y, "O"));
                 }
 
                 visitedGround.addAll(connectedGround);
             }
         }
 
-        printMatrix(matrix);
-
         return nestSize;
+    }
+
+    private List<List<String>> expandMatrix(List<List<String>> matrix, Set<String> horizontalsTokens, Set<String> verticalTokens, String filler) {
+        List<List<String>> expanded = new ArrayList<>();
+
+        for (int r = 0; r < matrix.size() - 1; r++) {
+            boolean shouldExpand = false;
+            for (int c = 0; c < matrix.get(0).size(); c++) {
+                String top = matrix.get(r).get(c);
+                String bottom = matrix.get(r + 1).get(c);
+
+                if (horizontalsTokens.contains(top) && horizontalsTokens.contains(bottom)) {
+                    shouldExpand = true;
+                    break;
+                }
+            }
+
+            List<String> copiedLine = new ArrayList<>(matrix.get(r));
+            expanded.add(copiedLine);
+
+            if (shouldExpand) {
+                List<String> expandedLine = new ArrayList<>();
+                for (int c = 0; c < matrix.get(0).size(); c++) {
+                    String value = matrix.get(r).get(c);
+                    if (verticalTokens.contains(value)) {
+                        expandedLine.add(filler);
+                    } else {
+                        expandedLine.add(" ");
+                    }
+                }
+                expanded.add(expandedLine);
+            }
+        }
+        expanded.add(new ArrayList<>(matrix.get(matrix.size() - 1)));
+
+        return expanded;
+    }
+
+    private List<List<String>> transpose(List<List<String>> matrix) {
+        List<List<String>> transposed = new ArrayList<>();
+        for (int c = 0; c < matrix.get(0).size(); c++) {
+            List<String> row = new ArrayList<>();
+            for (int r = 0; r < matrix.size(); r++) {
+                row.add(matrix.get(r).get(c));
+            }
+            transposed.add(row);
+        }
+
+        return transposed;
     }
 
     private void printMatrix(List<List<String>> matrix) {
@@ -102,6 +161,8 @@ public class Day10PipeMaze {
         toVisit.add(startingPoint);
         connectedGround.add(startingPoint);
 
+        Set<String> toExplore = Set.of(".", " ");
+
         while(!toVisit.isEmpty()) {
             Point p = toVisit.pop();
 
@@ -119,12 +180,7 @@ public class Day10PipeMaze {
                 isInLoop = false;
             }
 
-            if (east.isPresent() && (
-                    val.equals(".") && east.get().equals(".")
-                    || eastConnections.contains(east.get())
-                    || (eastConnections.contains(val) && east.get().equals("."))
-                )
-            ) {
+            if (east.isPresent() && toExplore.contains(east.get())) {
                 Point newPoint = new Point(p.x, p.y + 1);
                 if (!visitedPoints.contains(newPoint)) {
                     visitedPoints.add(newPoint);
@@ -132,12 +188,7 @@ public class Day10PipeMaze {
                 }
             }
 
-            if (west.isPresent() && (
-                    val.equals(".") && west.get().equals(".")
-                    || westConnections.contains(west.get())
-                    || (westConnections.contains(val) && west.get().equals("."))
-                )
-            ) {
+            if (west.isPresent() && toExplore.contains(west.get())) {
                 Point newPoint = new Point(p.x, p.y - 1);
                 if (!visitedPoints.contains(newPoint)) {
                     visitedPoints.add(newPoint);
@@ -145,12 +196,7 @@ public class Day10PipeMaze {
                 }
             }
 
-            if (north.isPresent() && (
-                    val.equals(".") && north.get().equals(".")
-                    || northConnections.contains(north.get())
-                    || (northConnections.contains(val) && north.get().equals("."))
-                )
-            ) {
+            if (north.isPresent() && toExplore.contains(north.get())) {
                 Point newPoint = new Point(p.x - 1, p.y);
                 if (!visitedPoints.contains(newPoint)) {
                     visitedPoints.add(newPoint);
@@ -158,12 +204,7 @@ public class Day10PipeMaze {
                 }
             }
 
-            if (south.isPresent() && (
-                    val.equals(".") && south.get().equals(".")
-                    || southConnections.contains(south.get())
-                    || southConnections.contains(val) && south.get().equals(".")
-                )
-            ) {
+            if (south.isPresent() && toExplore.contains(south.get())) {
                 Point newPoint = new Point(p.x + 1, p.y);
                 if (!visitedPoints.contains(newPoint)) {
                     visitedPoints.add(newPoint);
