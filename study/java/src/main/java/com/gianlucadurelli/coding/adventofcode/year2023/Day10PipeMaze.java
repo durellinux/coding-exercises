@@ -1,14 +1,11 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.*;
-import java.util.function.Predicate;
 
 public class Day10PipeMaze {
 
     private record Point(int x, int y) {}
     private record BFSStep(Point point, int length) {}
-
-    private record BFSStep2(Point point, String tunnelStart) {}
 
     private final Set<String> northConnections = Set.of("S", "|", "L", "J");
     private final Set<String> southConnections = Set.of("S", "|", "7", "F");
@@ -27,6 +24,7 @@ public class Day10PipeMaze {
         return detectLoop(startingPoint, graph).size() / 2;
     }
 
+    // startReplace is the pipe for starting point, hardcoded by looking at input
     public int solve2(List<String> input, String startReplace) {
         Map<Point, Set<Point>> graph = new HashMap<>();
         List<List<String>> matrix = new ArrayList<>();
@@ -48,7 +46,6 @@ public class Day10PipeMaze {
             }
         }
 
-        // Hardcoded by looking at input
         matrix.get(startingPoint.x).set(startingPoint.y, startReplace);
 
         Set<String> horizontalConnections = new HashSet<>(eastConnections);
@@ -133,8 +130,8 @@ public class Day10PipeMaze {
         List<List<String>> transposed = new ArrayList<>();
         for (int c = 0; c < matrix.get(0).size(); c++) {
             List<String> row = new ArrayList<>();
-            for (int r = 0; r < matrix.size(); r++) {
-                row.add(matrix.get(r).get(c));
+            for (List<String> strings : matrix) {
+                row.add(strings.get(c));
             }
             transposed.add(row);
         }
