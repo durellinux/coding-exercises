@@ -18,7 +18,7 @@ public class Day9MirageMaintenanceTest {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve1(MIRAGE_MAINTENANCE_INPUT)).isEqualTo(114);
+        Assertions.assertThat(solver.solve1(MIRAGE_MAINTENANCE_INPUT)).isEqualTo(1938800261);
     }
 
     @Test
