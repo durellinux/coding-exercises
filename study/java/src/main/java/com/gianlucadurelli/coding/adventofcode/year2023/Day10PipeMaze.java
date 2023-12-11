@@ -34,6 +34,10 @@ public class Day10PipeMaze {
         setToGroundAllNonLoopPoints(matrix, loop);
         matrix.get(startingPoint.x).set(startingPoint.y, startReplace);
 
+        return getNestSizeWithConnectedComponents(matrix);
+    }
+
+    private int getNestSizeWithConnectedComponents(List<List<String>> matrix) {
         Set<String> horizontalConnections = new HashSet<>(eastConnections);
         horizontalConnections.addAll(westConnections);
 
