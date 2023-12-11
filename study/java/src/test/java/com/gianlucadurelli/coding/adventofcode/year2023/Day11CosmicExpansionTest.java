@@ -33,7 +33,7 @@ public class Day11CosmicExpansionTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(COSMIC_EXPANSION_INPUT, 1000000)).isEqualTo(9329143);
+        Assertions.assertThat(solver.solve2(COSMIC_EXPANSION_INPUT, 1000000)).isEqualTo(710674907809L);
     }
 
 }
