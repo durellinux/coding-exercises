@@ -24,4 +24,17 @@ public class Day12HotSpringsTest {
         Assertions.assertThat(solver.solve(HOT_SPRINGS_INPUT)).isEqualTo(7916);
     }
 
+    @Test
+    public void test2() {
+        Assertions.assertThat(solver.solve2(
+                List.of("???.### 1,1,3", ".??..??...?##. 1,1,3", "?#?#?#?#?#?#?#? 1,3,1,6", "????.#...#... 4,1,1", "????.######..#####. 1,6,5", "?###???????? 3,2,1"),
+                5
+        )).isEqualTo(525152);
+    }
+
+    @Test
+    public void solution2() {
+        Assertions.assertThat(solver.solve2(HOT_SPRINGS_INPUT, 5)).isEqualTo(37366887898686L);
+    }
+
 }
