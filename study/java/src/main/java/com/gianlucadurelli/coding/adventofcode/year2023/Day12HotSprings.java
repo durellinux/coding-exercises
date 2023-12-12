@@ -1,13 +1,18 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
-import com.google.gson.internal.bind.JsonAdapterAnnotationTypeAdapterFactory;
-
 import java.util.*;
 
 public class Day12HotSprings {
 
     private record Entry(String brokenRecordString, char[] brokenRecord, List<Integer> numericRecord) {}
     private record MemoizationKey(int currentIndex, int currentSegment) {}
+
+    private record ExplorationContext(
+            List<Set<Integer>> segmentsValidPositions,
+            List<Integer> segmentSkipLength,
+            Set<Integer> dotsValidPositions,
+            Map<MemoizationKey, Long> cache
+    ) {}
 
     public long solve(List<String> input) {
         return solve2(input, 1);
@@ -59,12 +64,12 @@ public class Day12HotSprings {
         record.numericRecord.forEach(v -> {
             String brokenStringToMatch = brokenStringOfLength(v);
             possiblePositions.add(findAllPositions(record.brokenRecordString, brokenStringToMatch));
-            skipLength.add(brokenStringToMatch.length());
+            skipLength.add(brokenStringToMatch.length() - 1);
         });
         Set<Integer> dotPositions = getDotPositions(record.brokenRecord);
 
-        Map<MemoizationKey, Long> cache = new HashMap<>();
-        return computeArrangements(possiblePositions, dotPositions, skipLength, 0, 0, record.brokenRecordString.length(), cache);
+        ExplorationContext context = new ExplorationContext(possiblePositions, skipLength, dotPositions, new HashMap<>());
+        return computeArrangements(0, 0, record.brokenRecordString.length(), context);
     }
 
     private Set<Integer> getDotPositions(char[] brokenRecord) {
@@ -116,29 +121,29 @@ public class Day12HotSprings {
         return true;
     }
 
-    public long computeArrangements(List<Set<Integer>> startingPositions, Set<Integer> dotPositions, List<Integer> skipLength, int currentIndex, int currentSegment, int targetIndex, Map<MemoizationKey, Long> cache) {
+    public long computeArrangements(int currentIndex, int currentSegment, int targetIndex, ExplorationContext context) {
         if (currentIndex == targetIndex) {
-            return currentSegment == startingPositions.size() ? 1 : 0;
+            return currentSegment == context.segmentsValidPositions.size() ? 1 : 0;
         }
 
         MemoizationKey cacheKey = new MemoizationKey(currentIndex, currentSegment);
 
-        if (cache.containsKey(cacheKey)) {
-            return cache.get(cacheKey);
+        if (context.cache.containsKey(cacheKey)) {
+            return context.cache.get(cacheKey);
         }
 
         long withThisAsDot = 0;
-        if (dotPositions.contains(currentIndex)) {
-            withThisAsDot = computeArrangements(startingPositions, dotPositions, skipLength, currentIndex + 1, currentSegment, targetIndex, cache);
+        if (context.dotsValidPositions.contains(currentIndex)) {
+            withThisAsDot = computeArrangements(currentIndex + 1, currentSegment, targetIndex, context);
         }
 
         long withThisAsMatch = 0;
-        if (currentSegment < startingPositions.size() && startingPositions.get(currentSegment).contains(currentIndex)) {
-            withThisAsMatch = computeArrangements(startingPositions, dotPositions, skipLength, currentIndex + skipLength.get(currentSegment) - 1, currentSegment + 1, targetIndex, cache);
+        if (currentSegment < context.segmentsValidPositions.size() && context.segmentsValidPositions.get(currentSegment).contains(currentIndex)) {
+            withThisAsMatch = computeArrangements(currentIndex + context.segmentSkipLength.get(currentSegment), currentSegment + 1, targetIndex, context);
         }
 
         long solution = withThisAsDot + withThisAsMatch;
-        cache.put(cacheKey, solution);
+        context.cache.put(cacheKey, solution);
 
         return solution;
     }
