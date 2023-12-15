@@ -33,7 +33,7 @@ public class Day14ParabolicReflectorDishTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(PARABOLIC_REFLECTOR_DISH_INPUT)).isEqualTo(108955);
+        Assertions.assertThat(solver.solve2(PARABOLIC_REFLECTOR_DISH_INPUT)).isEqualTo(106689);
     }
 
 }
