@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -8,7 +9,7 @@ import java.util.List;
 public class Day16TheFloorWillBeLavaTest {
 
     private static final Day16TheFloorWillBeLava solver = new Day16TheFloorWillBeLava();
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day16TheFloorWillBeLava.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day16TheFloorWillBeLava.class);
 
     @Test
     public void test1() {

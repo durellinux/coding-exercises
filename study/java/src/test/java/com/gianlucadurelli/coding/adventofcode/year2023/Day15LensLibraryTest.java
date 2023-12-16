@@ -1,12 +1,13 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 public class Day15LensLibraryTest {
 
     private static final Day15LensLibrary solver = new Day15LensLibrary();
-    private static final String INPUT = AdventOfCode2023Inputs.loadInput(Day15LensLibrary.class).get(0);
+    private static final String INPUT = AdventOfCodeTestHelpers.loadInput(Day15LensLibrary.class).get(0);
 
     @Test
     public void test1() {

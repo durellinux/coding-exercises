@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class Day13PointOfIncidenceTest {
 
     private static final Day13PointOfIncidence solver = new Day13PointOfIncidence();
 
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day13PointOfIncidence.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day13PointOfIncidence.class);
 
     @Test
     public void test1() {

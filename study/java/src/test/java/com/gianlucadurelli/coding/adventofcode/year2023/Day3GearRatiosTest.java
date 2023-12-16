@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -9,8 +10,8 @@ public class Day3GearRatiosTest {
 
     public static final Day3GearRatios solver = new Day3GearRatios();
 
-    private static final List<String> TEST_INPUT = AdventOfCode2023Inputs.loadTestInput(Day3GearRatios.class);
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day3GearRatios.class);
+    private static final List<String> TEST_INPUT = AdventOfCodeTestHelpers.loadTestInput(Day3GearRatios.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day3GearRatios.class);
 
     @Test
     public void test1() {

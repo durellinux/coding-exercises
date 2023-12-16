@@ -1,4 +1,4 @@
-package com.gianlucadurelli.coding.adventofcode.year2023;
+package com.gianlucadurelli.coding.adventofcode;
 
 import lombok.SneakyThrows;
 
@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AdventOfCode2023Inputs {
+public class AdventOfCodeTestHelpers {
 
     @SneakyThrows
     private static List<String> getInput(String fileName) {

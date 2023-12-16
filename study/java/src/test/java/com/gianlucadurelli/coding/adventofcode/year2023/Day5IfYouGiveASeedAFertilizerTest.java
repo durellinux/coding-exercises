@@ -2,14 +2,15 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.List;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 public class Day5IfYouGiveASeedAFertilizerTest {
 
     private static final Day5IfYouGiveASeedAFertilizer solver = new Day5IfYouGiveASeedAFertilizer();
-    private static final List<String> TEST_INPUT = AdventOfCode2023Inputs.loadTestInput(Day5IfYouGiveASeedAFertilizer.class);
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day5IfYouGiveASeedAFertilizer.class);
+    private static final List<String> TEST_INPUT = AdventOfCodeTestHelpers.loadTestInput(Day5IfYouGiveASeedAFertilizer.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day5IfYouGiveASeedAFertilizer.class);
 
     @Test
     public void test1() {

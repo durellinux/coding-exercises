@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -10,7 +11,7 @@ public class Day7CamelCardsTest {
     private static final Day7CamelCards solver = new Day7CamelCards();
 
     private static final List<String> TEST_INPUT = List.of("32T3K 765", "T55J5 684", "KK677 28", "KTJJT 220", "QQQJA 483");
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day7CamelCards.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day7CamelCards.class);
 
     @Test
     public void test1() {

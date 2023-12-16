@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class Day10PipeMazeTest {
 
     private static final Day10PipeMaze solver = new Day10PipeMaze();
 
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day10PipeMaze.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day10PipeMaze.class);
 
     @Test
     public void test1() {

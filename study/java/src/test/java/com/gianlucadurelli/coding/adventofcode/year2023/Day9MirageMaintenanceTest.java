@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class Day9MirageMaintenanceTest {
 
     private static final Day9MirageMaintenance solver = new Day9MirageMaintenance();
 
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day9MirageMaintenance.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day9MirageMaintenance.class);
 
     @Test
     public void test1() {

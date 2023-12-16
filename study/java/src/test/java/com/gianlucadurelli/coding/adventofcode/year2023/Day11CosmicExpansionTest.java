@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -9,7 +10,7 @@ public class Day11CosmicExpansionTest {
 
     private static final Day11CosmicExpansion solver = new Day11CosmicExpansion();
 
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day11CosmicExpansion.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day11CosmicExpansion.class);
 
     @Test
     public void test1() {

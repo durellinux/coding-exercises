@@ -2,15 +2,14 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.List;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
-
-import junit.framework.TestCase;
 
 public class Day1TrebuchetTest {
 
     private static final Day1Trebuchet solver = new Day1Trebuchet();
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day1Trebuchet.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day1Trebuchet.class);
 
     @Test
     public void test1() {

@@ -1,18 +1,16 @@
 package com.gianlucadurelli.coding.adventofcode.year2022;
 
-import com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs;
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.junit.Assert.*;
-
 public class Day24BlizzardBasinTest {
 
     private static final Day24BlizzardBasin solver = new Day24BlizzardBasin();
-    private static final List<String> TEST_INPUT = AdventOfCode2023Inputs.loadTestInput(Day24BlizzardBasin.class);
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day24BlizzardBasin.class);
+    private static final List<String> TEST_INPUT = AdventOfCodeTestHelpers.loadTestInput(Day24BlizzardBasin.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day24BlizzardBasin.class);
 
     @Test
     public void test1() {

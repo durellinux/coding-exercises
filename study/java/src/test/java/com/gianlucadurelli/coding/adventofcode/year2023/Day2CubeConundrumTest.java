@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -16,8 +17,8 @@ public class Day2CubeConundrumTest {
             "blue", 14
     );
 
-    private static final List<String> TEST_INPUT = AdventOfCode2023Inputs.loadTestInput(Day2CubeConundrum.class);
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day2CubeConundrum.class);
+    private static final List<String> TEST_INPUT = AdventOfCodeTestHelpers.loadTestInput(Day2CubeConundrum.class);
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day2CubeConundrum.class);
 
     @Test
     public void test1() {

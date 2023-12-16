@@ -1,5 +1,6 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
+import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
@@ -8,10 +9,10 @@ import java.util.List;
 public class Day8HauntedWastelandTest {
 
     private static final Day8HauntedWasteland solver = new Day8HauntedWasteland();
-    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day8HauntedWasteland.class);
-    private static final List<String> TEST_INPUT_1 = AdventOfCode2023Inputs.loadTestInput(Day8HauntedWasteland.class);
-    private static final List<String> TEST_INPUT_2 = AdventOfCode2023Inputs.loadWithSuffix(Day8HauntedWasteland.class, "-test2.txt");
-    private static final List<String> TEST_INPUT_3 = AdventOfCode2023Inputs.loadWithSuffix(Day8HauntedWasteland.class, "-test3.txt");
+    private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day8HauntedWasteland.class);
+    private static final List<String> TEST_INPUT_1 = AdventOfCodeTestHelpers.loadTestInput(Day8HauntedWasteland.class);
+    private static final List<String> TEST_INPUT_2 = AdventOfCodeTestHelpers.loadWithSuffix(Day8HauntedWasteland.class, "-test2.txt");
+    private static final List<String> TEST_INPUT_3 = AdventOfCodeTestHelpers.loadWithSuffix(Day8HauntedWasteland.class, "-test3.txt");
 
     @Test
     public void test1() {
