@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
 import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.LENS_LIBRARY_INPUT;
-import static org.junit.Assert.*;
 
 public class Day15LensLibraryTest {
 
