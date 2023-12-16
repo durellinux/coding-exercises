@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.COSMIC_EXPANSION_INPUT;
-
 public class Day11CosmicExpansionTest {
 
     private static final Day11CosmicExpansion solver = new Day11CosmicExpansion();
+
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day11CosmicExpansion.class);
 
     @Test
     public void test1() {
@@ -20,7 +20,7 @@ public class Day11CosmicExpansionTest {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve1(COSMIC_EXPANSION_INPUT)).isEqualTo(9329143);
+        Assertions.assertThat(solver.solve1(INPUT)).isEqualTo(9329143);
     }
 
     @Test
@@ -33,7 +33,7 @@ public class Day11CosmicExpansionTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(COSMIC_EXPANSION_INPUT, 1000000)).isEqualTo(710674907809L);
+        Assertions.assertThat(solver.solve2(INPUT, 1000000)).isEqualTo(710674907809L);
     }
 
 }

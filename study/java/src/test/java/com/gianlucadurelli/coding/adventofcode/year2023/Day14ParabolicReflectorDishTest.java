@@ -5,12 +5,10 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.PARABOLIC_REFLECTOR_DISH_INPUT;
-import static org.junit.Assert.*;
-
 public class Day14ParabolicReflectorDishTest {
 
     private static final Day14ParabolicReflectorDish solver = new Day14ParabolicReflectorDish();
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day14ParabolicReflectorDish.class);
 
     @Test
     public void test1() {
@@ -21,7 +19,7 @@ public class Day14ParabolicReflectorDishTest {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve(PARABOLIC_REFLECTOR_DISH_INPUT)).isEqualTo(108955);
+        Assertions.assertThat(solver.solve(INPUT)).isEqualTo(108955);
     }
 
     @Test
@@ -33,7 +31,7 @@ public class Day14ParabolicReflectorDishTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(PARABOLIC_REFLECTOR_DISH_INPUT)).isEqualTo(106689);
+        Assertions.assertThat(solver.solve2(INPUT)).isEqualTo(106689);
     }
 
 }

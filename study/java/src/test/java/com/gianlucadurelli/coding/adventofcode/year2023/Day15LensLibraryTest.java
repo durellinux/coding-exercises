@@ -3,11 +3,10 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.LENS_LIBRARY_INPUT;
-
 public class Day15LensLibraryTest {
 
     private static final Day15LensLibrary solver = new Day15LensLibrary();
+    private static final String INPUT = AdventOfCode2023Inputs.loadInput(Day15LensLibrary.class).get(0);
 
     @Test
     public void test1() {
@@ -16,7 +15,7 @@ public class Day15LensLibraryTest {
 
     @Test
     public void solution1() {
-        Assertions.assertThat(solver.solve(LENS_LIBRARY_INPUT)).isEqualTo(502139);
+        Assertions.assertThat(solver.solve(INPUT)).isEqualTo(502139);
     }
 
     @Test
@@ -26,7 +25,7 @@ public class Day15LensLibraryTest {
 
     @Test
     public void solution2() {
-        Assertions.assertThat(solver.solve2(LENS_LIBRARY_INPUT)).isEqualTo(284132L);
+        Assertions.assertThat(solver.solve2(INPUT)).isEqualTo(284132L);
     }
 
 

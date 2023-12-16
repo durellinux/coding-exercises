@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.POINT_OF_INCIDENCE_INPUT;
-
 public class Day13PointOfIncidenceTest {
 
     private static final Day13PointOfIncidence solver = new Day13PointOfIncidence();
+
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day13PointOfIncidence.class);
 
     @Test
     public void test1() {
@@ -21,7 +21,7 @@ public class Day13PointOfIncidenceTest {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve(POINT_OF_INCIDENCE_INPUT, false)).isEqualTo(35360L);
+        Assertions.assertThat(solver.solve(INPUT, false)).isEqualTo(35360L);
     }
 
     @Test
@@ -34,7 +34,7 @@ public class Day13PointOfIncidenceTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve(POINT_OF_INCIDENCE_INPUT, true)).isEqualTo(36755L);
+        Assertions.assertThat(solver.solve(INPUT, true)).isEqualTo(36755L);
     }
 
 }

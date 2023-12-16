@@ -5,11 +5,10 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.THE_FLOOR_IS_LAVA_INPUT;
-
 public class Day16TheFloorWillBeLavaTest {
 
     private static final Day16TheFloorWillBeLava solver = new Day16TheFloorWillBeLava();
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day16TheFloorWillBeLava.class);
 
     @Test
     public void test1() {
@@ -20,7 +19,7 @@ public class Day16TheFloorWillBeLavaTest {
 
     @Test
     public void solution1() {
-        Assertions.assertThat(solver.solve(THE_FLOOR_IS_LAVA_INPUT)).isEqualTo(7623L);
+        Assertions.assertThat(solver.solve(INPUT)).isEqualTo(7623L);
     }
 
     @Test
@@ -32,8 +31,6 @@ public class Day16TheFloorWillBeLavaTest {
 
     @Test
     public void solution2() {
-        Assertions.assertThat(solver.solve2(THE_FLOOR_IS_LAVA_INPUT)).isEqualTo(8244L);
+        Assertions.assertThat(solver.solve2(INPUT)).isEqualTo(8244L);
     }
-
-
 }

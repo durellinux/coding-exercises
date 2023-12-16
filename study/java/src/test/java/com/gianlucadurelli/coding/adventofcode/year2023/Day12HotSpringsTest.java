@@ -5,12 +5,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.HOT_SPRINGS_INPUT;
-import static org.junit.Assert.*;
-
 public class Day12HotSpringsTest {
 
     private static final Day12HotSprings solver = new Day12HotSprings();
+
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day12HotSprings.class);
 
     @Test
     public void test1() {
@@ -21,7 +20,7 @@ public class Day12HotSpringsTest {
 
     @Test
     public void solution1() {
-        Assertions.assertThat(solver.solve(HOT_SPRINGS_INPUT)).isEqualTo(7916);
+        Assertions.assertThat(solver.solve(INPUT)).isEqualTo(7916);
     }
 
     @Test
@@ -34,7 +33,7 @@ public class Day12HotSpringsTest {
 
     @Test
     public void solution2() {
-        Assertions.assertThat(solver.solve2(HOT_SPRINGS_INPUT, 5)).isEqualTo(37366887898686L);
+        Assertions.assertThat(solver.solve2(INPUT, 5)).isEqualTo(37366887898686L);
     }
 
 }

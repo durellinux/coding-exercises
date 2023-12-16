@@ -5,11 +5,11 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.PIPE_MAZE_INPUT;
-
 public class Day10PipeMazeTest {
 
     private static final Day10PipeMaze solver = new Day10PipeMaze();
+
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day10PipeMaze.class);
 
     @Test
     public void test1() {
@@ -34,7 +34,7 @@ public class Day10PipeMazeTest {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve1(PIPE_MAZE_INPUT)).isEqualTo(6856);
+        Assertions.assertThat(solver.solve1(INPUT)).isEqualTo(6856);
     }
 
     @Test
@@ -63,6 +63,6 @@ public class Day10PipeMazeTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(PIPE_MAZE_INPUT, "F")).isEqualTo(501);
+        Assertions.assertThat(solver.solve2(INPUT, "F")).isEqualTo(501);
     }
 }
