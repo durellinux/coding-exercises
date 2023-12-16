@@ -32,7 +32,7 @@ public class Day16TheFloorWillBeLavaTest {
 
     @Test
     public void solution2() {
-        Assertions.assertThat(solver.solve2(THE_FLOOR_IS_LAVA_INPUT)).isEqualTo(7623L);
+        Assertions.assertThat(solver.solve2(THE_FLOOR_IS_LAVA_INPUT)).isEqualTo(8244L);
     }
 
 

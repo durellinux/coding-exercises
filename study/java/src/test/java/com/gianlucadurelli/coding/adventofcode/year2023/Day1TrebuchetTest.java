@@ -7,9 +7,10 @@ import org.junit.Test;
 
 import junit.framework.TestCase;
 
-public class Day1TrebuchetTest extends TestCase {
+public class Day1TrebuchetTest {
 
     private static final Day1Trebuchet solver = new Day1Trebuchet();
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day1Trebuchet.class);
 
     @Test
     public void test1() {
@@ -27,13 +28,13 @@ public class Day1TrebuchetTest extends TestCase {
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve1(AdventOfCode2023Inputs.TREBUCHET_INPUT))
+        Assertions.assertThat(solver.solve1(INPUT))
             .isEqualTo(54390);
     }
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(AdventOfCode2023Inputs.TREBUCHET_INPUT))
+        Assertions.assertThat(solver.solve2(INPUT))
             .isEqualTo(54277);
     }
 

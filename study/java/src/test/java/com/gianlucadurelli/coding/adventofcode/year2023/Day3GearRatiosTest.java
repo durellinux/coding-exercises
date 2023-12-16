@@ -9,28 +9,27 @@ public class Day3GearRatiosTest {
 
     public static final Day3GearRatios solver = new Day3GearRatios();
 
+    private static final List<String> TEST_INPUT = AdventOfCode2023Inputs.loadTestInput(Day3GearRatios.class);
+    private static final List<String> INPUT = AdventOfCode2023Inputs.loadInput(Day3GearRatios.class);
+
     @Test
     public void test1() {
-        Assertions.assertThat(solver.solve1(
-                List.of("467..114..", "...*......", "..35..633.", "......#...", "617*......", ".....+.58.", "..592.....", "......755.", "...$.*....", ".664.598..")
-        )).isEqualTo(4361);
+        Assertions.assertThat(solver.solve1(TEST_INPUT)).isEqualTo(4361);
     }
 
     @Test
     public void testSolution1() {
-        Assertions.assertThat(solver.solve1(AdventOfCode2023Inputs.GEAR_RATIOS_INPUT)).isEqualTo(532331);
+        Assertions.assertThat(solver.solve1(INPUT)).isEqualTo(532331);
     }
 
     @Test
     public void test2() {
-        Assertions.assertThat(solver.solve2(
-                List.of("467..114..", "...*......", "..35..633.", "......#...", "617*......", ".....+.58.", "..592.....", "......755.", "...$.*....", ".664.598..")
-        )).isEqualTo(467835);
+        Assertions.assertThat(solver.solve2(TEST_INPUT)).isEqualTo(467835);
     }
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(AdventOfCode2023Inputs.GEAR_RATIOS_INPUT)).isEqualTo(82301120);
+        Assertions.assertThat(solver.solve2(INPUT)).isEqualTo(82301120);
     }
 
 }
