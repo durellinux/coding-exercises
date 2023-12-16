@@ -1,11 +1,28 @@
 package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import java.util.*;
+import java.util.function.Function;
 
 public class Day5IfYouGiveASeedAFertilizer {
     private record ProblemEntry(long source, long destination, long length) {}
-    private record Interval(long start, long end) {}
+    public record Interval(long start, long end) {}
     private record MapInterval(long start, long end, long destinationStart) {}
+
+    public long solve(List<String> input, Function<String, List<Interval>> seedParser) {
+        List<Interval> seeds = seedParser.apply(input.get(0));
+        List<List<String>> otherLists = parseOtherLists(input.subList(3, input.size()));
+
+        return solve(
+                seeds,
+                otherLists.get(0),
+                otherLists.get(1),
+                otherLists.get(2),
+                otherLists.get(3),
+                otherLists.get(4),
+                otherLists.get(5),
+                otherLists.get(6)
+        );
+    }
 
     public long solve(
         List<Interval> seeds,
@@ -38,9 +55,31 @@ public class Day5IfYouGiveASeedAFertilizer {
                 .reduce(Long::min).orElse(0L);
     }
 
+    private List<List<String>> parseOtherLists(List<String> subList) {
+        List<List<String>> lists = new ArrayList<>();
+        List<String> currentList = new ArrayList<>();
+        int i = 0;
+        while (i < subList.size()) {
+            String value = subList.get(i);
+
+            if (value.isEmpty()) {
+                lists.add(currentList);
+                currentList = new ArrayList<>();
+                i += 2;
+            } else {
+                currentList.add(value);
+                i += 1;
+            }
+        }
+
+        lists.add(currentList);
+        return lists;
+    }
+
+
     public List<Interval> parseSeeds1(String input) {
         List<Interval> result = new ArrayList<>();
-        String[] values = input.split(" ");
+        String[] values = input.split(": ")[1].split(" ");
 
         for (String value : values) {
             long start = Long.valueOf(value.strip(), 10);
@@ -52,7 +91,7 @@ public class Day5IfYouGiveASeedAFertilizer {
 
     public List<Interval> parseSeeds2(String input) {
         List<Interval> result = new ArrayList<>();
-        String[] values = input.split(" ");
+        String[] values = input.split(": ")[1].split(" ");
 
         for (int i = 0; i < values.length; i+=2) {
             long start = Long.valueOf(values[i].strip(), 10);

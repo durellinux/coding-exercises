@@ -8,13 +8,19 @@ import java.util.function.Predicate;
 
 public class Day8HauntedWasteland {
 
-    public int solve1(String commandsString, List<String> map) {
+    public int solve1(List<String> input) {
+        String commandsString = input.get(0);
+        List<String> map = input.subList(2, input.size());
+
         Map<String, List<String>> graph = buildGraph(map);
         char[] commands = commandsString.toCharArray();
         return solveOne("AAA", commands, graph, (String node) -> node.equals("ZZZ"));
     }
 
-    public long solve2(String commandsString, List<String> map) {
+    public long solve2(List<String> input) {
+        String commandsString = input.get(0);
+        List<String> map = input.subList(2, input.size());
+
         Map<String, List<String>> graph = buildGraph(map);
         char[] commands = commandsString.toCharArray();
 
