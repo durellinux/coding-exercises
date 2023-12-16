@@ -5,8 +5,6 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static com.gianlucadurelli.coding.adventofcode.year2023.AdventOfCode2023Inputs.CAMEL_CARDS_INPUT;
-
 public class Day7CamelCardsTest {
 
     private static final Day7CamelCards solver = new Day7CamelCards();
@@ -31,7 +29,7 @@ public class Day7CamelCardsTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve(CAMEL_CARDS_INPUT, 2)).isEqualTo(250384185);
+        Assertions.assertThat(solver.solve(INPUT, 2)).isEqualTo(250384185);
     }
 
 }
