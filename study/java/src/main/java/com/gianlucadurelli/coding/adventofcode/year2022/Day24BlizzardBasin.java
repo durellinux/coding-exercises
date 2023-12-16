@@ -38,12 +38,16 @@ public class Day24BlizzardBasin {
             }
         }
 
+        Map<Long, Set<Blizzard>> blizzardConfigurations = new HashMap<>();
+        Map<Long, Set<Point>> blizzardPositions = new HashMap<>();
+        blizzardConfigurations.put(0L, blizzards);
+        blizzardPositions.put(0L, computeBlizzardPositions(blizzards));
+
         long time = 0;
         for (int i = 0; i < trips; i++) {
-            long tripTime = navigate(startPosition, endPosition, blizzards, R, C);
-            time += tripTime;
+            time = navigate(startPosition, endPosition, R, C, time, blizzardConfigurations, blizzardPositions);
 
-            System.out.println("Navigating from " + startPosition + " to " + endPosition + " in " + tripTime);
+            System.out.println("Navigating from " + startPosition + " to " + endPosition + " in " + time + " - Configurations: " + blizzardConfigurations.size());
 
             Point tmp = startPosition;
             startPosition = endPosition;
@@ -53,20 +57,16 @@ public class Day24BlizzardBasin {
         return time;
     }
 
-    private long navigate(Point startPosition, Point endPosition, Set<Blizzard> blizzards, int R, int C) {
+    private long navigate(Point startPosition, Point endPosition, int R, int C, long startStep, Map<Long, Set<Blizzard>> blizzardConfigurations, Map<Long, Set<Point>> blizzardPositions) {
         Queue<SimulationStep> simulations = new LinkedList<>();
 
-        Map<Long, Set<Blizzard>> blizzardsAtStep = new HashMap<>();
-        blizzardsAtStep.put(0L, blizzards);
+        long blizzardStates = lcm(R, C);
 
-        Map<Long, Set<Point>> blizzardPositionsAtStep = new HashMap<>();
-        blizzardPositionsAtStep.put(0L, computeBlizzardPositions(blizzards));
+        Map<Long, Set<Point>> memoizedSolutions = new HashMap<>();
+        memoizedSolutions.put(startStep % blizzardStates, new HashSet<>());
+        memoizedSolutions.get(startStep % blizzardStates).add(startPosition);
 
-        Map<Set<Blizzard>, Set<Point>> memoizedSolutions = new HashMap<>();
-        memoizedSolutions.put(blizzards, new HashSet<>());
-        memoizedSolutions.get(blizzards).add(startPosition);
-
-        simulations.add(new SimulationStep(startPosition, 0));
+        simulations.add(new SimulationStep(startPosition, startStep));
 
         while(!simulations.isEmpty()) {
             SimulationStep simulation = simulations.poll();
@@ -75,17 +75,12 @@ public class Day24BlizzardBasin {
                 return simulation.step;
             }
 
-            if (!blizzardsAtStep.containsKey(simulation.step + 1)) {
-                Set<Blizzard> blizzardsAtCurrentStep = blizzardsAtStep.get(simulation.step);
-                blizzardsAtStep.put(simulation.step + 1, simulateBlizzardMovement(blizzardsAtCurrentStep, R, C));
-
-            }
-            Set<Blizzard> blizzardsNextStep = blizzardsAtStep.get(simulation.step + 1);
-
-            if (!blizzardPositionsAtStep.containsKey(simulation.step + 1)) {
-                blizzardPositionsAtStep.put(simulation.step + 1, computeBlizzardPositions(blizzardsNextStep));
-            }
-            Set<Point> blizzardsPositions = blizzardPositionsAtStep.get(simulation.step + 1);
+            long nextStep = simulation.step + 1;
+            long currentHashIndex = simulation.step % blizzardStates;
+            long nextHashIndex = nextStep % blizzardStates;
+            Set<Blizzard> currentConfig = blizzardConfigurations.get(currentHashIndex);
+            computeValueInCache(blizzardConfigurations, blizzardPositions, R, C, currentConfig, nextStep);
+            Set<Point> blizzardsPositions = blizzardPositions.get(nextHashIndex);
 
             Optional<Point> wait = isValidMove(simulation.current.row, simulation.current.col, R, C, blizzardsPositions, startPosition, endPosition);
             Optional<Point> north = isValidMove(simulation.current.row - 1, simulation.current.col, R, C, blizzardsPositions, startPosition, endPosition);
@@ -94,29 +89,38 @@ public class Day24BlizzardBasin {
             Optional<Point> west = isValidMove(simulation.current.row, simulation.current.col - 1, R, C, blizzardsPositions, startPosition, endPosition);
 
             List<SimulationStep> nextSteps = new ArrayList<>();
-            wait.ifPresent(p -> nextSteps.add(new SimulationStep(p, simulation.step + 1)));
-            north.ifPresent(p -> nextSteps.add(new SimulationStep(p, simulation.step + 1)));
-            south.ifPresent(p -> nextSteps.add(new SimulationStep(p, simulation.step + 1)));
-            east.ifPresent(p -> nextSteps.add(new SimulationStep(p, simulation.step + 1)));
-            west.ifPresent(p -> nextSteps.add(new SimulationStep(p, simulation.step + 1)));
+            wait.ifPresent(p -> nextSteps.add(new SimulationStep(p, nextStep)));
+            north.ifPresent(p -> nextSteps.add(new SimulationStep(p, nextStep)));
+            south.ifPresent(p -> nextSteps.add(new SimulationStep(p, nextStep)));
+            east.ifPresent(p -> nextSteps.add(new SimulationStep(p, nextStep)));
+            west.ifPresent(p -> nextSteps.add(new SimulationStep(p, nextStep)));
 
-            Set<Point> visitedPoints = memoizedSolutions.getOrDefault(blizzardsNextStep, new HashSet<>());
-            for (SimulationStep nextStep: nextSteps) {
-                if (nextStep.current.equals(endPosition)) {
-                    blizzards.clear();
-                    blizzards.addAll(blizzardsNextStep);
-                    return nextStep.step;
+            Set<Point> visitedPoints = memoizedSolutions.getOrDefault(nextHashIndex, new HashSet<>());
+            for (SimulationStep simulationStep: nextSteps) {
+                if (simulationStep.current.equals(endPosition)) {
+                    return simulationStep.step;
                 }
 
-                if (!visitedPoints.contains(nextStep.current)) {
-                    visitedPoints.add(nextStep.current);
-                    memoizedSolutions.put(blizzardsNextStep, visitedPoints);
-                    simulations.add(nextStep);
+                if (!visitedPoints.contains(simulationStep.current)) {
+                    visitedPoints.add(simulationStep.current);
+                    memoizedSolutions.put(nextHashIndex, visitedPoints);
+                    simulations.add(simulationStep);
                 }
             }
         }
 
         return -1;
+    }
+
+    private void computeValueInCache(Map<Long, Set<Blizzard>> blizzardConfigurations, Map<Long, Set<Point>> blizzardPositions, int R, int C, Set<Blizzard> initialState, long step) {
+        long blizzardStates = lcm(R, C);
+
+        long hashedIndex = step % blizzardStates;
+        if (!blizzardPositions.containsKey(hashedIndex)) {
+            Set<Blizzard> nextConfig = simulateBlizzardMovement(initialState, R, C);
+            blizzardConfigurations.put(hashedIndex, nextConfig);
+            blizzardPositions.put(hashedIndex, computeBlizzardPositions(nextConfig));
+        }
     }
 
     private Set<Point> computeBlizzardPositions(Set<Blizzard> blizzards) {
@@ -187,5 +191,19 @@ public class Day24BlizzardBasin {
         }
 
         return Optional.of(p);
+    }
+
+    private long lcm(long a, long b) {
+        return a * b / gcd(a, b);
+    }
+
+    private long gcd(long a, long b) {
+        long t;
+        while (b != 0) {
+            t = b;
+            b = a % b;
+            a = t;
+        }
+        return a;
     }
 }
