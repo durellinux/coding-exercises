@@ -10,47 +10,25 @@ public class Day5IfYouGiveASeedAFertilizer {
 
     public long solve(List<String> input, Function<String, List<Interval>> seedParser) {
         List<Interval> seeds = seedParser.apply(input.get(0));
-        List<List<String>> otherLists = parseOtherLists(input.subList(3, input.size()));
+        List<List<String>> almanacs = parseOtherLists(input.subList(3, input.size()));
 
         return solve(
                 seeds,
-                otherLists.get(0),
-                otherLists.get(1),
-                otherLists.get(2),
-                otherLists.get(3),
-                otherLists.get(4),
-                otherLists.get(5),
-                otherLists.get(6)
+                almanacs
         );
     }
 
     public long solve(
         List<Interval> seeds,
-        List<String> seedsToSoilsInput,
-        List<String> soilToFertilizerInput,
-        List<String> fertilizerToWaterInput,
-        List<String> waterToLightInput,
-        List<String> lightToTemperatureInput,
-        List<String> temperatureToHumidityInput,
-        List<String> humidityToLocationInput
+        List<List<String>> almanacs
     ) {
-        Map<Long, ProblemEntry> seedsToSoils = parseInput(seedsToSoilsInput);
-        Map<Long, ProblemEntry> soilToFertilizer = parseInput(soilToFertilizerInput);
-        Map<Long, ProblemEntry> fertilizerToWater = parseInput(fertilizerToWaterInput);
-        Map<Long, ProblemEntry> waterToLight = parseInput(waterToLightInput);
-        Map<Long, ProblemEntry> lightToTemperature = parseInput(lightToTemperatureInput);
-        Map<Long, ProblemEntry> temperatureToHumidity = parseInput(temperatureToHumidityInput);
-        Map<Long, ProblemEntry> humidityToLocation = parseInput(humidityToLocationInput);
+        List<Interval> intervals = seeds;
+        for (List<String> almanacString: almanacs) {
+            Map<Long, ProblemEntry> almanacMap = parseInput(almanacString);
+            intervals = doMap(intervals, almanacMap);
+        }
 
-        List<Interval> soils = doMap(seeds, seedsToSoils);
-        List<Interval> fertilizers = doMap(soils, soilToFertilizer);
-        List<Interval> waters = doMap(fertilizers, fertilizerToWater);
-        List<Interval> lights = doMap(waters, waterToLight);
-        List<Interval> temperatures = doMap(lights, lightToTemperature);
-        List<Interval> humidities = doMap(temperatures, temperatureToHumidity);
-        List<Interval> locations = doMap(humidities, humidityToLocation);
-
-        return locations.stream()
+        return intervals.stream()
                 .map(v -> v.start)
                 .reduce(Long::min).orElse(0L);
     }
