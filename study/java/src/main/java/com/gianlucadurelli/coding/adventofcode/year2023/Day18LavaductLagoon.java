@@ -43,7 +43,8 @@ public class Day18LavaductLagoon {
         Queue<Integer> sortedRows = new LinkedList<>(pointsOnRows.keySet().stream().sorted().toList());
         Set<Point> allDug = new HashSet<>();
 
-        long dugPoints = computeOnDirection(minR, maxR, minC, maxC, sortedRows, allDug, segments, thrench, corners);
+        long dugPoints = 0;
+        dugPoints = computeOnDirection(minR, maxR, minC, maxC, sortedRows, allDug, segments, thrench, corners);
 
         for (Segment s: segments) {
             int minCol = s.points.stream().map(p -> p.col).min(Integer::compareTo).orElse(0);
@@ -51,16 +52,40 @@ public class Day18LavaductLagoon {
 
             dugPoints += ((s.rowMax - s.rowMin + 1) * (maxCol - minCol + 1));
 
-            for (int r = s.rowMin; r <= s.rowMax; r++) {
-                for(int c = minCol; c <= maxCol; c++) {
-                    allDug.add(new Point(r, c));
-                }
+//            for (int r = s.rowMin; r <= s.rowMax; r++) {
+//                for(int c = minCol; c <= maxCol; c++) {
+//                    allDug.add(new Point(r, c));
+//                }
+//            }
+        }
+
+//        printMatrix(thrench, allDug, minR, maxR, minC, maxC);
+
+        return dugPoints - thrench.size();
+    }
+
+    record RaycastFlipSegment(int startCol, int endCol) {}
+
+    private List<RaycastFlipSegment> getFlipSegments(int row, Set<Segment> verticalSegments, Set<Segment> horizontalSegments) {
+        List<RaycastFlipSegment> segmentTraversed = new ArrayList<>(verticalSegments.stream().filter(s -> s.rowMin < row && s.rowMax > row).toList().stream().map(
+                s -> new RaycastFlipSegment(s.points.stream().findFirst().orElseThrow().col, s.points.stream().findFirst().orElseThrow().col)
+        ).toList());
+
+        List<Segment> segmentsWithPointOnRow = horizontalSegments.stream().filter(s -> s.rowMin == row || s.rowMax == row).toList();
+        for (Segment horizontalSegment: segmentsWithPointOnRow) {
+            Point p1 = horizontalSegment.points.stream().findFirst().orElseThrow();
+            Point p2 = horizontalSegment.points.stream().skip(1).findFirst().orElseThrow();
+            List<Segment> correspondingVerticalSegments = verticalSegments.stream().filter(s -> s.points.stream().anyMatch(p -> p.equals(p1) || p.equals(p2))).toList();
+            int minRow = Math.min(correspondingVerticalSegments.get(0).rowMin, correspondingVerticalSegments.get(1).rowMin);
+            int maxRow = Math.max(correspondingVerticalSegments.get(0).rowMax, correspondingVerticalSegments.get(1).rowMax);
+            if (minRow < row && maxRow > row) {
+                segmentTraversed.add(new RaycastFlipSegment(Math.min(p1.col, p2.col), Math.max(p1.col, p2.col)));
             }
         }
 
-        printMatrix(thrench, allDug, minR, maxR, minC, maxC);
+        segmentTraversed.sort(Comparator.comparingInt(a -> a.startCol));
 
-        return dugPoints - thrench.size();
+        return segmentTraversed;
     }
 
     private long computeOnDirection(int minR, int maxR, int minC, int maxC, Queue<Integer> sortedRows, Set<Point> allDug, Set<Segment> segments, Set<Point> thrench, List<Point> corners) {
@@ -72,23 +97,26 @@ public class Day18LavaductLagoon {
         int rowStart = minR;
         while(!sortedRows.isEmpty()) {
             int rowEnd = sortedRows.poll();
+//            if (rowEnd > minR + maxR) {
+//                break;
+//            }
             System.out.println("Analyzing: " + rowStart + " -> " + rowEnd);
 
             Set<Point> dug = new HashSet<>();
             // Analyze rowStart
             System.out.println("Running: " + rowStart + " -> " + rowStart);
             dugPoints += rowsInPolygon(rowStart, rowStart, minC, maxC, dug, verticalSegments, horizontalSegment, thrench, corners);
-            allDug.addAll(dug);
+//            allDug.addAll(dug);
             System.out.println("Points: " + (dugPoints - oldPoints) + " -> " + dugPoints);
 //            printMatrix(thrench, allDug, minR, maxR, minC, maxC);
 
             if (rowStart +1 <= rowEnd - 1) {
                 oldPoints = dugPoints;
-                dug = new HashSet<>();
+//                dug = new HashSet<>();
                 // Analyze rowStart + 1
                 System.out.println("Running: " + (rowStart + 1) + " -> " + (rowEnd - 1));
                 dugPoints += rowsInPolygon(rowStart + 1, rowEnd - 1, minC, maxC, dug, verticalSegments, horizontalSegment, thrench, corners);
-                allDug.addAll(dug);
+//                allDug.addAll(dug);
                 System.out.println("Points: " + (dugPoints - oldPoints) + " -> " + dugPoints);
 //                printMatrix(thrench, allDug, minR, maxR, minC, maxC);
             }
@@ -112,79 +140,127 @@ public class Day18LavaductLagoon {
 
     record SmartSegment(Point start, Point middleStart, Point middleEnd, Point end) {}
 
-    public long rowsInPolygon(int row, int endRow, int minC, int maxC, Set<Point> dug, Set<Segment> verticalSegment, Set<Segment> horizontalSegment, Set<Point> thrench, List<Point> corners) {
-        boolean inPolygon = false;
-        Queue<Integer> sortedCols;
+    public long rowsInPolygon(int row, int endRow, int minC, int maxC, Set<Point> dug, Set<Segment> verticalSegments, Set<Segment> horizontalSegments, Set<Point> thrench, List<Point> corners) {
+        Set<Point> pointsOnRow = corners.stream().filter(p -> p.row == row).collect(Collectors.toSet());
+        Set<Segment> traversedSegments = verticalSegments.stream().filter(s -> s.rowMin < row && s.rowMax > row).collect(Collectors.toSet());
+        Set<Point> traversedPoints = traversedSegments.stream().map(s -> {
+            int col = s.points.stream().findFirst().orElseThrow().col;
+            return new Point(row, col);
+        }).collect(Collectors.toSet());
+        traversedPoints.addAll(pointsOnRow);
 
-        List<Integer> intersectedColumnsSegments = verticalSegment.stream().filter(s -> s.rowMin == row || s.rowMax == endRow).map(s -> {
-            Point p = s.points.stream().findFirst().orElseThrow();
-            return p.col;
-        }).sorted().toList();
+        Set<Segment> segmentsOnRow = horizontalSegments.stream().filter(s -> s.rowMin == row || s.rowMax == row).collect(Collectors.toSet());
 
-        Set<Segment> intersectedSegments = verticalSegment.stream().filter(s -> s.rowMin < row && s.rowMax > endRow).collect(Collectors.toSet());
+        List<RaycastFlipSegment> flipSegments = getFlipSegments(row, verticalSegments, horizontalSegments);
+        List<Point> sortedTraversedPoints = new ArrayList<>(traversedPoints.stream().toList());
+        sortedTraversedPoints.sort(Comparator.comparingInt(a -> a.col));
 
-        Set<Segment> intersectedSegmentsFake = new HashSet<>();
-        for (int i = 0; i < intersectedColumnsSegments.size() - 1; i+=2) {
-            Point middleStart = new Point(row, intersectedColumnsSegments.get(i));
-            Point middleEnd = new Point(row, intersectedColumnsSegments.get(i + 1));
-
-            Point start = verticalSegment.stream().filter(s -> s.points.stream().anyMatch(p -> p.equals(middleStart))).findFirst().orElseThrow().points.stream().filter(p -> !p.equals(middleStart)).findFirst().orElseThrow();
-            Point end = verticalSegment.stream().filter(s -> s.points.stream().anyMatch(p -> p.equals(middleEnd))).findFirst().orElseThrow().points.stream().filter(p -> !p.equals(middleEnd)).findFirst().orElseThrow();
-
-            int minRow = Math.min(start.row, end.row);
-            minRow = Math.min(minRow, row);
-
-            int maxRow = Math.max(start.row, end.row);
-            maxRow = Math.max(maxRow, row);
-
-            Point p1 = new Point(minRow, middleStart.col);
-            Point p2 = new Point(maxRow, middleStart.col);
-            intersectedSegmentsFake.add(new Segment(Set.of(p1, p2), Math.min(p1.row, p2.row), Math.max(p1.row, p2.row)));
-        }
-
-        System.out.println("Intersected Segments: " + intersectedSegments);
-        System.out.println("Intersected Segments Fake: " + intersectedSegmentsFake);
-
-        Set<Segment> allIntersectedSegments = new HashSet<>(intersectedSegments);
-        allIntersectedSegments.addAll(intersectedSegmentsFake);
-
-        List<Integer> intersectedColumns = verticalSegment.stream().filter(s -> s.rowMin <= row && s.rowMax >= row).map(
-            s -> s.points.stream().findFirst().orElseThrow().col
-        ).sorted().toList();
-        sortedCols = new LinkedList<>(new HashSet<>(intersectedColumns));
+        System.out.println("Row: " + row + " - " + sortedTraversedPoints + " - " + flipSegments);
 
         long dugPoints = 0;
-        System.out.println("Intersected cols: " + intersectedColumns);
-        while(!sortedCols.isEmpty()) {
-            int colStart = sortedCols.poll() + 1;
-            int colEnd = sortedCols.peek() != null ? sortedCols.peek() - 1 : maxC + 2;
-
-            boolean isOnHorizontalSegment = horizontalSegment.stream()
-                .anyMatch(s -> {
-                    int minCol = s.points.stream().map(p -> p.col).min(Integer::compareTo).orElseThrow();
-                    int maxCol = s.points.stream().map(p -> p.col).max(Integer::compareTo).orElseThrow();
-                    return s.rowMin == row && minCol < colStart && colStart < maxCol;
-                });
-
-            long intersectRight = allIntersectedSegments.stream().filter(s -> {
+        int colStart = Integer.MIN_VALUE;
+        for (Point p: sortedTraversedPoints) {
+            int colEnd = p.col - 1;
+            Point selectedPoint = new Point(row, colStart);
+            long flipsAfter = flipSegments.stream().filter(s -> selectedPoint.col < s.startCol).count();
+            boolean isInSegment = segmentsOnRow.stream().anyMatch(s -> {
                 Point p1 = s.points.stream().findFirst().orElseThrow();
-                return s.rowMin < row && s.rowMax > endRow && p1.col >= colStart;
-            }).count();
+                Point p2 = s.points.stream().skip(1).findFirst().orElseThrow();
+                int minCol = Math.min(p1.col, p2.col);
+                int maxCol = Math.max(p1.col, p2.col);
+                return minCol <= selectedPoint.col && maxCol >= selectedPoint.col;
+            });
 
-            System.out.println("Analyzing: " + new Point(row, colStart) + " -> intersecting: " + intersectRight + " / onSegment: " + isOnHorizontalSegment);
-
-            if (intersectRight % 2 == 1 && !isOnHorizontalSegment) {
+            if (!isInSegment && flipsAfter % 2 != 0) {
                 dugPoints += (long) (colEnd - colStart + 1) * (endRow - row + 1);
-                for (int c = colStart; c <= colEnd; c++) {
-                    for (int r = row; r <= endRow; r++) {
-                        Point p = new Point(r, c);
-                        if (dug.contains(p)) {
-                            System.out.println("Duplicated (for segment): " + p);
-                        }
-                        dug.add(p);
-                    }
-                }
+//                for (int c = colStart; c <= colEnd; c++) {
+//                    for (int r = row; r <= endRow; r++) {
+//                        Point dugP = new Point(r, c);
+//                        if (dug.contains(dugP)) {
+//                            System.out.println("Duplicated (for segment): " + dugP);
+//                        }
+//                        dug.add(dugP);
+//                    }
+//                }
             }
+
+            colStart = p.col + 1;
+        }
+
+        return dugPoints;
+//
+//        boolean inPolygon = false;
+//        Queue<Integer> sortedCols;
+//
+//        List<Integer> intersectedColumnsSegments = verticalSegment.stream().filter(s -> s.rowMin == row || s.rowMax == endRow).map(s -> {
+//            Point p = s.points.stream().findFirst().orElseThrow();
+//            return p.col;
+//        }).sorted().toList();
+//
+//        Set<Segment> intersectedSegments = verticalSegment.stream().filter(s -> s.rowMin < row && s.rowMax > endRow).collect(Collectors.toSet());
+//
+//        Set<Segment> intersectedSegmentsFake = new HashSet<>();
+//        for (int i = 0; i < intersectedColumnsSegments.size() - 1; i+=2) {
+//            Point middleStart = new Point(row, intersectedColumnsSegments.get(i));
+//            Point middleEnd = new Point(row, intersectedColumnsSegments.get(i + 1));
+//
+//            Point start = verticalSegment.stream().filter(s -> s.points.stream().anyMatch(p -> p.equals(middleStart))).findFirst().orElseThrow().points.stream().filter(p -> !p.equals(middleStart)).findFirst().orElseThrow();
+//            Point end = verticalSegment.stream().filter(s -> s.points.stream().anyMatch(p -> p.equals(middleEnd))).findFirst().orElseThrow().points.stream().filter(p -> !p.equals(middleEnd)).findFirst().orElseThrow();
+//
+//            int minRow = Math.min(start.row, end.row);
+//            minRow = Math.min(minRow, row);
+//
+//            int maxRow = Math.max(start.row, end.row);
+//            maxRow = Math.max(maxRow, row);
+//
+//            Point p1 = new Point(minRow, middleStart.col);
+//            Point p2 = new Point(maxRow, middleStart.col);
+//            intersectedSegmentsFake.add(new Segment(Set.of(p1, p2), Math.min(p1.row, p2.row), Math.max(p1.row, p2.row)));
+//        }
+//
+//        System.out.println("Intersected Segments: " + intersectedSegments);
+//        System.out.println("Intersected Segments Fake: " + intersectedSegmentsFake);
+//
+//        Set<Segment> allIntersectedSegments = new HashSet<>(intersectedSegments);
+//        allIntersectedSegments.addAll(intersectedSegmentsFake);
+//
+//        List<Integer> intersectedColumns = verticalSegment.stream().filter(s -> s.rowMin <= row && s.rowMax >= row).map(
+//            s -> s.points.stream().findFirst().orElseThrow().col
+//        ).sorted().toList();
+//        sortedCols = new LinkedList<>(new HashSet<>(intersectedColumns));
+//
+//        long dugPoints = 0;
+//        System.out.println("Intersected cols: " + intersectedColumns);
+//        while(!sortedCols.isEmpty()) {
+//            int colStart = sortedCols.poll() + 1;
+//            int colEnd = sortedCols.peek() != null ? sortedCols.peek() - 1 : maxC + 2;
+//
+//            boolean isOnHorizontalSegment = horizontalSegment.stream()
+//                .anyMatch(s -> {
+//                    int minCol = s.points.stream().map(p -> p.col).min(Integer::compareTo).orElseThrow();
+//                    int maxCol = s.points.stream().map(p -> p.col).max(Integer::compareTo).orElseThrow();
+//                    return s.rowMin == row && minCol < colStart && colStart < maxCol;
+//                });
+//
+//            long intersectRight = allIntersectedSegments.stream().filter(s -> {
+//                Point p1 = s.points.stream().findFirst().orElseThrow();
+//                return s.rowMin < row && s.rowMax > endRow && p1.col >= colStart;
+//            }).count();
+//
+//            System.out.println("Analyzing: " + new Point(row, colStart) + " -> intersecting: " + intersectRight + " / onSegment: " + isOnHorizontalSegment);
+//
+//            if (intersectRight % 2 == 1 && !isOnHorizontalSegment) {
+//                dugPoints += (long) (colEnd - colStart + 1) * (endRow - row + 1);
+//                for (int c = colStart; c <= colEnd; c++) {
+//                    for (int r = row; r <= endRow; r++) {
+//                        Point p = new Point(r, c);
+//                        if (dug.contains(p)) {
+//                            System.out.println("Duplicated (for segment): " + p);
+//                        }
+//                        dug.add(p);
+//                    }
+//                }
+//            }
 
 //            System.out.println("Analyzing: " + colStart + " -> " + colEnd + " = " + inPolygon);
 //
@@ -223,9 +299,9 @@ public class Day18LavaductLagoon {
 //            }
 //
 //            colStart = colEnd;
-        }
-
-        return dugPoints;
+//        }
+//
+//        return dugPoints;
     }
 
     /**

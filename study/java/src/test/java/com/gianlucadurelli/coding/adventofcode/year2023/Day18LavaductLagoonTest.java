@@ -13,7 +13,7 @@ public class Day18LavaductLagoonTest {
     private static final List<String> INPUT = AdventOfCodeTestHelpers.loadInput(Day18LavaductLagoon.class);
 
     @Test
-    public void test() {
+    public void test1() {
         Assertions.assertThat(solver.solve(solver.parseInput(TEST_INPUT))).isEqualTo(62);
     }
 
@@ -23,8 +23,13 @@ public class Day18LavaductLagoonTest {
     }
 
     @Test
+    public void test2() {
+        Assertions.assertThat(solver.solve(solver.parseInput2(TEST_INPUT))).isEqualTo(952408144115L);
+    }
+
+    @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve(solver.parseInput2(INPUT))).isEqualTo(48503);
+        Assertions.assertThat(solver.solve(solver.parseInput2(INPUT))).isEqualTo(148442153147147L);
     }
 
 }
