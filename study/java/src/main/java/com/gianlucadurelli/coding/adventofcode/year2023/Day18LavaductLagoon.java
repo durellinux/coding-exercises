@@ -187,12 +187,14 @@ public class Day18LavaductLagoon {
 
             Set<Point> dug = new HashSet<>();
             // Analyze rowStart
-            dugPoints += dugPointsOnRow(rowStart, rowStart, pointsOnRows.get(rowStart), minC, dug, verticalSegments, horizontalSegment);
+            System.out.println("Running: " + rowStart + " -> " + rowStart);
+            dugPoints += dugPointsOnRowWithSegments(rowStart, rowStart, pointsOnRows.get(rowStart), minC, dug, verticalSegments, horizontalSegment);
             allDug.addAll(dug);
 
             if (rowStart +1 <= rowEnd - 1) {
                 dug = new HashSet<>();
                 // Analyze rowStart + 1
+                System.out.println("Running: " + (rowStart + 1) + " -> " + (rowEnd - 1));
                 dugPoints += dugPointsOnRow(rowStart + 1, rowEnd - 1, pointsOnRows.get(rowStart), minC, dug, verticalSegments, horizontalSegment);
                 allDug.addAll(dug);
             }
@@ -201,7 +203,7 @@ public class Day18LavaductLagoon {
         }
 
         Set<Point> dug = new HashSet<>();
-        dugPoints += dugPointsOnRow(rowStart, rowStart, pointsOnRows.get(rowStart), minC, dug, verticalSegments, horizontalSegment);
+        dugPoints += dugPointsOnRowWithSegments(rowStart, rowStart, pointsOnRows.get(rowStart), minC, dug, verticalSegments, horizontalSegment);
         allDug.addAll(dug);
 
 
@@ -252,29 +254,82 @@ public class Day18LavaductLagoon {
         sortedCols = new LinkedList<>(new HashSet<>(intersectedColumns));
 
         long dugPoints = 0;
-        Integer colStart = sortedCols.poll();
+        Integer colStart = null;
+        inPolygon = true;
         while(!sortedCols.isEmpty()) {
             int colEnd;
-//            if (colStart == null) {
-//                colStart = sortedCols.poll();
-//                if (sortedCols.isEmpty()) {
-//                    System.out.println("Exit for abnormal condition");
-//                    break;
-//                }
-//            }
+            if (colStart == null) {
+                colStart = sortedCols.poll();
+                if (sortedCols.isEmpty()) {
+                    System.out.println("Exit for abnormal condition");
+                    break;
+                }
+            }
+            colEnd = sortedCols.poll();
+
+            if (inPolygon) {
+                dugPoints += (long) (colEnd - colStart - 1) * (endRow - row + 1);
+                for (int c = colStart + 1; c <= colEnd - 1; c++) {
+                    for(int r = row; r <= endRow; r++) {
+                        Point p = new Point(r, c);
+                        if (dug.contains(p)) {
+                            System.out.println("Duplicated (for segment): " + p);
+                        }
+                        dug.add(p);
+                    }
+                }
+            }
+
+            inPolygon = !inPolygon;
+            colStart = colEnd;
+        }
+
+        return dugPoints;
+    }
+
+    public long dugPointsOnRowWithSegments(int row, int endRow, List<Integer> columnsOnRow, int minC, Set<Point> dug, Set<Segment> verticalSegment, Set<Segment> horizontalSegment) {
+        boolean inPolygon = false;
+        Queue<Integer> sortedCols;
+
+        List<Integer> intersectedColumns = verticalSegment.stream().filter(s -> s.rowMin <= row && s.rowMax > endRow).map(s -> {
+            Point p = s.points.stream().findFirst().orElseThrow();
+            return p.col;
+        }).sorted().toList();
+        sortedCols = new LinkedList<>(new HashSet<>(intersectedColumns));
+
+        long dugPoints = 0;
+        Integer colStart = null;
+        while(!sortedCols.isEmpty()) {
+            int colEnd;
+            if (colStart == null) {
+                colStart = sortedCols.poll();
+                if (sortedCols.isEmpty()) {
+                    System.out.println("Exit for abnormal condition");
+                    break;
+                }
+            }
             colEnd = sortedCols.poll();
 
             Segment possibleSegment = new Segment(Set.of(new Point(row, colStart), new Point(row, colEnd)), row, row);
+            System.out.println(possibleSegment);
             if (horizontalSegment.contains(possibleSegment)) {
-                inPolygon = !inPolygon;
-                dugPoints += colEnd - colStart - 1;
-                for (int c = colStart + 1; c <= colEnd - 1; c++) {
-                    Point p = new Point(row, c);
-                    if (dug.contains(p)) {
-                        System.out.println("Duplicated (for segment): " + p);
-                    }
-                    dug.add(p);
+                Integer finalColStart = colStart;
+                Set<Segment> verticals = verticalSegment.stream().filter(s -> s.points.stream().anyMatch(p -> p.row <= row && (p.col == finalColStart || p.col == colEnd))).collect(Collectors.toSet());
+                long countVerticalTop = verticals.stream().filter(s -> s.points.stream().anyMatch(p -> p.row < row)).count();
+                System.out.println(row + " - " + colStart + " - " + colEnd + " " + possibleSegment + " " + verticals + " " + countVerticalTop);
+                if (countVerticalTop == 1) {
+                    inPolygon = !inPolygon;
                 }
+//
+//                inPolygon = !inPolygon;
+//                dugPoints += colEnd - colStart - 1;
+//                for (int c = colStart + 1; c <= colEnd - 1; c++) {
+//                    Point p = new Point(row, c);
+//                    if (dug.contains(p)) {
+//                        System.out.println("Duplicated (for segment): " + p);
+//                    }
+//                    dug.add(p);
+//                }
             } else if (inPolygon) {
                 dugPoints += (long) (colEnd - colStart - 1) * (endRow - row + 1);
                 for (int c = colStart + 1; c <= colEnd - 1; c++) {
