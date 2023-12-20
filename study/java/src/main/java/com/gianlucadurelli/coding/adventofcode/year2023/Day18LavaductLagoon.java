@@ -12,7 +12,50 @@ public class Day18LavaductLagoon {
 
 
     public long solve(List<DigPlan> plans) {
-        return solveWithPolygonsRaycast(plans);
+        return solveUsingCorners(plans);
+    }
+
+    private long solveUsingCorners(List<DigPlan> plans) {
+        Set<Point> thrench = new HashSet<>();
+        Map<Integer, List<Integer>> pointsOnRows = new HashMap<>();
+        List<Point> corners = new ArrayList<>();
+        Set<Segment> segments = new HashSet<>();
+
+        getStuffV1(plans, thrench, corners, segments, pointsOnRows);
+
+        long internalArea = slicker(corners);
+        long perimeter = computePerimeter(segments, thrench);
+
+        return internalArea + perimeter / 2 + 1;
+    }
+
+    private long slicker(List<Point> corners) {
+        long total = 0;
+        for (int i = 0; i < corners.size(); i++) {
+            int j = (i + 1) % corners.size();
+            Point pi = corners.get(i);
+            Point pj = corners.get(j);
+
+            total += ((long) pi.col * pj.row)
+                    - ((long) pj.col * pi.row);
+        }
+        total = total / 2;
+        System.out.println(total);
+        return Math.abs(total);
+    }
+
+    private long computePerimeter(Set<Segment> segments, Set<Point> thrench) {
+        long length = 0;
+        for (Segment s: segments) {
+            int minCol = s.points.stream().map(p -> p.col).min(Integer::compareTo).orElse(0);
+            int maxCol = s.points.stream().map(p -> p.col).max(Integer::compareTo).orElse(0);
+
+            length += ((long) (s.rowMax - s.rowMin + 1) * (maxCol - minCol + 1));
+        }
+
+        long perimeter = length - thrench.size();
+        System.out.println(perimeter);
+        return perimeter;
     }
 
     private long solveWithPolygonsRaycast(List<DigPlan> plans) {
@@ -31,16 +74,10 @@ public class Day18LavaductLagoon {
 
         Queue<Integer> sortedRows = new LinkedList<>(pointsOnRows.keySet().stream().sorted().toList());
 
-        long dugPoints = pointInsidePolygonByRaycastOnRows(minR, sortedRows, segments, corners);
+        long internalPoints = pointInsidePolygonByRaycastOnRows(minR, sortedRows, segments, corners);
+        long perimeter = computePerimeter(segments, thrench);
 
-        for (Segment s: segments) {
-            int minCol = s.points.stream().map(p -> p.col).min(Integer::compareTo).orElse(0);
-            int maxCol = s.points.stream().map(p -> p.col).max(Integer::compareTo).orElse(0);
-
-            dugPoints += ((long) (s.rowMax - s.rowMin + 1) * (maxCol - minCol + 1));
-        }
-
-        return dugPoints - thrench.size();
+        return internalPoints + perimeter;
     }
 
     private long pointInsidePolygonByRaycastOnRows(int minR, Queue<Integer> sortedRows, Set<Segment> segments, List<Point> corners) {
@@ -192,25 +229,6 @@ public class Day18LavaductLagoon {
         }
 
         return plans;
-    }
-
-    private long inversePrick(long b, long A) {
-        return A + 1 - b / 2;
-    }
-
-    private long slicker(List<Point> corners) {
-        double total = 0;
-        for (int i = 0; i < corners.size(); i++) {
-            int j = (i + 1) % corners.size();
-            Point pi = corners.get(i);
-            Point pj = corners.get(j);
-
-            total += (pi.col * pj.row)
-                - (pj.col * pi.row);
-        }
-        total = total / 2;
-        System.out.println(total);
-        return Math.round(total);
     }
 
 }
