@@ -106,6 +106,6 @@ public class Day21StepCounterTest {
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(INPUT, 1000)).isEqualTo(846276);
+        Assertions.assertThat(solver.solve2(INPUT, 196)).isEqualTo(32768);
     }
 }

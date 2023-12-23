@@ -88,7 +88,7 @@ public class Day21StepCounter {
         int C = garden[0].length;
 
         WalkStatsWithFrontiers centerStats = makeSteps(garden, start, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
-//        WalkStatsWithFrontiers solution = makeSteps(garden, start, maxSteps, this::nextPlotsWithOverFlow, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+        WalkStatsWithFrontiers solution = makeSteps(garden, start, maxSteps, this::nextPlotsWithOverFlow, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
 
         System.out.println("Garden: " + R + " x " + C);
         System.out.println("Start: " + start.x + " x " + start.y);
@@ -144,7 +144,7 @@ public class Day21StepCounter {
 
 
         long result = centerStats.stats.even;
-        for (int i = 0; i < fullGardens; i++) {
+        for (int i = 0; i < fullGardens - 1; i++) {
             int s = i + 1;
             if (i % 2 == 0) {
                 result += rightStats.stats.even * s * 4;
@@ -157,7 +157,7 @@ public class Day21StepCounter {
         System.out.println(result + evenRemainderUp + evenRemainderDown + leftStats.stats.even + rightStats.stats.even);
 
 
-        return result;
+        return solution.visitedPlotsAtStep(maxSteps);
     }
 
 

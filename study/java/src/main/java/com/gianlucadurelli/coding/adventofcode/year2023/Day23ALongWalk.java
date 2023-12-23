@@ -86,7 +86,7 @@ public class Day23ALongWalk {
         System.out.println("Crossroads: " + crossRoads.size());
         System.out.println("R x C: " + R + " x " + C);
         System.out.println("Trails: " + trails.size());
-        return longestPathWithTrails(start, end, trails, R);
+        return longestPathWithTrailsBFS(start, end, trails);
     }
 
     private Set<Trail> findTrails(char[][] hikes, Point start, Set<Point> crossRoads) {
@@ -151,14 +151,11 @@ public class Day23ALongWalk {
         return longestPath;
     }
 
-    private long longestPathWithTrails(Point start, Point end, Set<Trail> trails, int R) {
-        Map<Set<Point>, Long> trailsLength = new HashMap<>();
+    private long longestPathWithTrailsBFS(Point start, Point end, Set<Trail> trails) {
         Map<Point, Integer> pointIndex = new HashMap<>();
         Map<Point, List<Trail>> trailsFromPoint = new HashMap<>();
 
         for (Trail t: trails) {
-            trailsLength.put(t.points, t.lenght);
-
             t.points.forEach(p -> {
                 List<Trail> trailsFrom = trailsFromPoint.getOrDefault(p, new ArrayList<>());
                 trailsFrom.add(t);
@@ -209,7 +206,7 @@ public class Day23ALongWalk {
     }
 
     private boolean isJoint(Point p, char[][] hikes) {
-        return hikes[p.r][p.c] == '.' && computeNextMoves(p, hikes).size() > 2;
+        return hikes[p.r][p.c] != '#' && computeNextMoves(p, hikes).size() > 2;
     }
 
     private List<Point> computeNextMoves(Point p, char[][] hikes) {
