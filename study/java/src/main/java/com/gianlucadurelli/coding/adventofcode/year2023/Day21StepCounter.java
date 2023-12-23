@@ -58,12 +58,12 @@ public class Day21StepCounter {
         }
 
         public Step minUp(int R) {
-            List<Step> steps = selectedSteps.stream().filter(s -> s.p.y == 0).sorted(Comparator.comparingInt(a -> a.step)).map(s -> new Step(new Point(R - 1, s.p.y), s.step  +1)).toList();
+            List<Step> steps = selectedSteps.stream().filter(s -> s.p.x == 0).sorted(Comparator.comparingInt(a -> a.step)).map(s -> new Step(new Point(R - 1, s.p.y), s.step  +1)).toList();
             return steps.get(0);
         }
 
         public Step minDown(int R) {
-            List<Step> steps = selectedSteps.stream().filter(s -> s.p.y == R -1).sorted(Comparator.comparingInt(a -> a.step)).map(s -> new Step(new Point(0, s.p.y), s.step + 1)).toList();
+            List<Step> steps = selectedSteps.stream().filter(s -> s.p.x == R -1).sorted(Comparator.comparingInt(a -> a.step)).map(s -> new Step(new Point(0, s.p.y), s.step + 1)).toList();
             return steps.get(0);
         }
     }
@@ -87,40 +87,77 @@ public class Day21StepCounter {
         int R = garden.length;
         int C = garden[0].length;
 
-        WalkStatsWithFrontiers stats = makeSteps(garden, start, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+        WalkStatsWithFrontiers centerStats = makeSteps(garden, start, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+//        WalkStatsWithFrontiers solution = makeSteps(garden, start, maxSteps, this::nextPlotsWithOverFlow, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
 
         System.out.println("Garden: " + R + " x " + C);
         System.out.println("Start: " + start.x + " x " + start.y);
-        System.out.println("Frontiers size: " + stats.frontiers.size());
-        System.out.println(stats.stats);
+        System.out.println("Frontiers size: " + centerStats.frontiers.size());
+        System.out.println(centerStats.stats);
 
-        if (maxSteps <= stats.stats.minStep) {
-            return stats.visitedPlotsAtStep(maxSteps);
+        if (maxSteps <= centerStats.stats.minStep) {
+            return centerStats.visitedPlotsAtStep(maxSteps);
         }
 
-        long fullGardens = maxSteps / stats.stats.maxStep;
+        int fullGardens = ((maxSteps - 65) / 130);
+        int remainingSteps = maxSteps - 65 - fullGardens * 130;
 
-        Step firstUp = stats.minUp(R);
-        Step firstDown = stats.minDown(R);
-        Step firstLeft = stats.minLeft(C);
-        Step firstRight = stats.minRight(C);
+        Step firstUp = centerStats.minUp(R);
+        Step firstDown = centerStats.minDown(R);
+        Step firstLeft = centerStats.minLeft(C);
+        Step firstRight = centerStats.minRight(C);
 
-
+        System.out.println("Left");
         WalkStatsWithFrontiers leftStats = makeSteps(garden, firstLeft.p, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+        System.out.println("Right");
         WalkStatsWithFrontiers rightStats = makeSteps(garden, firstRight.p, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+        System.out.println("Up");
         WalkStatsWithFrontiers upStats = makeSteps(garden, firstUp.p, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
+        System.out.println("Down");
         WalkStatsWithFrontiers downStats = makeSteps(garden, firstDown.p, 400, this::nextPlots, s -> s.p.x == R - 1 || s.p.y == C - 1 || s.p.x == 0 || s.p.y == 0);
 
         System.out.println(leftStats.stats);
         System.out.println(rightStats.stats);
         System.out.println(upStats.stats);
-        System.out.println(leftStats.stats);
+        System.out.println(downStats.stats);
+        System.out.println(fullGardens);
+        System.out.println(remainingSteps);
 
-        return stats.stats().even()
-                + leftStats.visitedPlotsAtStep(maxSteps - firstLeft.step)
-                + rightStats.visitedPlotsAtStep(maxSteps - firstRight.step)
-                + upStats.visitedPlotsAtStep(maxSteps - firstUp.step)
-                + downStats.visitedPlotsAtStep(maxSteps - firstDown.step);
+        long oddRemainderUp = upStats.visitedPlotsAtStep(remainingSteps) * ((fullGardens + 1) * 4 - 2) / 2;
+        long evenRemainderUp = upStats.visitedPlotsAtStep(remainingSteps + 1) * ((fullGardens + 1) * 4 - 2) / 2;
+        System.out.println(oddRemainderUp);
+        System.out.println(evenRemainderUp);
+
+        long oddRemainderDown = downStats.visitedPlotsAtStep(remainingSteps) * ((fullGardens + 1) * 4 - 2) / 2;
+        long evenRemainderDown = downStats.visitedPlotsAtStep(remainingSteps + 1) * ((fullGardens + 1) * 4 - 2) / 2;
+        System.out.println(oddRemainderDown);
+        System.out.println(evenRemainderDown);
+
+        System.out.println(upStats.visitedPlotsAtStep(remainingSteps));
+        System.out.println(leftStats.visitedPlotsAtStep(remainingSteps));
+        System.out.println(rightStats.visitedPlotsAtStep(remainingSteps));
+        System.out.println(downStats.visitedPlotsAtStep(remainingSteps));
+
+        long value = Math.round(Math.pow(fullGardens + 1, 2) * centerStats.stats.odd + Math.pow(fullGardens, 2) * centerStats.stats.even);
+        System.out.println(value + oddRemainderUp + oddRemainderDown + leftStats.stats.odd + rightStats.stats.odd);
+        System.out.println(value + evenRemainderUp + evenRemainderDown + leftStats.stats.even + rightStats.stats.even);
+
+
+        long result = centerStats.stats.even;
+        for (int i = 0; i < fullGardens; i++) {
+            int s = i + 1;
+            if (i % 2 == 0) {
+                result += rightStats.stats.even * s * 4;
+            } else {
+                result += rightStats.stats.odd * s * 4;
+            }
+        }
+
+        System.out.println(result + oddRemainderUp + oddRemainderDown + leftStats.stats.odd + rightStats.stats.odd);
+        System.out.println(result + evenRemainderUp + evenRemainderDown + leftStats.stats.even + rightStats.stats.even);
+
+
+        return result;
     }
 
 
@@ -186,7 +223,7 @@ public class Day21StepCounter {
             }
         }
 
-        printMatrix(garden, visitedPlots);
+//        printMatrix(garden, visitedPlots);
 
         long even = 0;
         long odd = 0;
@@ -308,9 +345,9 @@ public class Day21StepCounter {
             for (int c = 0; c < C; c++) {
                 Point p = new Point(r, c);
                 if (stepForPoint.containsKey(p)) {
-                    System.out.print("O");
+                    System.out.print(stepForPoint.get(p) + " ");
                 } else {
-                    System.out.print(garden[r][c]);
+                    System.out.print(garden[r][c] + " ");
                 }
             }
             System.out.println();
