@@ -8,13 +8,6 @@ public class Day21StepCounter {
 
     private record Point(int x, int y) {}
 
-    private record Fraction(int numerator, int denominator, boolean positive) {
-        public static Fraction from(Point p) {
-            // TODO: Fix
-            return new Fraction(p.y, p.x, true);
-        }
-    }
-
     private record Segment(Point p1, Point p2) {
         public boolean belongsToSegment(Point p, int R, int C) {
             int xMin = Math.min(p1.x, p2.x);
