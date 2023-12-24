@@ -1,13 +1,8 @@
 package com.gianlucadurelli.coding.libraries.math;
 
 public record DoublePrecision(double value) implements Operations<DoublePrecision> {
-    private static final DoublePrecision ZERO = new DoublePrecision(0);
-    private static final DoublePrecision ONE = new DoublePrecision(1);
-
-    @Override
-    public DoublePrecision fromLong(long value) {
-        return new DoublePrecision(value);
-    }
+    public static final DoublePrecision ZERO = new DoublePrecision(0);
+    public static final DoublePrecision ONE = new DoublePrecision(1);
 
     @Override
     public double asDouble() {

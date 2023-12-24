@@ -1,7 +1,6 @@
 package com.gianlucadurelli.coding.libraries.math;
 
-public interface Operations<T> {
-    T fromLong(long value);
+public interface Operations<T extends Operations<T>> {
     double asDouble();
     T getZero();
     T getOne();

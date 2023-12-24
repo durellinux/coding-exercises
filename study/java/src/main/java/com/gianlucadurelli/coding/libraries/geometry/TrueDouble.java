@@ -39,12 +39,12 @@ public class TrueDouble {
         public Optional<Point> intersect(PointWithVelocity other) {
             Optional<Point> intersection = this.trajectory.intersect(other.trajectory);
 
-            System.out.println("Hailstone 1: " + this.p);
-            System.out.println("Hailstone 2: " + other.p);
+//            System.out.println("Hailstone 1: " + this.p);
+//            System.out.println("Hailstone 2: " + other.p);
 
 
             if (intersection.isEmpty()) {
-                System.out.println("Intersection: No Intersection");
+//                System.out.println("Intersection: No Intersection");
                 return Optional.empty();
             }
 
@@ -53,11 +53,11 @@ public class TrueDouble {
 
 
             if (thisTimeToPoint < 0 || otherTimeToPoint < 0) {
-                System.out.println("Intersection in the past: " + intersection.map(i -> i.x + ", " + i.y).orElseThrow());
+//                System.out.println("Intersection in the past: " + intersection.map(i -> i.x + ", " + i.y).orElseThrow());
                 return Optional.empty();
             }
 
-            System.out.println("Intersection : " + intersection.map(i -> i.x + ", " + i.y).orElseThrow());
+//            System.out.println("Intersection : " + intersection.map(i -> i.x + ", " + i.y).orElseThrow());
             return intersection;
         }
 

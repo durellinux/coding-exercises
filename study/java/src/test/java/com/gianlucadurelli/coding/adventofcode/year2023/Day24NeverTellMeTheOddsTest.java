@@ -21,4 +21,11 @@ public class Day24NeverTellMeTheOddsTest {
     public void solution1() {
         Assertions.assertThat(solver.solve(INPUT, Day24NeverTellMeTheOdds.TestArea.real())).isEqualTo(19976);
     }
+
+    @Test
+    public void solution2() {
+        // Prints equations => then input them to ChatGPT
+        solver.solve2(TEST_INPUT, Day24NeverTellMeTheOdds.TestArea.example());
+        solver.solve2(INPUT, Day24NeverTellMeTheOdds.TestArea.example());
+    }
 }

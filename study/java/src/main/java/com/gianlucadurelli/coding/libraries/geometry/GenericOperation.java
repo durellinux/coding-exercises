@@ -5,13 +5,12 @@ import com.gianlucadurelli.coding.libraries.math.Operations;
 
 import java.util.Optional;
 
-public class GenericOperation {
+public class GenericOperation<T extends Operations<T>> {
     public record Point<T extends Operations<T>>(T x, T y, T z) {
         public String debug() {
             return "x = " + x.asDouble() + ", y = " + y.asDouble() + ", z = " + z.asDouble();
         }
     }
-
     public record Line2DMQ<T extends Operations<T>>(T m, T q) {
         public static <T extends Operations<T>> Line2DMQ<T> from(T m, Point<T> p) {
             T q = p.y.subtract(m.multiplyBy(p.x));
