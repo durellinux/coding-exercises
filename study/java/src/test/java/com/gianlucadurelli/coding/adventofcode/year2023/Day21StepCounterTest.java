@@ -29,67 +29,43 @@ public class Day21StepCounterTest {
     public void test2() {
         Assertions.assertThat(solver.solve2(TEST_INPUT, 6)).isEqualTo(16);
         Assertions.assertThat(solver.solve2(TEST_INPUT, 10)).isEqualTo(50);
-    }
-
-    @Ignore
-    public void test_2() {
-        Assertions.assertThat(solver.solve(TEST_INPUT_2, 50)).isEqualTo(16);
-    }
-
-    @Test
-    public void test2_plot() {
-        for (int i = 499; i < 500; i++) {
-            List<Long> solution = solver.plot2(TEST_INPUT, i);
-            long area = area(i);
-            List<Long> expected =frontiers(solution.size());
-            List<Long> diff = error(solution, expected);
-//            System.out.println(i + " " + solver.plot2(TEST_INPUT, i) + " - " + area + " - " + (solution - area));
-            System.out.println(solution);
-            System.out.println(expected);
-            System.out.println(diff);
-//            for (int tmp = 0; tmp < solution.size(); tmp++) {
-//                System.out.println(tmp + " " + diff.get(tmp));
-//            }
-        }
-    }
-
-    long area(long s) {
-        long i = s / 2;
-        if ( s % 2 == 0) {
-            return 1 + 8 * i * (i+1) / 2;
-        }
-
-        return 4 + 4*i + 8*i*(i+1)/2;
-    }
-
-    List<Long> error(List<Long> actual, List<Long> expected) {
-        List<Long> diff = new ArrayList<>();
-        for (int i = 0; i < actual.size(); i++) {
-            diff.add(expected.get(i) -actual.get(i));
-        }
-
-        return diff;
-    }
-
-    List<Long> frontiers(long s) {
-        List<Long> f = new ArrayList<>();
-        for (int i = 0; i < s; i++) {
-            f.add(perimeter(i));
-        }
-
-        return f;
-    }
-
-    long perimeter(long s) {
-        if (s == 0) {
-            return 1;
-        }
-
-        return 4 * (s);
+        Assertions.assertThat(solver.solve2(TEST_INPUT, 100)).isEqualTo(6536);
     }
 
     @Test
     public void testSolution2() {
-        Assertions.assertThat(solver.solve2(INPUT, 196)).isEqualTo(32768);
+        Assertions.assertThat(solver.solve2(INPUT, 131)).isEqualTo(14679);
+        Assertions.assertThat(solver.solve2(INPUT, 195)).isEqualTo(32404);
+        Assertions.assertThat(solver.solve2(INPUT, 197)).isEqualTo(33196);
+        Assertions.assertThat(solver.solve2(INPUT, 261)).isEqualTo(57872);
+        Assertions.assertThat(solver.solve2(INPUT, 263)).isEqualTo(58764);
+        Assertions.assertThat(solver.solve2(INPUT, 327)).isEqualTo(90820);
+        Assertions.assertThat(solver.solve2(INPUT, 393)).isEqualTo(130933);
+        Assertions.assertThat(solver.solve2(INPUT, 523)).isEqualTo(231608L);
+        Assertions.assertThat(solver.solve2(INPUT, 655)).isEqualTo(363051L);
+        Assertions.assertThat(solver.solve2(INPUT, 787)).isEqualTo(523876L);
+        Assertions.assertThat(solver.solve2(INPUT, 919)).isEqualTo(714127L);
+        Assertions.assertThat(solver.solve2(INPUT, 1047)).isEqualTo(926672L);
+        Assertions.assertThat(solver.solve2(INPUT, 26501365)).isEqualTo(593992588165537L);
+    }
+
+    @Test
+    public void testSolution2_validate() {
+        // 263  1 0 0
+        // 393  1 1 +124 130933L 131057L
+        // 523  2 1 -124 231608L 231484L
+        // 655  2 2 +248 363051L 363299L
+        // 787  3 2 -248 523876L 523628L
+        // 919  3 3 +372 714127L 714499L
+        // 1047 4 3 -372 926672L 926300L
+        for(int s = 523; s <= 523; s+=2) {
+            System.out.println("Testing steps: " + s);
+            Assertions.assertThat(solver.solve2(INPUT, s)).isEqualTo(solver.solveBruteForce(INPUT, s));
+        }
+    }
+
+    private List<Long> solutionsList(Long value) {
+//        return List.of(value, value + 124, value - 124);
+        return List.of(value);
     }
 }
