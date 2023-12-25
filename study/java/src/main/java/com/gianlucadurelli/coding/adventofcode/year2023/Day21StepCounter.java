@@ -131,7 +131,7 @@ public class Day21StepCounter {
         System.out.println(rightStats.visitedPlotsAtStep(remainingSteps));
         System.out.println(downStats.visitedPlotsAtStep(remainingSteps));
 
-        long value = Math.round(Math.pow(fullGardens + 1, 2) * centerStats.stats.odd + Math.pow(fullGardens, 2) * centerStats.stats.even);
+        long value = Math.round(Math.pow(fullGardens + 1, 2) * centerStats.stats.even + Math.pow(fullGardens, 2) * centerStats.stats.odd);
         System.out.println(value + oddRemainderUp + oddRemainderDown + leftStats.stats.odd + rightStats.stats.odd);
         System.out.println(value + evenRemainderUp + evenRemainderDown + leftStats.stats.even + rightStats.stats.even);
 
@@ -140,9 +140,9 @@ public class Day21StepCounter {
         for (int i = 0; i < fullGardens - 1; i++) {
             int s = i + 1;
             if (i % 2 == 0) {
-                result += rightStats.stats.even * s * 4;
-            } else {
                 result += rightStats.stats.odd * s * 4;
+            } else {
+                result += rightStats.stats.even * s * 4;
             }
         }
 
