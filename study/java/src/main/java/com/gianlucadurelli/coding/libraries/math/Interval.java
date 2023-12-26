@@ -3,19 +3,19 @@ package com.gianlucadurelli.coding.libraries.math;
 import java.util.Optional;
 
 public record Interval(Number start, Number end) {
-    boolean isBefore(Interval otherInterval) {
+    public boolean isBefore(Interval otherInterval) {
         return this.end.compareTo(otherInterval.start) < 0;
     }
 
-    boolean isAfter(Interval otherInterval) {
+    public boolean isAfter(Interval otherInterval) {
         return this.start.compareTo(otherInterval.end) > 0;
     }
 
-    boolean areOverlapping(Interval otherInterval) {
+    public boolean areOverlapping(Interval otherInterval) {
         return !isBefore(otherInterval) && !isAfter(otherInterval);
     }
 
-    Optional<Interval> intersect(Interval otherInterval) {
+    public Optional<Interval> intersect(Interval otherInterval) {
         if (!areOverlapping(otherInterval)) {
             return Optional.empty();
         }
@@ -32,7 +32,7 @@ public record Interval(Number start, Number end) {
             return Optional.of(new Interval(otherInterval.start, this.end));
         }
 
-        if (this.start.compareTo(otherInterval.start) < 0 && otherInterval.end.compareTo(this.end) < 0) {
+        if (this.start.compareTo(otherInterval.start) <= 0 && otherInterval.end.compareTo(this.end) < 0) {
             return Optional.of(new Interval(otherInterval.start, otherInterval.end));
         }
 
@@ -41,5 +41,9 @@ public record Interval(Number start, Number end) {
         }
 
         throw new UnsupportedOperationException("Cannot compute intersection " + this + " - " + otherInterval);
+    }
+
+    public Number length() {
+        return end.subtract(start).add(1);
     }
 }
