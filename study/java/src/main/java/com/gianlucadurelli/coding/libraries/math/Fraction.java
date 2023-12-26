@@ -56,4 +56,13 @@ public record Fraction(BigInteger numerator, BigInteger denominator) implements 
         long signMultiplier = isPositive ? 1L : -1L;
         return new Fraction(BigInteger.valueOf(signMultiplier).multiply(positiveNumerator).divide(divisor), positiveDenominator.divide(divisor));
     }
+
+    @Override
+    public int compareTo(Number otherNumber) {
+        Fraction other = otherNumber.as();
+        if (this.equals(other)) {
+            return 0;
+        }
+        return Double.compare(this.asDouble(), other.asDouble());
+    }
 }

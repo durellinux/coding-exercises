@@ -1,8 +1,11 @@
 package com.gianlucadurelli.coding.libraries.math;
 
-public interface Number {
+public interface Number extends Comparable<Number> {
     default <T> T as() {
         return (T) this;
+    }
+    default <T> T as(Class<T> clazz) {
+        return clazz.cast(this);
     }
     double asDouble();
     Number getZero();

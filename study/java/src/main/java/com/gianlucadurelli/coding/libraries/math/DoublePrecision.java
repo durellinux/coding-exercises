@@ -42,4 +42,13 @@ public record DoublePrecision(double value) implements Number {
         DoublePrecision other = otherNumber.as();
         return new DoublePrecision(this.value / other.value);
     }
+
+    @Override
+    public int compareTo(Number otherNumber) {
+        DoublePrecision other = otherNumber.as();
+        if (this.equals(other)) {
+            return 0;
+        }
+        return Double.compare(this.asDouble(), other.asDouble());
+    }
 }
