@@ -1,6 +1,6 @@
 package com.gianlucadurelli.coding.libraries.math;
 
-public record DoublePrecision(double value) implements Operations<DoublePrecision> {
+public record DoublePrecision(double value) implements Number {
     public static final DoublePrecision ZERO = new DoublePrecision(0);
     public static final DoublePrecision ONE = new DoublePrecision(1);
 
@@ -20,22 +20,26 @@ public record DoublePrecision(double value) implements Operations<DoublePrecisio
     }
 
     @Override
-    public DoublePrecision add(DoublePrecision other) {
+    public DoublePrecision add(Number otherNumber) {
+        DoublePrecision other = otherNumber.as();
         return new DoublePrecision(this.value + other.value);
     }
 
     @Override
-    public DoublePrecision subtract(DoublePrecision other) {
+    public DoublePrecision subtract(Number otherNumber) {
+        DoublePrecision other = otherNumber.as();
         return new DoublePrecision(this.value - other.value);
     }
 
     @Override
-    public DoublePrecision multiplyBy(DoublePrecision other) {
+    public DoublePrecision multiplyBy(Number otherNumber) {
+        DoublePrecision other = otherNumber.as();
         return new DoublePrecision(this.value * other.value);
     }
 
     @Override
-    public DoublePrecision divideBy(DoublePrecision other) {
+    public DoublePrecision divideBy(Number otherNumber) {
+        DoublePrecision other = otherNumber.as();
         return new DoublePrecision(this.value / other.value);
     }
 }

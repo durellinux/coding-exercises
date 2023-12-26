@@ -11,7 +11,7 @@ public class FractionTest {
         Fraction f1 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4));
         Fraction f2 = new Fraction(BigInteger.valueOf(3), BigInteger.valueOf(4));
 
-        Fraction sum = f1.add(f2);
+        Fraction sum = f1.add(f2).as();
         Assertions.assertThat(sum.numerator().longValue()).isEqualTo(3);
         Assertions.assertThat(sum.denominator().longValue()).isEqualTo(2);
     }

@@ -1,2 +1,5 @@
 package com.gianlucadurelli.coding.libraries.geometry;
-public record Line2DMQ<T>(T m, T q) {}
+
+import com.gianlucadurelli.coding.libraries.math.Number;
+
+public record Line2DMQ(Number m, Number q) {}

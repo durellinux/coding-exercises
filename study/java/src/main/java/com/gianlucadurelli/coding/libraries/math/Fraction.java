@@ -1,39 +1,40 @@
 package com.gianlucadurelli.coding.libraries.math;
-
-import java.math.BigDecimal;
 import java.math.BigInteger;
 
-public record Fraction(BigInteger numerator, BigInteger denominator) implements Operations<Fraction> {
+public record Fraction(BigInteger numerator, BigInteger denominator) implements Number {
     public static Fraction ZERO = Fraction.simplified(BigInteger.ZERO, BigInteger.ONE);
     public static Fraction MINUS_ONE = Fraction.simplified(BigInteger.ONE.negate(), BigInteger.ONE);
 
     public static Fraction ONE = Fraction.simplified(BigInteger.ONE, BigInteger.ONE);
 
     @Override
-    public Fraction getZero() {
+    public Number getZero() {
         return ZERO;
     }
 
     @Override
-    public Fraction getOne() {
+    public Number getOne() {
         return ONE;
     }
 
-    public Fraction add(Fraction other) {
+    public Fraction add(Number otherNumber) {
+        Fraction other = otherNumber.as();
         BigInteger denominator = this.denominator.multiply(other.denominator);
         BigInteger numerator = this.numerator.multiply(other.denominator).add(other.numerator.multiply(this.denominator));
         return Fraction.simplified(numerator, denominator);
     }
 
-    public Fraction subtract(Fraction other) {
+    public Fraction subtract(Number other) {
         return this.add(other.multiplyBy(MINUS_ONE));
     }
 
-    public Fraction multiplyBy(Fraction other) {
+    public Fraction multiplyBy(Number otherNumber) {
+        Fraction other = otherNumber.as();
         return Fraction.simplified(this.numerator.multiply(other.numerator), this.denominator.multiply(other.denominator));
     }
 
-    public Fraction divideBy(Fraction other) {
+    public Fraction divideBy(Number otherNumber) {
+        Fraction other = otherNumber.as();
         Fraction inverse = Fraction.simplified(other.denominator, other.numerator);
         return this.multiplyBy(inverse);
     }

@@ -1,4 +1,5 @@
 package com.gianlucadurelli.coding.libraries.geometry;
 
-public record Point<T>(T x, T y, T z) {
-}
+import com.gianlucadurelli.coding.libraries.math.Number;
+
+public record Point(Number x, Number y, Number z) {}
