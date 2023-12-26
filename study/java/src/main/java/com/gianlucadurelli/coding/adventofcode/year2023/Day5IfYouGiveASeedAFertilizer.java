@@ -5,7 +5,9 @@ import java.util.function.Function;
 
 public class Day5IfYouGiveASeedAFertilizer {
     private record ProblemEntry(long source, long destination, long length) {}
-    public record Interval(long start, long end) {}
+    public record Interval(long start, long end) {
+
+    }
     private record MapInterval(long start, long end, long destinationStart) {}
 
     public long solve(List<String> input, Function<String, List<Interval>> seedParser) {

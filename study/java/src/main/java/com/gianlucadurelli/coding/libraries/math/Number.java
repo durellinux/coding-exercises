@@ -12,6 +12,10 @@ public interface Number extends Comparable<Number> {
     Number getOne();
 
     Number add(Number other);
+    default Number add(long other) {
+        Number otherNumber = NumberFactory.create(other, this.getClass());
+        return add(otherNumber);
+    }
     Number subtract(Number other);
     Number multiplyBy(Number other);
     Number divideBy(Number other);
