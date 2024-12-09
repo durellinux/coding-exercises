@@ -7,29 +7,75 @@ import java.util.*;
  */
 public class TheCoinChangeProblem {
 
-    public static long getWays(int change, List<Long> coins) {
-        Map<Long, Long> cache = new HashMap<>();
-        cache.put(0L, 0L);
-        for(long i = 1; i<=change; i++) {
-            long iWays = countWays(i, coins, cache);
-            cache.put(i, iWays);
-        }
-        long cacheIndex = change;
-        return cache.get(cacheIndex);
-    }
+    public static class Change {
+        private final Map<Integer, Integer> coinsMap;
 
-    private static long countWays(long target, List<Long> coins, Map<Long, Long> cache) {
-        long ways = 0;
-        for (long start: cache.keySet()) {
-            for (long coin: coins) {
-                if (start + coin == target) {
-                    ways += cache.get(start) + 1;
+        public Change() {
+            coinsMap = new HashMap<>();
+        }
+
+        public Change(Map<Integer, Integer> coinsMap) {
+            this.coinsMap = coinsMap;
+        }
+
+        public void put(Integer coin) {
+            int currentCount = coinsMap.getOrDefault(coin, 0);
+            coinsMap.put(coin, currentCount + 1);
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            Change memo = (Change) o;
+            return Objects.equals(coinsMap, memo.coinsMap);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(coinsMap);
+        }
+
+        public Change copy() {
+            return new Change(new HashMap<>(this.coinsMap));
+        }
+
+        @Override
+        public String toString() {
+            List<Integer> keys = coinsMap.keySet().stream().sorted().toList();
+            StringBuilder str = new StringBuilder("{");
+            for (int key: keys) {
+                int count = coinsMap.get(key);
+                for (int i = 0; i < count; i++) {
+                    str.append(" ").append(key).append(",");
                 }
             }
-        }
+            str.append("}");
 
-        return ways;
+            return str.toString();
+        }
     }
 
+    public static long getWays(int change, List<Integer> coins) {
+        Map<List<Integer>, Long> memo = new HashMap<>();
+        long solution = doChange(change, 0, coins, memo);
+        return solution;
+    }
 
+    public static long doChange(int target, int coinIndex, List<Integer> coins, Map<List<Integer>, Long> memo) {
+        if (target < 0 || coinIndex == coins.size()) {
+            return 0;
+        }
+
+        if (target == 0) {
+            return 1;
+        }
+
+        if (!memo.containsKey(List.of(target, coinIndex))) {
+            long combinations = doChange(target - coins.get(coinIndex), coinIndex, coins, memo) + doChange(target, coinIndex + 1, coins, memo);
+            memo.put(List.of(target, coinIndex), combinations);
+        }
+
+        return memo.get(List.of(target, coinIndex));
+    }
 }

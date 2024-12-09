@@ -9,13 +9,12 @@ import java.util.Set;
 
 import static org.junit.Assert.*;
 
-@Ignore("Not solved")
 public class TheCoinChangeProblemTest {
 
     @Test
     public void getWaysExample() {
         int change = 4;
-        List<Long> coins = List.of(1L, 2L, 3L);
+        List<Integer> coins = List.of(1, 2, 3);
         long expectedWays = 4;
 
         long ways = TheCoinChangeProblem.getWays(change, coins);
@@ -25,8 +24,8 @@ public class TheCoinChangeProblemTest {
 
     @Test
     public void getWays10() {
-        int change = 260;
-        List<Long> coins = List.of(8L, 47L, 13L, 24L, 25L, 31L, 32L, 35L, 3L, 19L, 40L, 48L, 1L, 4L, 17L, 38L, 22L, 30L, 33L, 15L, 44L, 46L, 36L, 9L, 20L, 49L);
+        int change = 250;
+        List<Integer> coins = List.of(8, 47, 13, 24, 25, 31, 32, 35, 3, 19, 40, 48, 1, 4, 17, 38, 22, 30, 33, 15, 44, 46, 36, 9, 20, 49);
         long expectedWays = 3542323427L;
 
         long ways = TheCoinChangeProblem.getWays(change, coins);
