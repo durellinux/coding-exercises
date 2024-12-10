@@ -51,7 +51,6 @@ mod tests {
         Ok((list_1, list_2))
     }
 
-
     #[test]
     fn test_solution_1() -> Result<(), io::Error> {
         let content = read_file("resources/adventofcode/2024/day1.txt".parse().unwrap())?;
