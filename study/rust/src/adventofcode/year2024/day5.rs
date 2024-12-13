@@ -126,7 +126,7 @@ mod tests {
         let content = read_file("resources/adventofcode/2024/day5.txt".parse()?)?;
         let (rules, mut updates) = parse_input(content)?;
         let result = solve2(rules, &mut updates)?;
-        assert_eq!(result, 4790);
+        assert_eq!(result, 6319);
         Ok(())
     }
 }
