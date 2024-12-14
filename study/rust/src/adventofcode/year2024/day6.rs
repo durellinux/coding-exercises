@@ -1,6 +1,5 @@
-use core::panic::PanicInfo;
 use std::collections::{HashMap, HashSet};
-use crate::utils::types::{GenericError, PointI32, PointWithDirectionI32};
+use crate::utils::types::{PointI32, PointWithDirectionI32};
 
 pub fn solve1(mut mat: Vec<Vec<char>>) -> i32 {
     let mut guard_position = find_guard(&mat).unwrap();

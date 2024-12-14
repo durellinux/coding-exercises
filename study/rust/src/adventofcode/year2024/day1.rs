@@ -31,12 +31,11 @@ pub fn solve2(list_1: Vec<i64>, list_2: Vec<i64>) -> i64 {
 
 #[cfg(test)]
 mod tests {
-    use std::io;
-    use std::io::Error;
     use crate::adventofcode::year2024::day1::{solve, solve2};
     use crate::utils::file_utils::read_file;
+    use crate::utils::types::GenericError;
 
-    fn parse_input(content: String) -> Result<(Vec<i64>, Vec<i64>), Error> {
+    fn parse_input(content: String) -> Result<(Vec<i64>, Vec<i64>), GenericError> {
         let mut list_1: Vec<i64> = vec![];
         let mut list_2: Vec<i64> = vec![];
         let lines: Vec<&str> = content.split("\n").collect();
@@ -52,7 +51,7 @@ mod tests {
     }
 
     #[test]
-    fn test_solution_1() -> Result<(), io::Error> {
+    fn test_solution_1() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day1.txt".parse().unwrap())?;
         let (list_1, list_2) = parse_input(content).unwrap();
         let result = solve(list_1, list_2);
@@ -61,7 +60,7 @@ mod tests {
     }
 
     #[test]
-    fn test_solution_2() -> Result<(), io::Error> {
+    fn test_solution_2() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day1.txt".parse().unwrap())?;
         let (list_1, list_2) = parse_input(content).unwrap();
         let result = solve2(list_1, list_2);

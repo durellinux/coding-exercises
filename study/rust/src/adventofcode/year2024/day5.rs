@@ -1,5 +1,4 @@
 use std::collections::{HashMap, HashSet};
-use std::io::{Error, ErrorKind};
 use crate::utils::types::GenericError;
 
 pub fn solve1(rules: HashMap<i32, HashSet<i32>>, updates: Vec<Vec<i32>>) -> Result<i32, GenericError> {

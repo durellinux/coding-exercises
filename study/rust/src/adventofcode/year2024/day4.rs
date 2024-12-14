@@ -1,5 +1,3 @@
-use std::io::Error;
-
 pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
     let mut result = 0;
 
@@ -94,6 +92,7 @@ mod tests {
     use super::*;
     use std::io::Error;
     use crate::utils::file_utils::read_file;
+    use crate::utils::types::GenericError;
 
     fn parse_input(content: String) -> Result<Vec<Vec<char>>, Error> {
         let mut mat: Vec<Vec<char>> = vec![];
@@ -107,7 +106,7 @@ mod tests {
     }
 
     #[test]
-    fn test_case_1() -> Result<(), Error> {
+    fn test_case_1() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day4-test.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve1(mat);
@@ -116,7 +115,7 @@ mod tests {
     }
 
     #[test]
-    fn test_solution_1() -> Result<(), Error> {
+    fn test_solution_1() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day4.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve1(mat);
@@ -125,7 +124,7 @@ mod tests {
     }
 
     #[test]
-    fn test_case_2() -> Result<(), Error> {
+    fn test_case_2() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day4-test.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve2(mat);
@@ -135,7 +134,7 @@ mod tests {
 
 
     #[test]
-    fn test_solution_2() -> Result<(), Error> {
+    fn test_solution_2() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day4.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve2(mat);

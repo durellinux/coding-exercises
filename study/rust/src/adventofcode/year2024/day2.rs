@@ -58,10 +58,10 @@ fn check_line(row: Vec<i32>) -> i32 {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::io::Error;
     use crate::utils::file_utils::read_file;
+    use crate::utils::types::GenericError;
 
-    fn parse_input(content: String) -> Result<Vec<Vec<i32>>, Error> {
+    fn parse_input(content: String) -> Result<Vec<Vec<i32>>, GenericError> {
         let mut mat: Vec<Vec<i32>> = vec![];
         let lines: Vec<&str> = content.split("\n").collect();
         lines.iter().for_each(|line| {
@@ -74,7 +74,7 @@ mod tests {
     }
 
     #[test]
-    fn test_case_1() -> Result<(), Error> {
+    fn test_case_1() -> Result<(), GenericError> {
         let mat: Vec<Vec<i32>> = vec![
             vec![7, 6, 4, 2, 1],
             vec![1, 2, 7, 8, 9],
@@ -89,7 +89,7 @@ mod tests {
     }
 
     #[test]
-    fn test_solution_1() -> Result<(), Error> {
+    fn test_solution_1() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day2.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve1(mat);
@@ -98,7 +98,7 @@ mod tests {
     }
 
     #[test]
-    fn test_case_2() -> Result<(), Error> {
+    fn test_case_2() -> Result<(), GenericError> {
         let mat: Vec<Vec<i32>> = vec![
             vec![7, 6, 4, 2, 1],
             vec![1, 2, 7, 8, 9],
@@ -114,7 +114,7 @@ mod tests {
 
 
     #[test]
-    fn test_solution_2() -> Result<(), Error> {
+    fn test_solution_2() -> Result<(), GenericError> {
         let content = read_file("resources/adventofcode/2024/day2.txt".parse().unwrap())?;
         let mat = parse_input(content)?;
         let result = solve2(mat);

@@ -1,5 +1,3 @@
-use std::io;
-
 pub type GenericError = Box<dyn std::error::Error>;
 
 #[derive(Debug, Copy, Clone, PartialEq, Hash, Eq)]
