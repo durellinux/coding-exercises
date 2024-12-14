@@ -3,8 +3,8 @@ use crate::utils::matrix::valid_point;
 use crate::utils::types::PointI32;
 
 pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
-    let mut unique_positions: HashSet<PointI32> = HashSet::new();
-    let mut frequency_position: HashMap<char, Vec<PointI32>> = HashMap::new();
+    let mut unique_positions: HashSet<PointI32<i32>> = HashSet::new();
+    let mut frequency_position: HashMap<char, Vec<PointI32<i32>>> = HashMap::new();
 
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {
@@ -41,8 +41,8 @@ pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
 }
 
 pub fn solve2(mat: Vec<Vec<char>>) -> i32 {
-    let mut unique_positions: HashSet<PointI32> = HashSet::new();
-    let mut frequency_position: HashMap<char, Vec<PointI32>> = HashMap::new();
+    let mut unique_positions: HashSet<PointI32<i32>> = HashSet::new();
+    let mut frequency_position: HashMap<char, Vec<PointI32<i32>>> = HashMap::new();
 
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {

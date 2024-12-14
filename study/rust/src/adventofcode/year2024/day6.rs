@@ -34,7 +34,7 @@ pub fn solve1(mut mat: Vec<Vec<char>>) -> i32 {
     result
 }
 
-fn find_guard(mat: &Vec<Vec<char>>) -> Option<PointI32> {
+fn find_guard(mat: &Vec<Vec<char>>) -> Option<PointI32<i32>> {
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {
             if mat[i][j] == '^' {
@@ -125,12 +125,12 @@ pub fn solve2(mut mat: Vec<Vec<char>>) -> i32 {
     result
 }
 
-fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &PointI32, block_direction: char, block_position: PointI32) -> i32 {
+fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &PointI32<i32>, block_direction: char, block_position: PointI32<i32>) -> i32 {
     let mut guard_position = initial_position.clone();
     let mut current_direction = block_direction;
     mat[block_position.x as usize][block_position.y as usize] = 'O';
 
-    let mut visited: HashSet<PointWithDirectionI32> = HashSet::new();
+    let mut visited: HashSet<PointWithDirectionI32<i32>> = HashSet::new();
 
     while guard_position.x >= 0 && guard_position.x < mat.len() as i32 && guard_position.y >= 0 && guard_position.y < mat.len() as i32 {
         let point_with_direction = PointWithDirectionI32{point: guard_position, direction: current_direction};
