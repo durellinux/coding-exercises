@@ -1,10 +1,10 @@
 use std::collections::{HashMap, HashSet};
 use crate::utils::matrix::valid_point;
-use crate::utils::types::PointI32;
+use crate::utils::types::Point;
 
 pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
-    let mut unique_positions: HashSet<PointI32<i32>> = HashSet::new();
-    let mut frequency_position: HashMap<char, Vec<PointI32<i32>>> = HashMap::new();
+    let mut unique_positions: HashSet<Point<i32>> = HashSet::new();
+    let mut frequency_position: HashMap<char, Vec<Point<i32>>> = HashMap::new();
 
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {
@@ -13,7 +13,7 @@ pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
                 continue;
             }
 
-            let position = PointI32 {x: i as i32, y: j as i32};
+            let position = Point {x: i as i32, y: j as i32};
             frequency_position.entry(value)
                 .and_modify(|v| v.push(position))
                 .or_insert(vec![position]);
@@ -27,8 +27,8 @@ pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
                 let p2 = positions[i2];
                 let dx = p2.x - p1.x;
                 let dy = p2.y - p1.y;
-                let antinode1 = PointI32 {x: p1.x - dx, y: p1.y - dy};
-                let antinode2 = PointI32 {x: p2.x + dx, y: p2.y + dy};
+                let antinode1 = Point {x: p1.x - dx, y: p1.y - dy};
+                let antinode2 = Point {x: p2.x + dx, y: p2.y + dy};
                 unique_positions.insert(antinode1);
                 unique_positions.insert(antinode2);
             }
@@ -41,8 +41,8 @@ pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
 }
 
 pub fn solve2(mat: Vec<Vec<char>>) -> i32 {
-    let mut unique_positions: HashSet<PointI32<i32>> = HashSet::new();
-    let mut frequency_position: HashMap<char, Vec<PointI32<i32>>> = HashMap::new();
+    let mut unique_positions: HashSet<Point<i32>> = HashSet::new();
+    let mut frequency_position: HashMap<char, Vec<Point<i32>>> = HashMap::new();
 
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {
@@ -51,7 +51,7 @@ pub fn solve2(mat: Vec<Vec<char>>) -> i32 {
                 continue;
             }
 
-            let position = PointI32 {x: i as i32, y: j as i32};
+            let position = Point {x: i as i32, y: j as i32};
             frequency_position.entry(value)
                 .and_modify(|v| v.push(position))
                 .or_insert(vec![position]);
@@ -69,7 +69,7 @@ pub fn solve2(mat: Vec<Vec<char>>) -> i32 {
                 let p2 = positions[i2];
                 let dx = p2.x - p1.x;
                 let dy = p2.y - p1.y;
-                let mut antinode = PointI32 {x: p1.x + dx, y: p1.y + dy};
+                let mut antinode = Point {x: p1.x + dx, y: p1.y + dy};
 
                 while valid_point(&antinode, &mat) {
                     unique_positions.insert(antinode);

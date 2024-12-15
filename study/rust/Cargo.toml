@@ -6,3 +6,4 @@ edition = "2021"
 [dependencies]
 regex = "1.11.1"
 log = "0.4.22"
+num = "0.4.3"

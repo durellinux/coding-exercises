@@ -1,5 +1,5 @@
 use std::collections::{HashMap, HashSet};
-use crate::utils::types::{PointI32, PointWithDirectionI32};
+use crate::utils::types::{Point, PointWithDirectionI32};
 
 pub fn solve1(mut mat: Vec<Vec<char>>) -> i32 {
     let mut guard_position = find_guard(&mat).unwrap();
@@ -34,11 +34,11 @@ pub fn solve1(mut mat: Vec<Vec<char>>) -> i32 {
     result
 }
 
-fn find_guard(mat: &Vec<Vec<char>>) -> Option<PointI32<i32>> {
+fn find_guard(mat: &Vec<Vec<char>>) -> Option<Point<i32>> {
     for i in 0..mat.len() {
         for j in 0..mat[0].len() {
             if mat[i][j] == '^' {
-                return Some(PointI32 {x: i as i32, y: j as i32})
+                return Some(Point {x: i as i32, y: j as i32})
             }
         }
     }
@@ -100,7 +100,7 @@ pub fn solve2(mut mat: Vec<Vec<char>>) -> i32 {
         let next_cell = optional_next_cell.unwrap();
         if next_cell == '.' {
             mat[new_x as usize][new_y as usize] = 'X';
-            let block_position = PointI32 {x: new_x, y:new_y};
+            let block_position = Point {x: new_x, y:new_y};
 
             if block_position != initial_position {
                 let mut mat_copy = mat.clone();
@@ -125,7 +125,7 @@ pub fn solve2(mut mat: Vec<Vec<char>>) -> i32 {
     result
 }
 
-fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &PointI32<i32>, block_direction: char, block_position: PointI32<i32>) -> i32 {
+fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &Point<i32>, block_direction: char, block_position: Point<i32>) -> i32 {
     let mut guard_position = initial_position.clone();
     let mut current_direction = block_direction;
     mat[block_position.x as usize][block_position.y as usize] = 'O';
@@ -162,15 +162,6 @@ fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &PointI32<i32>, bl
     }
 
     0
-}
-
-fn print_matrix(mat: Vec<Vec<char>>) {
-    for i in 0..mat.len() {
-        for j in 0..mat[0].len() {
-            print!("{}", mat[i][j]);
-        }
-        print!("\n");
-    }
 }
 
 #[cfg(test)]
