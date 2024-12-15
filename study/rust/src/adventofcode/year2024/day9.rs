@@ -1,5 +1,3 @@
-use std::ops::Deref;
-
 #[derive(PartialEq)]
 struct DiscBlock {
     size: i32,

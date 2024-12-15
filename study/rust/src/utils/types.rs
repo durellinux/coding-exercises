@@ -1,5 +1,8 @@
 pub type GenericError = Box<dyn std::error::Error>;
 
+#[cfg(test)]
+pub type TestResult = Result<(), GenericError>;
+
 #[derive(Debug, Copy, Clone, PartialEq, Hash, Eq)]
 pub struct PointI32<T> {
     pub(crate) x: T, pub(crate) y: T

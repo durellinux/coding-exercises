@@ -1,5 +1,5 @@
 use std::collections::{HashSet, VecDeque};
-use crate::utils::matrix::{ valid_coordinates_i64, valid_point};
+use crate::utils::matrix::{ valid_coordinates_i64};
 use crate::utils::types::PointI32;
 
 pub fn solve1(mat: Vec<Vec<i32>>) -> i32 {

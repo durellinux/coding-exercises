@@ -1,4 +1,3 @@
-use num::Integer;
 use crate::utils::types::PointI32;
 
 pub fn valid_point<T>(point: &PointI32<i32>, matrix: &Vec<Vec<T>>) -> bool {
