@@ -1,2 +1,3 @@
 Put your inputs here, named day1.txt, day2.txt, ...
 If part 2 is different dayN-part2.txt.
+Also some of the tests requires the test input, named dayN-test.txt.
