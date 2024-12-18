@@ -1,4 +1,4 @@
-struct Case {
+pub struct Case {
     btn_a: Vec<i64>,
     btn_b: Vec<i64>,
     prize: Vec<i64>

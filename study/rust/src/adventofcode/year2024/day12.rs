@@ -1,6 +1,4 @@
 use std::collections::{HashSet, VecDeque};
-use std::ops::Deref;
-use crate::utils::matrix::print_char_matrix;
 use crate::utils::navigation_utils::{get_4_directions, get_bottom_direction, get_direction_in_matrix, get_left_direction, get_right_direction, get_top_direction, navigate_in_matrix};
 use crate::utils::types::{Point, Segment};
 
@@ -10,9 +8,7 @@ pub fn solve1(mut garden: Vec<Vec<char>>) -> u64 {
     for x in 0..garden.len() {
         for y in 0..garden[0].len() {
             if garden[x][y] != '.' {
-                // let crop = garden[x][y];
-                let (area, perimeter, sides) = region_price(&mut garden, Point {x, y});
-                // println!("Crop: {} - A: {}, P: {}, S: {}", crop, area, perimeter, sides);
+                let (area, perimeter, _) = region_price(&mut garden, Point {x, y});
                 price += area * perimeter;
             }
         }
@@ -26,9 +22,7 @@ pub fn solve2(mut garden: Vec<Vec<char>>) -> u64 {
     for x in 0..garden.len() {
         for y in 0..garden[0].len() {
             if garden[x][y] != '.' {
-                // let crop = garden[x][y];
-                let (area, perimeter, sides) = region_price(&mut garden, Point {x, y});
-                // println!("{}-{} - {} - A: {} S: {}", x, y, crop, area, sides);
+                let (area, _, sides) = region_price(&mut garden, Point {x, y});
                 price += area * sides;
             }
         }
@@ -69,7 +63,7 @@ fn region_price(garden: &mut Vec<Vec<char>>, start: Point<usize>) -> (u64, u64, 
         }
     }
 
-    let mut sides = count_sides(&visited_perimeter, garden, crop);
+    let sides = count_sides(&visited_perimeter, garden, crop);
 
     for p in visited {
         garden[p.x][p.y] = '.'
@@ -135,15 +129,15 @@ fn count_sides(perimeter_crops: &HashSet<Point<usize>>, garden: &Vec<Vec<char>>,
         }
     }
 
-    sides += get_vertical_segments(&mut vertical_segments_1, crop);
-    sides += get_vertical_segments(&mut vertical_segments_2, crop);
-    sides += get_horizontal_segments(&mut horizontal_segments_1, crop);
-    sides += get_horizontal_segments(&mut horizontal_segments_2, crop);
+    sides += get_vertical_segments(&mut vertical_segments_1);
+    sides += get_vertical_segments(&mut vertical_segments_2);
+    sides += get_horizontal_segments(&mut horizontal_segments_1);
+    sides += get_horizontal_segments(&mut horizontal_segments_2);
 
     sides
 }
 
-fn get_vertical_segments(vertical_segments: &mut HashSet<Segment<usize>>, crop: char) -> u64 {
+fn get_vertical_segments(vertical_segments: &mut HashSet<Segment<usize>>) -> u64 {
     let mut sides = 0;
 
     while !vertical_segments.is_empty() {
@@ -179,7 +173,7 @@ fn get_vertical_segments(vertical_segments: &mut HashSet<Segment<usize>>, crop: 
     sides
 }
 
-fn get_horizontal_segments(horizontal_segments: &mut HashSet<Segment<usize>>, crop: char) -> u64 {
+fn get_horizontal_segments(horizontal_segments: &mut HashSet<Segment<usize>>) -> u64 {
     let mut sides = 0;
 
     while !horizontal_segments.is_empty() {

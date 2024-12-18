@@ -1,14 +1,13 @@
-use std::collections::HashSet;
 use crate::utils::types::Point;
 
-struct Robot {
+pub struct Robot {
     p: Point<i32>,
     v: Point<i32>,
 }
 
 pub fn solve1(robots: Vec<Robot>, size: Point<i32>, steps: u32) -> i32 {
     let mut final_robots: Vec<Robot> = vec![];
-    for mut robot in robots {
+    for robot in robots {
         let x = robot.p.x;
         let y = robot.p.y;
         let vx = robot.v.x;
@@ -36,10 +35,8 @@ fn evaluate(robots: Vec<Robot>, size: Point<i32>) -> i32 {
         let y = robot.p.y;
 
         let dx = x / xh;
-        let rx = x % xh;
 
         let dy = y / yh;
-        let ry = y % yh;
 
         // println!("({},{}) - {},{} - {},{} ", x, y, dx, dy, rx, ry);
 
@@ -57,43 +54,6 @@ fn evaluate(robots: Vec<Robot>, size: Point<i32>) -> i32 {
     }
 
     q1 * q2 * q3 * q4
-}
-
-fn evaluate2(robots: Vec<Robot>, size: Point<i32>) -> Vec<i32> {
-    let mut q1: HashSet<Point<i32>> = HashSet::new();
-    let mut q2: HashSet<Point<i32>> = HashSet::new();
-    let mut q3: HashSet<Point<i32>> = HashSet::new();
-    let mut q4: HashSet<Point<i32>> = HashSet::new();
-
-    let xh = size.x / 2;
-    let yh = size.y / 2;
-
-    for robot in robots {
-        let x = robot.p.x;
-        let y = robot.p.y;
-
-        let dx = x / xh;
-        let rx = x % xh;
-
-        let dy = y / yh;
-        let ry = y % yh;
-
-        // println!("({},{}) - {},{} - {},{} ", x, y, dx, dy, rx, ry);
-
-        if x != xh && y != yh {
-            if dx == 0 && dy == 0 {
-                q1.insert(Point{x, y});
-            } else if dx >= 1 && dy == 0 {
-                q2.insert(Point{x, y});
-            } else if dx == 0 && dy >= 1 {
-                q3.insert(Point{x, y});
-            } else if dx >= 1 && dy >= 1 {
-                q4.insert(Point{x, y});
-            }
-        }
-    }
-
-    vec![q1.len() as i32, q2.len() as i32, q3.len() as i32, q4.len() as i32]
 }
 
 fn move_robot(x: i32, y: i32, vx: i32, vy: i32, size: Point<i32>, steps: u32) -> Point<i32> {
