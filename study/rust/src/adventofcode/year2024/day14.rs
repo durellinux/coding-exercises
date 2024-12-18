@@ -1,3 +1,4 @@
+use std::collections::HashSet;
 use crate::utils::types::Point;
 
 struct Robot {
@@ -5,7 +6,7 @@ struct Robot {
     v: Point<i32>,
 }
 
-pub fn solve1(robots: Vec<Robot>, size: Point<i32>, steps: i32) -> i32 {
+pub fn solve1(robots: Vec<Robot>, size: Point<i32>, steps: u32) -> i32 {
     let mut final_robots: Vec<Robot> = vec![];
     for mut robot in robots {
         let x = robot.p.x;
@@ -13,13 +14,9 @@ pub fn solve1(robots: Vec<Robot>, size: Point<i32>, steps: i32) -> i32 {
         let vx = robot.v.x;
         let vy = robot.v.y;
 
-        let mut xf = (x + vx * steps) % size.x;
-        xf = (xf + size.x) % size.x;
+        let new_position = move_robot(x, y, vx, vy, size, steps);
 
-        let mut yf = (y + vy * steps) % size.y;
-        yf = (yf + size.y) % size.y;
-
-        final_robots.push(Robot {p: Point{x: xf, y: yf}, v: robot.v});
+        final_robots.push(Robot {p: new_position, v: robot.v});
     }
 
     evaluate(final_robots, size)
@@ -62,6 +59,78 @@ fn evaluate(robots: Vec<Robot>, size: Point<i32>) -> i32 {
     q1 * q2 * q3 * q4
 }
 
+fn evaluate2(robots: Vec<Robot>, size: Point<i32>) -> Vec<i32> {
+    let mut q1: HashSet<Point<i32>> = HashSet::new();
+    let mut q2: HashSet<Point<i32>> = HashSet::new();
+    let mut q3: HashSet<Point<i32>> = HashSet::new();
+    let mut q4: HashSet<Point<i32>> = HashSet::new();
+
+    let xh = size.x / 2;
+    let yh = size.y / 2;
+
+    for robot in robots {
+        let x = robot.p.x;
+        let y = robot.p.y;
+
+        let dx = x / xh;
+        let rx = x % xh;
+
+        let dy = y / yh;
+        let ry = y % yh;
+
+        // println!("({},{}) - {},{} - {},{} ", x, y, dx, dy, rx, ry);
+
+        if x != xh && y != yh {
+            if dx == 0 && dy == 0 {
+                q1.insert(Point{x, y});
+            } else if dx >= 1 && dy == 0 {
+                q2.insert(Point{x, y});
+            } else if dx == 0 && dy >= 1 {
+                q3.insert(Point{x, y});
+            } else if dx >= 1 && dy >= 1 {
+                q4.insert(Point{x, y});
+            }
+        }
+    }
+
+    vec![q1.len() as i32, q2.len() as i32, q3.len() as i32, q4.len() as i32]
+}
+
+fn move_robot(x: i32, y: i32, vx: i32, vy: i32, size: Point<i32>, steps: u32) -> Point<i32> {
+    let mut xf = (x + vx * steps as i32) % size.x;
+    xf = (xf + size.x) % size.x;
+
+    let mut yf = (y + vy * steps as i32) % size.y;
+    yf = (yf + size.y) % size.y;
+
+    Point{x: xf, y: yf}
+}
+
+// TODO: Write proper algorithm, as this one I have no idea why it works
+pub fn solve2(robots: Vec<Robot>, size: Point<i32>) -> u32 {
+    let loop_lenght = 10403;
+    let mut max_heuristic = 1e30 as i32;
+    let mut max_heuristic_at = 0;
+
+    for i in 0..=loop_lenght {
+        let mut final_robots = vec![];
+
+        for robot in &robots {
+            let new_position = move_robot(robot.p.x, robot.p.y, robot.v.x, robot.v.y, size, i);
+            final_robots.push(Robot {p: new_position, v: robot.v});
+        }
+
+        let heuristic = evaluate(final_robots, size);
+        if heuristic < max_heuristic {
+            max_heuristic = heuristic;
+            max_heuristic_at = i;
+        }
+    }
+
+
+    max_heuristic_at
+}
+
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
@@ -95,6 +164,15 @@ mod tests {
         let robots = parse_input("day14")?;
         let result = solve1(robots, Point{x: 101, y: 103}, 100);
         assert_eq!(result, 221616000);
+        Ok(())
+    }
+
+
+    #[test]
+    pub fn test_solution_2() -> TestResult {
+        let robots = parse_input("day14")?;
+        let result = solve2(robots, Point{x: 101, y: 103});
+        assert_eq!(result, 7572);
         Ok(())
     }
 }
