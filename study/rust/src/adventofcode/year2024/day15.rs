@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashSet, VecDeque};
 use crate::utils::matrix::valid_point;
 use crate::utils::types::Point;
 
@@ -9,16 +9,61 @@ pub struct Warehouse {
     pub map_size: Point<i32>,
 }
 
-pub fn solve1(mut map: Vec<Vec<char>>, commands: Vec<char>) -> u64 {
-    let mut robot_position = find_robot_position(&map);
+pub fn solve1(map: Vec<Vec<char>>, commands: Vec<char>) -> u64 {
+    solve_warehouse(map, commands, false)
+}
+
+
+pub fn solve2(map: Vec<Vec<char>>, commands: Vec<char>) -> u64 {
+    solve_warehouse(map, commands, true)
+}
+
+pub fn solve_warehouse(mut map: Vec<Vec<char>>, commands: Vec<char>, scale_up: bool) -> u64 {
+    let robot_position = find_robot_position(&map);
     map[robot_position.x][robot_position.y] = '.';
+
+    let mut warehouse = create_warehouse(&map, scale_up);
+
+    let mut robot_position_i32 = if scale_up == false {Point{x: robot_position.x as i32, y: robot_position.y as i32}} else {Point{x: robot_position.x as i32, y: robot_position.y as i32 * 2}};
 
     for c in commands {
         let direction = get_direction(c);
-        do_move(&mut map, &mut robot_position, direction);
+        do_move_warehouse(&mut warehouse, &mut robot_position_i32, direction);
     }
 
-    evaluate(&map)
+    print_warehouse(&warehouse, scale_up, &robot_position_i32);
+    evaluate_warehouse(&warehouse)
+}
+
+
+
+fn create_warehouse(map: &Vec<Vec<char>>, scale_up: bool) -> Warehouse {
+    let box_width: i32 = if scale_up { 2 } else { 1 };
+    let max_x: i32 = map.len() as i32;
+    let max_y: i32 = map[0].len() as i32 * box_width;
+    let mut warehouse: Warehouse = Warehouse {walls: HashSet::new(), boxes: HashSet::new(), box_width, map_size: Point {x: max_x, y: max_y}};
+
+    for x in 0..map.len() {
+        for y in 0..map[0].len() {
+            let symbol = map[x][y];
+            if symbol == '#' {
+                if scale_up {
+                    warehouse.walls.insert(Point{x: x as i32, y: y as i32 * 2});
+                    warehouse.walls.insert(Point{x: x as i32, y: y as i32 * 2 + 1});
+                } else {
+                    warehouse.walls.insert(Point{x: x as i32, y: y as i32});
+                }
+            } else if symbol == 'O' {
+                if scale_up {
+                    warehouse.boxes.insert(Point{x: x as i32, y: y as i32 * 2});
+                } else {
+                    warehouse.boxes.insert(Point{x: x as i32, y: y as i32});
+                }
+            }
+        }
+    }
+
+    warehouse
 }
 
 fn get_direction(command: char) -> Point<i32> {
@@ -47,43 +92,111 @@ fn evaluate(map: &Vec<Vec<char>>) -> u64 {
     result
 }
 
-fn do_move(map: &mut Vec<Vec<char>>, robot: &mut Point<usize>, direction: Point<i32>) {
-    let new_point = Point{x: robot.x as i32 + direction.x, y: robot.y as i32 + direction.y};
-    if !valid_point(&new_point, map) {
+fn evaluate_warehouse(warehouse: &Warehouse) -> u64 {
+    let mut result: u64 = 0;
+
+    for box_position in warehouse.boxes.clone() {
+        result += 100 * box_position.x as u64 + box_position.y as u64;
+    }
+
+    result
+}
+
+
+fn do_move_warehouse(warehouse: &mut Warehouse, robot: &mut Point<i32>, direction: Point<i32>) {
+    let maybe_new_point = Point{x: robot.x as i32 + direction.x, y: robot.y as i32 + direction.y};
+    if maybe_new_point.x < 0 || maybe_new_point.x >= warehouse.map_size.x || maybe_new_point.y < 0 || maybe_new_point.y >= warehouse.map_size.y {
         return
     }
 
-    let new_cell = map[new_point.x as usize][new_point.y as usize];
+    let new_point = Point {x: maybe_new_point.x, y: maybe_new_point.y};
+    let mut new_cell = '.';
+
+    if warehouse.walls.contains(&new_point) {
+        new_cell = '#';
+    } else if warehouse.boxes.contains(&new_point) || ( warehouse.box_width > 1 && new_point.y >= 1 && warehouse.boxes.contains(&Point {x: maybe_new_point.x, y: maybe_new_point.y - 1})) {
+        new_cell = 'O';
+    }
+
     if new_cell == '#' {
         return
     }
     if new_cell == '.' {
-        robot.x = new_point.x as usize;
-        robot.y = new_point.y as usize;
+        robot.x = new_point.x;
+        robot.y = new_point.y;
         return
     }
 
-    let first_free = find_first_free_in_direction(map, &new_point, &direction);
-    if first_free.is_none() {
-        return
+    let first_box = if warehouse.boxes.contains(&new_point) { new_point } else { Point {x: maybe_new_point.x, y: maybe_new_point.y - 1} };
+
+    let movable_boxes: HashSet<Point<i32>> = find_movable_boxes(first_box, warehouse, direction);
+    if movable_boxes.len() > 0 {
+        let new_positions: Vec<Point<i32>> = movable_boxes.iter().map(|b| Point {x: b.x + direction.x, y: b.y + direction.y}).collect();
+
+        for box_position in movable_boxes {
+            warehouse.boxes.remove(&box_position);
+        }
+
+        for box_position in new_positions {
+            warehouse.boxes.insert(box_position);
+        }
+
+        robot.x = new_point.x;
+        robot.y = new_point.y;
     }
 
-    let free_position = first_free.unwrap();
-    map[free_position.x as usize][free_position.y as usize] = 'O';
-    map[new_point.x as usize][new_point.y as usize] = '.';
-    robot.x = new_point.x as usize;
-    robot.y = new_point.y as usize;
 }
 
-fn find_first_free_in_direction(map: &Vec<Vec<char>>, start: &Point<i32>, direction: &Point<i32>) -> Option<Point<i32>> {
-    let mut cur_x = start.x;
-    let mut cur_y = start.y;
-    while map[cur_x as usize][cur_y as usize] == 'O' {
-        cur_x += direction.x;
-        cur_y += direction.y;
+fn find_movable_boxes(initial: Point<i32>, warehouse: &mut Warehouse, direction: Point<i32>) -> HashSet<Point<i32>> {
+    let mut boxes: HashSet<Point<i32>> = HashSet::new();
+    let mut to_visit: VecDeque<Point<i32>> = VecDeque::new();
+    boxes.insert(initial);
+
+    to_visit.push_back(initial);
+    while !to_visit.is_empty() {
+        let current = to_visit.pop_front().unwrap();
+        let mut possible_walls: Vec<Point<i32>> = vec![];
+        let mut possible_boxes: Vec<Point<i32>> = vec![];
+
+        if direction.x == 0 {
+            if warehouse.box_width == 1 {
+                possible_walls.push(Point{x: current.x, y: current.y + direction.y});
+                possible_boxes.push(Point{x: current.x, y: current.y + direction.y});
+            } else if warehouse.box_width == 2 {
+                possible_walls.push(Point{x: current.x, y: current.y + direction.y});
+                possible_walls.push(Point{x: current.x, y: current.y + direction.y + 1});
+                possible_boxes.push(Point{x: current.x, y: current.y + direction.y * 2});
+            }
+        } else if direction.y == 0 {
+
+            if warehouse.box_width == 1 {
+                possible_walls.push(Point{x: current.x + direction.x, y: current.y});
+                possible_boxes.push(Point{x: current.x + direction.x, y: current.y});
+            } else if warehouse.box_width == 2 {
+                possible_walls.push(Point{x: current.x + direction.x, y: current.y});
+                possible_walls.push(Point{x: current.x + direction.x, y: current.y + 1});
+
+                possible_boxes.push(Point{x: current.x + direction.x, y: current.y - 1});
+                possible_boxes.push(Point{x: current.x + direction.x, y: current.y});
+                possible_boxes.push(Point{x: current.x + direction.x, y: current.y + 1});
+            }
+        }
+
+        for possible_wall in possible_walls {
+            if warehouse.walls.contains(&possible_wall) {
+                return HashSet::new();
+            }
+        }
+
+        for possible_box in possible_boxes {
+            if warehouse.boxes.contains(&possible_box) && !boxes.contains(&possible_box) {
+                boxes.insert(possible_box);
+                to_visit.push_back(possible_box);
+            }
+        }
     }
 
-    if map[cur_x as usize][cur_y as usize] == '.' { Some(Point{x: cur_x, y: cur_y}) } else { None }
+    boxes
 }
 
 fn find_robot_position(map: &Vec<Vec<char>>) -> Point<usize> {
@@ -96,6 +209,27 @@ fn find_robot_position(map: &Vec<Vec<char>>) -> Point<usize> {
     }
 
     Point {x: map.len(), y: 0}
+}
+
+fn print_warehouse(warehouse: &Warehouse, scale_up: bool, robot_position: &Point<i32>) {
+    for x in 0..warehouse.map_size.x {
+        for y in 0..warehouse.map_size.y {
+            if robot_position.x == x && robot_position.y == y {
+                print!("@");
+            } else if warehouse.walls.contains(&Point{x, y}) {
+                print!("#");
+            } else if !scale_up && warehouse.boxes.contains(&Point{x, y}) {
+                print!("O");
+            } else if scale_up && warehouse.boxes.contains(&Point{x, y}) {
+                print!("[");
+            } else if scale_up &&  warehouse.boxes.contains(&Point{x, y: y - 1}) {
+                print!("]");
+            } else {
+                print!(".");
+            }
+        }
+        print!("\n");
+    }
 }
 
 #[cfg(test)]
@@ -140,6 +274,22 @@ mod tests {
         let (map, commands) = parse_input("day15")?;
         let result = solve1(map, commands);
         assert_eq!(result, 1492518);
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_case_2() -> TestResult {
+        let (map, commands) = parse_input("day15-test")?;
+        let result = solve2(map, commands);
+        assert_eq!(result, 9021);
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_solution_2() -> TestResult {
+        let (map, commands) = parse_input("day15")?;
+        let result = solve2(map, commands);
+        assert_eq!(result, 1512860);
         Ok(())
     }
 }
