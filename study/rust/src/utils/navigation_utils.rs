@@ -1,6 +1,18 @@
 use crate::utils::matrix::valid_point;
 use crate::utils::types::Point;
 
+pub fn get_cardinal_point_direction(cardinal_point: char) -> Point<isize> {
+    if cardinal_point == 'E' {
+        get_right_direction()
+    } else if cardinal_point == 'N' {
+        get_top_direction()
+    } else if cardinal_point == 'W' {
+        get_left_direction()
+    } else {
+        get_bottom_direction()
+    }
+}
+
 pub fn get_4_directions() -> Vec<Point<isize>> {
     vec![
         get_top_direction(),
