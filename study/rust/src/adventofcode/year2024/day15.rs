@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 use crate::utils::matrix::valid_point;
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub struct Warehouse {
     pub walls: HashSet<Point<i32>>,
@@ -237,7 +237,7 @@ mod tests {
     use super::*;
     use crate::utils::file_utils::read_aoc_input_lines;
     use crate::utils::string_parsing::as_char_list;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
 
     fn parse_input(name: &str) -> Result<(Vec<Vec<char>>, Vec<char>), GenericError> {
         let mut map: Vec<Vec<char>> = vec![];

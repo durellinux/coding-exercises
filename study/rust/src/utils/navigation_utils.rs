@@ -1,5 +1,5 @@
 use crate::utils::matrix::{valid_point, valid_point_with_size};
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub fn get_cardinal_point_direction(cardinal_point: char) -> Point<isize> {
     if cardinal_point == 'E' {

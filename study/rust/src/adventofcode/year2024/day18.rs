@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet, VecDeque};
 use crate::utils::navigation_utils::{get_4_directions, navigate_in_matrix, navigate_in_sparse_matrix};
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 #[derive(Copy, Clone, Hash, Eq, PartialEq)]
 pub struct Byte {
@@ -71,7 +71,7 @@ fn navigate(start: Byte, end: Point<usize>, size: Point<usize>, corrupted: &Hash
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
     use super::*;
 
     fn parse_input(name: &str) -> Result<Vec<Byte>, GenericError> {

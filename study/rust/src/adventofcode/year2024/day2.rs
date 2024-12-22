@@ -59,7 +59,7 @@ fn check_line(row: Vec<i32>) -> i32 {
 mod tests {
     use super::*;
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     fn parse_input(content: String) -> Result<Vec<Vec<i32>>, GenericError> {
         let mut mat: Vec<Vec<i32>> = vec![];

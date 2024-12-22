@@ -55,7 +55,7 @@ fn make_patterns(pattern: String, towels: &Vec<String>, memoized: &mut HashMap<S
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
     use super::*;
 
     fn parse_input(name: &str) -> Result<(Vec<String>, Vec<String>), GenericError> {

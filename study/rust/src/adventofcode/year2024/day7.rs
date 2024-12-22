@@ -74,7 +74,7 @@ fn solve1_recursive2(equation: &Equation, current_result: u64, index: usize) -> 
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::{read_aoc_input};
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
     use super::*;
 
     fn parse_input(content: String) -> Result<Vec<Equation>, GenericError> {

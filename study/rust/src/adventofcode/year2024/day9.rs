@@ -146,7 +146,7 @@ fn print_disk(disk: &Vec<DiscBlock>) {
 mod tests {
     use super::*;
     use crate::utils::file_utils::read_aoc_input;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     fn parse_input(content: String) -> Result<Vec<i32>, GenericError> {
         let mut data: Vec<i32> = vec![];

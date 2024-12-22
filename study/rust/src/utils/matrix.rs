@@ -1,4 +1,4 @@
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub fn valid_point<T>(point: &Point<i32>, matrix: &Vec<Vec<T>>) -> bool {
     let x = point.x;

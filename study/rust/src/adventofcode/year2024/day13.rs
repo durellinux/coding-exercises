@@ -53,7 +53,7 @@ fn solve_case(case: Case) -> i64 {
 mod tests {
     use crate::utils::file_utils::{read_aoc_input_lines};
     use super::*;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
 
     fn parse_input(name: &str) -> Result<Vec<Case>, GenericError> {
         let mut cases: Vec<Case> = vec![];

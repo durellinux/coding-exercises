@@ -1,5 +1,5 @@
 use std::collections::{HashMap, HashSet};
-use crate::utils::types::GenericError;
+use crate::utils::geometry::GenericError;
 
 pub fn solve1(rules: HashMap<i32, HashSet<i32>>, updates: Vec<Vec<i32>>) -> Result<i32, GenericError> {
     let mut result = 0;
@@ -62,7 +62,7 @@ fn is_in_order(rules: &HashMap<i32, HashSet<i32>>, update: &Vec<i32>) -> bool {
 mod tests {
     use std::collections::{HashMap, HashSet};
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
     use super::*;
 
     fn parse_input(content: String) -> Result<(HashMap<i32, HashSet<i32>>, Vec<Vec<i32>>), GenericError> {

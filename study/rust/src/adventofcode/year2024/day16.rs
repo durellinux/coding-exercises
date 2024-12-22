@@ -3,7 +3,7 @@ use std::cmp::Ordering;
 use std::collections::{BinaryHeap, HashMap, HashSet, VecDeque};
 use crate::utils::matrix::valid_point;
 use crate::utils::navigation_utils::{get_cardinal_point_direction};
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Position {
@@ -235,7 +235,7 @@ pub fn solve2(map: Vec<Vec<char>>) -> u64 {
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_mat_char;
-    use crate::utils::types::TestResult;
+    use crate::utils::geometry::TestResult;
     use super::*;
 
     #[test]

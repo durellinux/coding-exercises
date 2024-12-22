@@ -46,7 +46,7 @@ pub fn solve2(input: &str) -> i32 {
 mod tests {
     use super::*;
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     #[test]
     fn test_case_1() -> Result<(), GenericError> {

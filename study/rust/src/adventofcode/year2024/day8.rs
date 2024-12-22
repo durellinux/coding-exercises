@@ -1,6 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use crate::utils::matrix::valid_point;
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub fn solve1(mat: Vec<Vec<char>>) -> i32 {
     let mut unique_positions: HashSet<Point<i32>> = HashSet::new();
@@ -89,7 +89,7 @@ pub fn solve2(mat: Vec<Vec<char>>) -> i32 {
 mod test {
     use super::*;
     use crate::utils::file_utils::read_aoc_input_mat_char;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     #[test]
     pub fn test_case_1() -> Result<(), GenericError> {

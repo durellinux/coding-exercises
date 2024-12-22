@@ -1,4 +1,4 @@
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub struct Robot {
     p: Point<i32>,
@@ -95,7 +95,7 @@ pub fn solve2(robots: Vec<Robot>, size: Point<i32>) -> u32 {
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
     use crate::utils::string_parsing::as_number_list_with_split;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
     use super::*;
 
     fn parse_input(name: &str) -> Result<Vec<Robot>, GenericError> {

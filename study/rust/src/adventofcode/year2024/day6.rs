@@ -1,5 +1,5 @@
 use std::collections::{HashMap, HashSet};
-use crate::utils::types::{Point, PointWithDirectionI32};
+use crate::utils::geometry::{Point, PointWithDirectionI32};
 
 pub fn solve1(mut mat: Vec<Vec<char>>) -> i32 {
     let mut guard_position = find_guard(&mat).unwrap();
@@ -167,7 +167,7 @@ fn loop_detection(mat: &mut Vec<Vec<char>>, initial_position: &Point<i32>, block
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
     use super::*;
 
     fn parse_input(content: String) -> Result<Vec<Vec<char>>, GenericError> {

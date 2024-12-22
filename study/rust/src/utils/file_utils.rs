@@ -3,7 +3,7 @@ use std::fmt::Debug;
 use std::str::FromStr;
 use num::Integer;
 use crate::utils::string_parsing::{as_char_list, as_number_list};
-use crate::utils::types::GenericError;
+use crate::utils::geometry::GenericError;
 
 pub fn read_file(file_path: String) -> Result<String, GenericError> {
     let content = fs::read_to_string(file_path)?;

@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 use crate::utils::matrix::{ valid_coordinates_i64};
-use crate::utils::types::Point;
+use crate::utils::geometry::Point;
 
 pub fn solve1(mat: Vec<Vec<i32>>) -> i32 {
     let mut result = 0;
@@ -105,7 +105,7 @@ fn hike_with_rating(trail: &Vec<Vec<i32>>, start: Point<isize>) -> i32 {
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_mat_number;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
     use super::*;
 
     #[test]

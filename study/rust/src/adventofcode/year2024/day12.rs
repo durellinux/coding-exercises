@@ -1,6 +1,6 @@
 use std::collections::{HashSet, VecDeque};
 use crate::utils::navigation_utils::{get_4_directions, get_bottom_direction, get_direction_in_matrix, get_left_direction, get_right_direction, get_top_direction, navigate_in_matrix};
-use crate::utils::types::{Point, Segment};
+use crate::utils::geometry::{Point, Segment};
 
 pub fn solve1(mut garden: Vec<Vec<char>>) -> u64 {
     let mut price = 0;
@@ -217,7 +217,7 @@ fn should_create_segment(neighbor: &Option<Point<usize>>, crop: char, garden: &V
 mod tests {
     use super::*;
     use crate::utils::file_utils::read_aoc_input_mat_char;
-    use crate::utils::types::TestResult;
+    use crate::utils::geometry::TestResult;
 
     #[test]
     pub fn test_case_1() -> TestResult {

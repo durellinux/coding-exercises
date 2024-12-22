@@ -33,7 +33,7 @@ pub fn solve2(list_1: Vec<i64>, list_2: Vec<i64>) -> i64 {
 mod tests {
     use crate::adventofcode::year2024::day1::{solve, solve2};
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     fn parse_input(content: String) -> Result<(Vec<i64>, Vec<i64>), GenericError> {
         let mut list_1: Vec<i64> = vec![];

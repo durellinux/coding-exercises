@@ -92,7 +92,7 @@ mod tests {
     use super::*;
     use std::io::Error;
     use crate::utils::file_utils::read_file;
-    use crate::utils::types::GenericError;
+    use crate::utils::geometry::GenericError;
 
     fn parse_input(content: String) -> Result<Vec<Vec<char>>, Error> {
         let mut mat: Vec<Vec<char>> = vec![];

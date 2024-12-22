@@ -71,7 +71,7 @@ fn solve_recursive(stone: &Step, max_blinks: u64, memoized: &mut HashMap<Step, u
 mod tests {
     use crate::utils::file_utils::{read_aoc_input};
     use crate::utils::string_parsing::{as_number_list_with_split};
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
     use super::*;
 
     fn parse_input(name: &str) -> Result<Vec<u64>, GenericError> {

@@ -111,7 +111,7 @@ fn store(value: i64, register: char, device: &mut Device) {
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
     use super::*;
-    use crate::utils::types::{GenericError, TestResult};
+    use crate::utils::geometry::{GenericError, TestResult};
 
     fn parse_input(name: &str) -> Result<Device, GenericError> {
         let mut device = Device{registers: HashMap::new(), instructions: vec![], instruction_pointer: 0, halted: false};
