@@ -106,7 +106,6 @@ fn store(value: i64, register: char, device: &mut Device) {
     device.registers.entry(register).and_modify(|v| *v = value);
 }
 
-
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
@@ -150,7 +149,7 @@ mod tests {
     pub fn test_solution_1() -> TestResult {
         let mut device = parse_input("day17")?;
         let result = solve1(&mut device);
-        assert_eq!(result, "4,6,3,5,6,3,5,2,1,0");
+        assert_eq!(result, "3,6,3,7,0,7,0,3,0");
         Ok(())
     }
 }
