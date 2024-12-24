@@ -1,5 +1,5 @@
 use std::collections::HashMap;
-use num::pow;
+use num::{pow, range};
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub struct Instruction {
@@ -106,6 +106,102 @@ fn store(value: i64, register: char, device: &mut Device) {
     device.registers.entry(register).and_modify(|v| *v = value);
 }
 
+
+// This solution is custom to the input as it is based on the analysis of the program
+pub fn solve2(device: &mut Device) -> i64 {
+    let values = vec![2,4,1,5,7,5,1,6,0,3,4,6,5,5,3,0];
+    let mut unknown_a: Vec<i64> = vec![];
+    for _ in 0..64 {
+        unknown_a.push(-1);
+    }
+
+    let mut results = solve_output(0, 0, 0, &values, 0);
+    results.sort();
+
+    results[0]
+}
+
+pub fn solve_output(reg_a: i64, locked_a: i64, a_start: usize, values: &Vec<i64>, current_value: usize) -> Vec<i64> {
+    if current_value == values.len() {
+        return if is_zero(reg_a, locked_a, a_start) {
+            vec![reg_a]
+        } else {
+            vec![]
+        }
+    }
+
+    let a_mask = 0b111 << a_start;
+    let a_0_3 = (reg_a & a_mask) >> a_start;
+    let locked_a_0_3 = (locked_a & a_mask) >> a_start;
+
+    let b_possibilities = generate_all_possibilities(a_0_3, locked_a_0_3, 0);
+
+    let mut results = vec![];
+
+    for b in b_possibilities.iter() {
+        let constrained_a_with_b = reg_a | (b << a_start);
+        let constrained_a_with_b_locked = locked_a | (0b111 << a_start);
+
+        let b1 = *b as usize ^ 5;
+        if a_start + b1 + 3 >= 64 {
+            continue
+        }
+
+        let c_start = a_start+b1;
+        let c_mask = 0b111 << c_start;
+        let c_0_3 = (constrained_a_with_b & c_mask) >> c_start;
+        let locked_c_0_3 = (constrained_a_with_b_locked & c_mask) >> c_start;
+        let c_possibilities = generate_all_possibilities(c_0_3, locked_c_0_3, 0);
+        let constrained_a_with_b_and_c_locked = constrained_a_with_b_locked | (0b111 << c_start);
+
+        let b2 = b1 as i64 ^ 6;
+
+        let value = values[current_value];
+        for c in c_possibilities.iter() {
+            if c ^ b2 == value {
+                let constrained_a_with_b_and_c = constrained_a_with_b | (c << c_start);
+                let next_results = solve_output(constrained_a_with_b_and_c, constrained_a_with_b_and_c_locked, a_start + 3, values, current_value + 1);
+                results.extend(next_results);
+            }
+        }
+    }
+
+    results
+}
+
+fn is_zero(val: i64, locked_a: i64, from: usize) -> bool {
+    for b in from..64 {
+        let is_locked = (locked_a & (1 << b)) != 0;
+        let value = val & (1 << b);
+
+        if is_locked && value != 0 {
+            return false;
+        }
+    }
+
+    true
+}
+
+fn generate_all_possibilities(val: i64, locked: i64, position: usize) -> Vec<i64> {
+    if position == 3 {
+        let result = vec![val];
+        return result;
+    }
+
+    let mut result: Vec<i64> = vec![];
+    let is_locked = (locked & (0b1 << position)) != 0;
+
+    if !is_locked {
+        result.extend(generate_all_possibilities(val, locked, position + 1));
+        let new_1 = val | (0b1 << position);
+        result.extend(generate_all_possibilities(new_1, locked, position + 1));
+    } else {
+        result.extend(generate_all_possibilities(val, locked, position + 1));
+    }
+
+    result
+}
+
 #[cfg(test)]
 mod tests {
     use crate::utils::file_utils::read_aoc_input_lines;
@@ -150,6 +246,14 @@ mod tests {
         let mut device = parse_input("day17")?;
         let result = solve1(&mut device);
         assert_eq!(result, "3,6,3,7,0,7,0,3,0");
+        Ok(())
+    }
+
+    #[test]
+    pub fn test_solution_2() -> TestResult {
+        let mut device = parse_input("day17")?;
+        let result = solve2(&mut device);
+        assert_eq!(result, 136904920099226);
         Ok(())
     }
 }
