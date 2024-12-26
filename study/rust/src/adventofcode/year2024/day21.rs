@@ -226,9 +226,6 @@ mod tests {
         Ok(())
     }
 
-
-
-
     #[test]
     pub fn test_solution_1() -> TestResult {
         let lines = read_aoc_input_lines(2024, "day21")?;

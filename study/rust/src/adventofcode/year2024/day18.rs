@@ -10,7 +10,8 @@ pub struct Byte {
 
 pub fn solve1(bytes: Vec<Byte>, size: Point<usize>, simulation_time: u64) -> u64 {
     let mut corrupted: HashMap<Point<usize>, u64> = HashMap::new();
-    for byte in bytes {
+    for b in 0..simulation_time {
+        let byte = bytes.get(b as usize).unwrap();
         corrupted.insert(byte.location, byte.time);
     }
 

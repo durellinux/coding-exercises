@@ -97,7 +97,7 @@ mod tests {
     fn test_solution_1() -> TestResult {
         let (mut signals, mut gates) = parse_input("day24")?;
         let result = solve1(&mut signals, &mut gates);
-        assert_eq!(result, 2024);
+        assert_eq!(result, 60714423975686);
         Ok(())
     }
 

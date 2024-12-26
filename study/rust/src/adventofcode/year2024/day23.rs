@@ -124,7 +124,7 @@ mod tests {
     fn test_solution_2() -> TestResult {
         let connections = parse_input("day23")?;
         let result = solve2(connections);
-        assert_eq!(result, "co,de,ka,ta");
+        assert_eq!(result, "hl,io,ku,pk,ps,qq,sh,tx,ty,wq,xi,xj,yp");
         Ok(())
     }
 
