@@ -1,32 +1,33 @@
 package com.gianlucadurelli.coding.solid.liskov;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class RectangleTest {
 
   @Test
-  @Disabled
-  public void computeArea() {
+  public void shouldWorkWithRectangles() {
     // Given a rectangle of edges a and b
     Rectangle r = new Rectangle(1, 1);
-    Rectangle s = new Square(1);
+    setEdges(r, 2, 4);
 
-    // Then area is a*b
-    assertArea(r);
-    assertArea(s);
+    // Then the area is a * b
+    Assertions.assertThat(r.getArea()).isEqualTo(8);
   }
 
-  private void assertArea(Rectangle r) {
-    r.setA(2);
-    r.setB(4);
-    int area = r.getArea();
+  @Test
+  public void shouldViolateLiskovSubstitutionPrincileWithSquare() {
+    // Given a square of edges a and b
+    Square s = new Square(1);
+    setEdges(s, 2, 4);
 
-    Assertions.assertThat(area).isEqualTo(8);
+    // Then the area is a * b
+    Assertions.assertThat(s.getArea()).isNotEqualTo(8);
   }
 
+  private void setEdges(Rectangle r, int a, int b) {
+    r.setA(a);
+    r.setB(b);
+  }
 
 }
