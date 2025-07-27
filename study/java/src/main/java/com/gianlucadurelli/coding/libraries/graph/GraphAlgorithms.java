@@ -75,6 +75,36 @@ public class GraphAlgorithms {
         return dominators;
     }
 
+    public static <T> Map<String, Set<String>> computeConnectedComponents(Graph<T> graph) {
+        // For each node we return the set of nodes in the connected component
+        Map<String, Set<String>> components = new HashMap<>();
+        Set<String> visited = new HashSet<>();
+        for (String nodeId : graph.nodes().keySet()) {
+            if (!visited.contains(nodeId)) {
+                Set<String> component = new HashSet<>();
+                exploreComponent(graph, nodeId, visited, component);
+                for (String id : component) {
+                    components.put(id, component);
+                }
+            }
+        }
+
+        return components;
+    }
+
+    private static <T> void exploreComponent(Graph<T> graph, String nodeId, Set<String> visited, Set<String> component) {
+        visited.add(nodeId);
+        component.add(nodeId);
+
+        for (Edge<T> edge : graph.edges()) {
+            if (edge.source().id().equals(nodeId) && !visited.contains(edge.target().id())) {
+                exploreComponent(graph, edge.target().id(), visited, component);
+            } else if (edge.target().id().equals(nodeId) && !visited.contains(edge.source().id())) {
+                exploreComponent(graph, edge.source().id(), visited, component);
+            }
+        }
+    }
+
     private static <T> Map<String, Set<String>> buildPredecessorsMap(Graph<T> graph) {
         Map<String, Set<String>> predecessors = new HashMap<>();
 
@@ -99,6 +129,8 @@ public class GraphAlgorithms {
         Map<String, Set<String>> dominators = new HashMap<>();
         Set<String> allNodes = graph.nodes().keySet();
 
+        Map<String, Set<String>> connectedComponents = computeConnectedComponents(graph);
+
         // For the start node, it's only dominated by itself
         Set<String> startNodeDominators = new HashSet<>();
         startNodeDominators.add(startNodeId);
@@ -107,7 +139,7 @@ public class GraphAlgorithms {
         // For all other nodes, initially they are dominated by all nodes
         for (String nodeId : allNodes) {
             if (!nodeId.equals(startNodeId)) {
-                dominators.put(nodeId, new HashSet<>(allNodes));
+                dominators.put(nodeId, new HashSet<>(connectedComponents.get(nodeId)));
             }
         }
 

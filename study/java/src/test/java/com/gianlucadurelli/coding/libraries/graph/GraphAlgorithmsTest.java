@@ -1,7 +1,6 @@
 package com.gianlucadurelli.coding.libraries.graph;
 
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -73,7 +72,6 @@ public class GraphAlgorithmsTest {
         }
 
         @Test
-        @Disabled
         public void shouldHandleDisconnectedGraph() {
             // Create a disconnected graph
             //           A    C
@@ -206,6 +204,47 @@ public class GraphAlgorithmsTest {
             assertThrows(IllegalArgumentException.class, () -> {
                 GraphAlgorithms.computeGraphDominators(graph, "Z");
             });
+        }
+
+        @Test
+        public void shouldWorkWithLargeGraph() {
+            // Create a large graph with many nodes and edges
+            int nodesCount = 1000;
+            Node<String>[] nodes = new Node[nodesCount];
+            for (int i = 0; i < nodesCount; i++) {
+                nodes[i] = new Node<>(String.valueOf(i), "Node " + i, "Data " + i);
+            }
+
+            // Create edges in a way that forms a tree structure
+            List<Edge<String>> edges = new java.util.ArrayList<>();
+            for (int i = 1; i < nodesCount; i++) {
+                // Connect each node to its parent node
+                int parentIndex = (i - 1) / 2; // Simple binary tree structure
+                edges.add(new Edge<>(nodes[parentIndex], nodes[i]));
+            }
+
+            // Add a few additional edges to create some complexity
+            edges.add(new Edge<>(nodes[0], nodes[500])); // Connect root to a middle node
+            edges.add(new Edge<>(nodes[250], nodes[750])); // Connect a middle node to another middle node
+            edges.add(new Edge<>(nodes[999], nodes[10])); // Connect last node back to something above
+            // Run 100 more edges to increase complexity
+            for (int i = 0; i < 100; i++) {
+                int sourceIndex = (int) (Math.random() * nodesCount);
+                int targetIndex = (int) (Math.random() * nodesCount);
+                if (sourceIndex != targetIndex) {
+                    edges.add(new Edge<>(nodes[sourceIndex], nodes[targetIndex]));
+                }
+            }
+
+            Graph<String> largeGraph = Graph.from(List.of(nodes), edges);
+            // Compute dominators and check it terminates in a less than 1s
+            int startTime = (int) System.currentTimeMillis();
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(largeGraph, "0");
+            int endTime = (int) System.currentTimeMillis();
+
+
+            int totalTime = endTime - startTime;
+            Assertions.assertTrue(totalTime < 1000, "Dominators computation took too long: " + totalTime + "ms");
         }
     }
 }
