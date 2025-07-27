@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.adventofcode.year2022;
 
 import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 

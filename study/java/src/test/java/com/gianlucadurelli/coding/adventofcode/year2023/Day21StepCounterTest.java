@@ -2,13 +2,13 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@Ignore("Ignore as the solution is not valid... god knows what I did during the competition, but the solution is not valid anymore")
+@Disabled("Ignore as the solution is not valid... god knows what I did during the competition, but the solution is not valid anymore")
 public class Day21StepCounterTest {
 
     private static final Day21StepCounter solver = new Day21StepCounter();

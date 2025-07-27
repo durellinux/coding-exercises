@@ -1,11 +1,11 @@
 package com.gianlucadurelli.coding.leetcode;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.time.chrono.IsoEra;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RemoveElementTest {
 

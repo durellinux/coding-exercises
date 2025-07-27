@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.leetcode;
 
 import com.gianlucadurelli.coding.leetcode.Robot9_2;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Robot9_2Test {
 

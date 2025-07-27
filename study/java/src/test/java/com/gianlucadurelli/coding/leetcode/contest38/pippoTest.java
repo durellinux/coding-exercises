@@ -1,12 +1,12 @@
 package com.gianlucadurelli.coding.leetcode.contest38;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@Ignore("Does not work")
+@Disabled("Does not work")
 public class pippoTest {
 	pippo p = new pippo();
 

@@ -1,7 +1,7 @@
 package com.gianlucadurelli.coding.libraries.math;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
 public class FractionTest {

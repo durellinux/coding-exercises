@@ -1,9 +1,9 @@
 package com.gianlucadurelli.coding.libraries.math;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class IntervalTest {
     private static final Interval i0_5 = new Interval(new LongPrecision(0), new LongPrecision(5));

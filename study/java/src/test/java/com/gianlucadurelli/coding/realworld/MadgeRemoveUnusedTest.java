@@ -1,15 +1,15 @@
 package com.gianlucadurelli.coding.realworld;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 
 public class MadgeRemoveUnusedTest {
 
 	@Test
-	@Ignore
+	@Disabled
 	public void sampleCase() throws IOException {
 		String depdendencyFile = "PATH_TO_MADGE_DEPENDENCY_FILE";
 		String entryPointFile = "PATH_TO_A_FILE_CONTAINING_LIST_OF_ENTRY_POINTS_OF_THE_APP";

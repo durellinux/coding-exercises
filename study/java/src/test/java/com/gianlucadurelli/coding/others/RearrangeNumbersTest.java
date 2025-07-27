@@ -2,20 +2,20 @@ package com.gianlucadurelli.coding.others;
 
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class RearrangeNumbersTest {
 	List<List<Integer>> testData = new ArrayList<>();
 	List<String> goldenData = new ArrayList<>();
 
 
-	@Before
+	@BeforeEach
 	public void setup() {
 		testData.add(List.of(50, 2, 1, 9));
 		goldenData.add("95021");

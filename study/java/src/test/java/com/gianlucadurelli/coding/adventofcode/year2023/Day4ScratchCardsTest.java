@@ -2,13 +2,11 @@ package com.gianlucadurelli.coding.adventofcode.year2023;
 
 import com.gianlucadurelli.coding.adventofcode.AdventOfCodeTestHelpers;
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
-
-import junit.framework.TestCase;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class Day4ScratchCardsTest extends TestCase {
+public class Day4ScratchCardsTest {
 
     private static final Day4ScratchCards solver = new Day4ScratchCards();
 

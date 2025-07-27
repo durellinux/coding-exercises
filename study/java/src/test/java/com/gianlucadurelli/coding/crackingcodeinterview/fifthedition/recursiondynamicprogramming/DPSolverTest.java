@@ -1,7 +1,7 @@
 package com.gianlucadurelli.coding.crackingcodeinterview.fifthedition.recursiondynamicprogramming;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.gianlucadurelli.coding.hackerrank.practice.algorithms.greedy;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class LuckBalanceTest {
 

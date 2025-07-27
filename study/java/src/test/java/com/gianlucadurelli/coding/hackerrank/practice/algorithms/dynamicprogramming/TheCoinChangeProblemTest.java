@@ -1,13 +1,13 @@
 package com.gianlucadurelli.coding.hackerrank.practice.algorithms.dynamicprogramming;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TheCoinChangeProblemTest {
 

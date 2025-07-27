@@ -1,15 +1,15 @@
 package com.gianlucadurelli.coding.solid.liskov;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 public class RectangleTest {
 
   @Test
-  @Ignore
+  @Disabled
   public void computeArea() {
     // Given a rectangle of edges a and b
     Rectangle r = new Rectangle(1, 1);

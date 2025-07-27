@@ -1,7 +1,7 @@
 package com.gianlucadurelli.coding.crackingcodeinterview.fifthedition.linkedlist;
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
 import java.util.LinkedList;

@@ -2,7 +2,7 @@ package com.gianlucadurelli.coding.designpatterns.structural.decorator;
 
 
 import org.assertj.core.api.Assertions;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class Decorator {
 
