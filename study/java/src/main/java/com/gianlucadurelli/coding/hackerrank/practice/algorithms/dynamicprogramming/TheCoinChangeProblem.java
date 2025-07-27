@@ -56,13 +56,13 @@ public class TheCoinChangeProblem {
         }
     }
 
-    public static long getWays(int change, List<Integer> coins) {
-        Map<List<Integer>, Long> memo = new HashMap<>();
+    public static long getWays(int change, List<Long> coins) {
+        Map<List<Long>, Long> memo = new HashMap<>();
         long solution = doChange(change, 0, coins, memo);
         return solution;
     }
 
-    public static long doChange(int target, int coinIndex, List<Integer> coins, Map<List<Integer>, Long> memo) {
+    public static long doChange(long target, int coinIndex, List<Long> coins, Map<List<Long>, Long> memo) {
         if (target < 0 || coinIndex == coins.size()) {
             return 0;
         }
@@ -71,11 +71,11 @@ public class TheCoinChangeProblem {
             return 1;
         }
 
-        if (!memo.containsKey(List.of(target, coinIndex))) {
+        if (!memo.containsKey(List.of(target, Long.valueOf(coinIndex)))) {
             long combinations = doChange(target - coins.get(coinIndex), coinIndex, coins, memo) + doChange(target, coinIndex + 1, coins, memo);
-            memo.put(List.of(target, coinIndex), combinations);
+            memo.put(List.of(target, Long.valueOf(coinIndex)), combinations);
         }
 
-        return memo.get(List.of(target, coinIndex));
+        return memo.get(List.of(target, Long.valueOf(coinIndex)));
     }
 }
