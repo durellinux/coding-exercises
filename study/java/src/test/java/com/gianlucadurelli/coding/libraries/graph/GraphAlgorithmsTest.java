@@ -74,16 +74,18 @@ public class GraphAlgorithmsTest {
         @Test
         public void shouldHandleDisconnectedGraph() {
             // Create a disconnected graph
-            //           A    C
+            //           A    C - D
             //          /
             //         B
             Node<String> nodeA = new Node<>("A", "Node A", "Data A");
             Node<String> nodeB = new Node<>("B", "Node B", "Data B");
             Node<String> nodeC = new Node<>("C", "Node C", "Data C");
+            Node<String> nodeD = new Node<>("D", "Node D", "Data D");
             Edge<String> edgeAB = new Edge<>(nodeA, nodeB);
+            Edge<String> edgeCD = new Edge<>(nodeC, nodeD);
             Graph<String> disconnectedGraph = Graph.from(
-                List.of(nodeA, nodeB, nodeC),
-                List.of(edgeAB)
+                List.of(nodeA, nodeB, nodeC, nodeD),
+                List.of(edgeAB, edgeCD)
             );
 
             // Compute dominators
@@ -92,7 +94,8 @@ public class GraphAlgorithmsTest {
             // Verify dominators
             assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
             assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
-            assertThat(dominators.get("C")).isEqualTo(Set.of("C")); // C is isolated and only dominates itself
+            assertThat(dominators.get("C")).isEmpty(); // C is isolated/not reachable from A, so no dominators
+            assertThat(dominators.get("D")).isEmpty(); // D is dominated/not reachable from A, so no dominators
         }
 
         @Test

@@ -2,10 +2,7 @@ package com.gianlucadurelli.coding.libraries.graph;
 
 import lombok.experimental.UtilityClass;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @UtilityClass
 public class GraphAlgorithms {
@@ -23,13 +20,15 @@ public class GraphAlgorithms {
             throw new IllegalArgumentException("Start node ID does not exist in the graph");
         }
 
+        Graph<T> connectedGraph = connectedGraphWithNode(graph, startNodeId);
+
         // Step 1: Build a map of predecessors for each node
-        Map<String, Set<String>> predecessors = buildPredecessorsMap(graph);
+        Map<String, Set<String>> predecessors = buildPredecessorsMap(connectedGraph);
 
         // Step 2: Initialize dominators
         // - Start node is only dominated by itself
         // - All other nodes are dominated by all nodes (including themselves)
-        Map<String, Set<String>> dominators = initializeDominators(graph, startNodeId);
+        Map<String, Set<String>> dominators = initializeDominators(connectedGraph, startNodeId);
 
         // Step 3: Iteratively compute dominators until no changes occur
         boolean changed;
@@ -37,7 +36,7 @@ public class GraphAlgorithms {
             changed = false;
 
             // For each node except the start node
-            for (String nodeId : graph.nodes().keySet()) {
+            for (String nodeId : connectedGraph.nodes().keySet()) {
                 if (nodeId.equals(startNodeId)) {
                     continue;
                 }
@@ -72,6 +71,13 @@ public class GraphAlgorithms {
             }
         } while (changed);
 
+        // Add nodes from other connected components
+        for (String nodeId : graph.nodes().keySet()) {
+            if (!dominators.containsKey(nodeId)) {
+                dominators.put(nodeId, Collections.emptySet());
+            }
+        }
+
         return dominators;
     }
 
@@ -90,6 +96,39 @@ public class GraphAlgorithms {
         }
 
         return components;
+    }
+
+    public static <T> Graph<T> connectedGraphWithNode(Graph<T> graph, String nodeId) {
+        if (graph == null || graph.nodes() == null || graph.nodes().isEmpty()) {
+            throw new IllegalArgumentException("Graph cannot be null or empty");
+        }
+
+        if (nodeId == null || nodeId.isEmpty()) {
+            throw new IllegalArgumentException("Node ID cannot be null or empty");
+        }
+
+        if (!graph.nodes().containsKey(nodeId)) {
+            throw new IllegalArgumentException("Node ID does not exist in the graph");
+        }
+
+        Map<String, Set<String>> connectedComponents = computeConnectedComponents(graph);
+        Set<String> component = connectedComponents.get(nodeId);
+
+        // Create a new graph with only the nodes in the connected component
+        Map<String, Node<T>> filteredNodes = new HashMap<>();
+        Set<Edge<T>> filteredEdges = new HashSet<>();
+
+        for (String id : component) {
+            filteredNodes.put(id, graph.nodes().get(id));
+        }
+
+        for (Edge<T> edge : graph.edges()) {
+            if (component.contains(edge.source().id()) && component.contains(edge.target().id())) {
+                filteredEdges.add(edge);
+            }
+        }
+
+        return Graph.from(new ArrayList<>(filteredNodes.values()), new ArrayList<>(filteredEdges));
     }
 
     private static <T> void exploreComponent(Graph<T> graph, String nodeId, Set<String> visited, Set<String> component) {
@@ -129,8 +168,6 @@ public class GraphAlgorithms {
         Map<String, Set<String>> dominators = new HashMap<>();
         Set<String> allNodes = graph.nodes().keySet();
 
-        Map<String, Set<String>> connectedComponents = computeConnectedComponents(graph);
-
         // For the start node, it's only dominated by itself
         Set<String> startNodeDominators = new HashSet<>();
         startNodeDominators.add(startNodeId);
@@ -139,7 +176,7 @@ public class GraphAlgorithms {
         // For all other nodes, initially they are dominated by all nodes
         for (String nodeId : allNodes) {
             if (!nodeId.equals(startNodeId)) {
-                dominators.put(nodeId, new HashSet<>(connectedComponents.get(nodeId)));
+                dominators.put(nodeId, new HashSet<>(allNodes));
             }
         }
 
