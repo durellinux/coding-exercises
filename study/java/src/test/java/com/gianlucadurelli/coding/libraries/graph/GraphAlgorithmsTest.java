@@ -1,9 +1,8 @@
 package com.gianlucadurelli.coding.libraries.graph;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.util.List;
 import java.util.Map;
@@ -41,12 +40,12 @@ public class GraphAlgorithmsTest {
             // Compute dominators
             Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph, "A");
             // Verify dominators
-            assertEquals(Set.of("A"), dominators.get("A")); // Root dominates itself
-            assertEquals(Set.of("A", "B"), dominators.get("B")); // Child 1 is dominated by Root and itself
-            assertEquals(Set.of("A", "C"), dominators.get("C")); // Child 2 is dominated by Root and itself
-            assertEquals(Set.of("A", "B", "D"), dominators.get("D")); // Grandchild 1 is dominated by Root, Child 1, and itself
-            assertEquals(Set.of("A", "B", "E"), dominators.get("E")); // Grandchild 2 is dominated by Root, Child 1, and itself
-            assertEquals(Set.of("A", "C", "F"), dominators.get("F")); // Grandchild 3 is dominated by Root, Grandchild 2, and itself
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // Root dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // Child 1 is dominated by Root and itself
+            assertThat(dominators.get("C")).isEqualTo(Set.of("A", "C")); // Child 2 is dominated by Root and itself
+            assertThat(dominators.get("D")).isEqualTo(Set.of("A", "B", "D")); // Grandchild 1 is dominated by Root, Child 1, and itself
+            assertThat(dominators.get("E")).isEqualTo(Set.of("A", "B", "E")); // Grandchild 2 is dominated by Root, Child 1, and itself
+            assertThat(dominators.get("F")).isEqualTo(Set.of("A", "C", "F")); // Grandchild 3 is dominated by Root, Grandchild 2, and itself
         }
 
         @Test
@@ -55,7 +54,8 @@ public class GraphAlgorithmsTest {
             Graph<String> emptyGraph = Graph.from(List.of(), List.of());
 
             // Compute dominators
-            Assertions.assertThrows(IllegalArgumentException.class, () -> GraphAlgorithms.computeGraphDominators(emptyGraph, "A"));
+            assertThatThrownBy(() -> GraphAlgorithms.computeGraphDominators(emptyGraph, "A"))
+                .isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -68,7 +68,7 @@ public class GraphAlgorithmsTest {
             Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(singleNodeGraph, "A");
 
             // Verify that the only dominator is itself
-            assertEquals(Set.of("A"), dominators.get("A"));
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A"));
         }
 
         @Test
@@ -90,9 +90,9 @@ public class GraphAlgorithmsTest {
             Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(disconnectedGraph, "A");
 
             // Verify dominators
-            assertEquals(Set.of("A"), dominators.get("A")); // A dominates itself
-            assertEquals(Set.of("A", "B"), dominators.get("B")); // B is dominated by A and itself
-            assertEquals(Set.of("C"), dominators.get("C")); // C is isolated and only dominates itself
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
+            assertThat(dominators.get("C")).isEqualTo(Set.of("C")); // C is isolated and only dominates itself
         }
 
         @Test
@@ -117,9 +117,9 @@ public class GraphAlgorithmsTest {
             Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(cyclicGraph, "A");
 
             // Verify dominators
-            assertEquals(Set.of("A"), dominators.get("A")); // A dominates itself
-            assertEquals(Set.of("A", "B"), dominators.get("B")); // B is dominated by A and itself
-            assertEquals(Set.of("A", "B", "C"), dominators.get("C")); // C is dominated by A, B, and itself
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
+            assertThat(dominators.get("C")).isEqualTo(Set.of("A", "B", "C")); // C is dominated by A, B, and itself
         }
 
         @Test
@@ -161,49 +161,79 @@ public class GraphAlgorithmsTest {
 
             // Verify dominators
             // A is dominated by A
-            assertEquals(Set.of("A"), dominators.get("A"));
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A"));
 
             // B is dominated by A and B
-            assertEquals(Set.of("A", "B"), dominators.get("B"));
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B"));
 
             // C is dominated by A and C
-            assertEquals(Set.of("A", "C"), dominators.get("C"));
+            assertThat(dominators.get("C")).isEqualTo(Set.of("A", "C"));
 
             // D is dominated by A, B, and D
-            assertEquals(Set.of("A", "B", "D"), dominators.get("D"));
+            assertThat(dominators.get("D")).isEqualTo(Set.of("A", "B", "D"));
 
             // E is dominated by A and E (A dominates E because all paths to E go through A)
-            assertEquals(Set.of("A", "E"), dominators.get("E"));
+            assertThat(dominators.get("E")).isEqualTo(Set.of("A", "E"));
 
             // F is dominated by A, E, and F
-            assertEquals(Set.of("A", "E", "F"), dominators.get("F"));
+            assertThat(dominators.get("F")).isEqualTo(Set.of("A", "E", "F"));
+        }
+
+        @Test
+        public void shouldWorkForNonReducibleCFG() {
+            // Create a non-reducible control flow graph (CFG)
+            // Graph structure:
+            //     A
+            //    / \
+            //   B - C
+            Node<String> nodeA = new Node<>("A", "Node A", "Data A");
+            Node<String> nodeB = new Node<>("B", "Node B", "Data B");
+            Node<String> nodeC = new Node<>("C", "Node C", "Data C");
+
+            Edge<String> edgeAB = new Edge<>(nodeA, nodeB);
+            Edge<String> edgeAC = new Edge<>(nodeA, nodeC);
+            Edge<String> edgeBC = new Edge<>(nodeB, nodeC);
+            Edge<String> edgeCB = new Edge<>(nodeC, nodeB);
+
+            Graph<String> graph = Graph.from(
+                    List.of(nodeA, nodeB, nodeC),
+                    List.of(edgeAB, edgeAC, edgeBC, edgeCB)
+            );
+
+            // Compute dominators
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph, "A");
+
+            // Verify dominators
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
+            assertThat(dominators.get("C")).isEqualTo(Set.of("A", "C")); // C is dominated by A and itself
         }
 
         @Test
         public void testComputeGraphDominatorsWithInvalidInput() {
             // Test with null graph
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThatThrownBy(() -> {
                 GraphAlgorithms.computeGraphDominators(null, "A");
-            });
+            }).isInstanceOf(IllegalArgumentException.class);
 
             // Create a valid graph for testing other invalid inputs
             Node<String> nodeA = new Node<>("A");
             Graph<String> graph = Graph.from(List.of(nodeA), List.of());
 
             // Test with null start node ID
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThatThrownBy(() -> {
                 GraphAlgorithms.computeGraphDominators(graph, null);
-            });
+            }).isInstanceOf(IllegalArgumentException.class);
 
             // Test with empty start node ID
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThatThrownBy(() -> {
                 GraphAlgorithms.computeGraphDominators(graph, "");
-            });
+            }).isInstanceOf(IllegalArgumentException.class);
 
             // Test with non-existent start node ID
-            assertThrows(IllegalArgumentException.class, () -> {
+            assertThatThrownBy(() -> {
                 GraphAlgorithms.computeGraphDominators(graph, "Z");
-            });
+            }).isInstanceOf(IllegalArgumentException.class);
         }
 
         @Test
@@ -244,7 +274,7 @@ public class GraphAlgorithmsTest {
 
 
             int totalTime = endTime - startTime;
-            Assertions.assertTrue(totalTime < 1000, "Dominators computation took too long: " + totalTime + "ms");
+            assertThat(totalTime < 1000).withFailMessage("Dominators computation took too long: " + totalTime + "ms").isTrue();
         }
     }
 }
