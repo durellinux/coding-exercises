@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/python3
 
 def cost(B):
     cache = dict()
@@ -33,16 +33,16 @@ def cost(B):
 if __name__ == '__main__':
     # fptr = open(os.environ['OUTPUT_PATH'], 'w')
 
-    t = int(raw_input())
+    t = int(input())
 
-    for t_itr in xrange(t):
-        n = int(raw_input())
+    for t_itr in range(t):
+        n = int(input())
 
-        B = map(int, raw_input().rstrip().split())
+        B = list(map(int, input().rstrip().split()))
 
         result = cost(B)
 
-        print result
+        print(result)
         # fptr.write(str(result) + '\n')
 
     # fptr.close()
@@ -50,4 +50,4 @@ if __name__ == '__main__':
 # if __name__ == '__main__':
 #     B = [100, 2, 100, 2, 100]
 #     # B = [1, 2, 3]
-#     print cost(B)
+#     print(cost(B))

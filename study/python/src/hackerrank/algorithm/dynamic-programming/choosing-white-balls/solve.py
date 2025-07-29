@@ -1,4 +1,4 @@
-#!/bin/python
+#!/bin/python3
 
 import math
 import os
@@ -48,12 +48,12 @@ def pickElement(balls, index, newBalls):
     newBalls.add(tmpBalls)
 
 if __name__ == '__main__':
-    nk = raw_input().split()
+    nk = input().split()
 
     n = int(nk[0])
 
     k = int(nk[1])
 
-    balls = raw_input()
+    balls = input()
 
-    print solve(n, k, balls)
+    print(solve(n, k, balls))
