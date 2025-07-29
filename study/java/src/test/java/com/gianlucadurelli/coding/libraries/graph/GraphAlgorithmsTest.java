@@ -159,6 +159,40 @@ public class GraphAlgorithmsTest {
         }
 
         @Test
+        public void shouldHandleCyclicGraphsWithNoEntryPoint() {
+            // Create a cyclic graph with no entry point
+            //     A
+            //    / \
+            //   B   C
+            //    \ /
+            //     D
+
+            Node<String> nodeA = new Node<>("A", "Node A", "Data A");
+            Node<String> nodeB = new Node<>("B", "Node B", "Data B");
+            Node<String> nodeC = new Node<>("C", "Node C", "Data C");
+            Node<String> nodeD = new Node<>("D", "Node D", "Data D");
+
+            Edge<String> edgeAB = new Edge<>(nodeA, nodeB);
+            Edge<String> edgeBD = new Edge<>(nodeB, nodeD);
+            Edge<String> edgeDC = new Edge<>(nodeD, nodeC);
+            Edge<String> edgeCA = new Edge<>(nodeC, nodeA);
+
+            Graph<String> cyclicGraphNoEntry = Graph.from(
+                List.of(nodeA, nodeB, nodeC, nodeD),
+                List.of(edgeAB, edgeBD, edgeDC, edgeCA)
+            );
+
+            // Compute dominators
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(cyclicGraphNoEntry);
+
+            // Verify dominators
+            assertThat(dominators.get("A")).isEmpty(); // A is part of a cycle, with no entry point
+            assertThat(dominators.get("B")).isEmpty(); // B is part of a cycle, with no entry point
+            assertThat(dominators.get("C")).isEmpty(); // C is part of a cycle, with no entry point
+            assertThat(dominators.get("D")).isEmpty(); // D is part of a cycle, with no entry point
+        }
+
+        @Test
         public void shouldHandleDAGs() {
             // Create a DAG for testing
             // Graph structure:
