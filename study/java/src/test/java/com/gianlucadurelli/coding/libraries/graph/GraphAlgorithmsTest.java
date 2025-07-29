@@ -38,7 +38,7 @@ public class GraphAlgorithmsTest {
             );
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph);
             // Verify dominators
             assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // Root dominates itself
             assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // Child 1 is dominated by Root and itself
@@ -54,7 +54,7 @@ public class GraphAlgorithmsTest {
             Graph<String> emptyGraph = Graph.from(List.of(), List.of());
 
             // Compute dominators
-            assertThatThrownBy(() -> GraphAlgorithms.computeGraphDominators(emptyGraph, "A"))
+            assertThatThrownBy(() -> GraphAlgorithms.computeGraphDominators(emptyGraph))
                 .isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -65,7 +65,7 @@ public class GraphAlgorithmsTest {
             Graph<String> singleNodeGraph = Graph.from(List.of(singleNode), List.of());
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(singleNodeGraph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(singleNodeGraph);
 
             // Verify that the only dominator is itself
             assertThat(dominators.get("A")).isEqualTo(Set.of("A"));
@@ -89,40 +89,73 @@ public class GraphAlgorithmsTest {
             );
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(disconnectedGraph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(disconnectedGraph);
 
             // Verify dominators
             assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
             assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
-            assertThat(dominators.get("C")).isEmpty(); // C is isolated/not reachable from A, so no dominators
-            assertThat(dominators.get("D")).isEmpty(); // D is dominated/not reachable from A, so no dominators
+            assertThat(dominators.get("C")).isEqualTo(Set.of("C")); // C dominates itself
+            assertThat(dominators.get("D")).isEqualTo(Set.of("C", "D")); // D is dominated by C and itself
+        }
+
+        @Test
+        public void shouldHandleDisconnectedGraphWithCyclicComponent() {
+            // Create a disconnected graph with a cyclic component
+            //     A    C <-> D
+            //    /
+            //   B
+
+            Node<String> nodeA = new Node<>("A", "Node A", "Data A");
+            Node<String> nodeB = new Node<>("B", "Node B", "Data B");
+            Node<String> nodeC = new Node<>("C", "Node C", "Data C");
+            Node<String> nodeD = new Node<>("D", "Node D", "Data D");
+            Edge<String> edgeAB = new Edge<>(nodeA, nodeB);
+            Edge<String> edgeCD = new Edge<>(nodeC, nodeD);
+            Edge<String> edgeDC = new Edge<>(nodeD, nodeC); // Cycle between C and D
+            Graph<String> disconnectedCyclicGraph = Graph.from(
+                List.of(nodeA, nodeB, nodeC, nodeD),
+                List.of(edgeAB, edgeCD, edgeDC)
+            );
+
+            // Compute dominators
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(disconnectedCyclicGraph);
+            // Verify dominators
+            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
+            assertThat(dominators.get("C")).isEmpty(); // C is in an isolated cycle, no dominators
+            assertThat(dominators.get("D")).isEmpty(); // D is in an isolated cycle, no dominators
         }
 
         @Test
         public void shouldHandleCyclicGraph() {
             // Create a cyclic graph
+            //     S
+            //     |
             //     A
             //    / \
             //   B - C
 
+            Node<String> startNode = new Node<>("S", "Start Node", "Data S");
             Node<String> nodeA = new Node<>("A", "Node A", "Data A");
             Node<String> nodeB = new Node<>("B", "Node B", "Data B");
             Node<String> nodeC = new Node<>("C", "Node C", "Data C");
+            Edge<String> edgeSA = new Edge<>(startNode, nodeA);
             Edge<String> edgeAB = new Edge<>(nodeA, nodeB);
             Edge<String> edgeBC = new Edge<>(nodeB, nodeC);
             Edge<String> edgeCA = new Edge<>(nodeC, nodeA); // Cycle A -> B -> C -> A
             Graph<String> cyclicGraph = Graph.from(
-                List.of(nodeA, nodeB, nodeC),
-                List.of(edgeAB, edgeBC, edgeCA)
+                List.of(startNode, nodeA, nodeB, nodeC),
+                List.of(edgeSA, edgeAB, edgeBC, edgeCA)
             );
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(cyclicGraph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(cyclicGraph);
 
             // Verify dominators
-            assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
-            assertThat(dominators.get("B")).isEqualTo(Set.of("A", "B")); // B is dominated by A and itself
-            assertThat(dominators.get("C")).isEqualTo(Set.of("A", "B", "C")); // C is dominated by A, B, and itself
+            assertThat(dominators.get("S")).isEqualTo(Set.of("S")); // Start node dominates itself
+            assertThat(dominators.get("A")).isEqualTo(Set.of("S", "A")); // A dominates itself
+            assertThat(dominators.get("B")).isEqualTo(Set.of("S", "A", "B")); // B is dominated by A and itself
+            assertThat(dominators.get("C")).isEqualTo(Set.of("S", "A", "B", "C")); // C is dominated by A, B, and itself
         }
 
         @Test
@@ -160,7 +193,7 @@ public class GraphAlgorithmsTest {
             );
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph);
 
             // Verify dominators
             // A is dominated by A
@@ -204,7 +237,7 @@ public class GraphAlgorithmsTest {
             );
 
             // Compute dominators
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph, "A");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(graph);
 
             // Verify dominators
             assertThat(dominators.get("A")).isEqualTo(Set.of("A")); // A dominates itself
@@ -216,26 +249,7 @@ public class GraphAlgorithmsTest {
         public void testComputeGraphDominatorsWithInvalidInput() {
             // Test with null graph
             assertThatThrownBy(() -> {
-                GraphAlgorithms.computeGraphDominators(null, "A");
-            }).isInstanceOf(IllegalArgumentException.class);
-
-            // Create a valid graph for testing other invalid inputs
-            Node<String> nodeA = new Node<>("A");
-            Graph<String> graph = Graph.from(List.of(nodeA), List.of());
-
-            // Test with null start node ID
-            assertThatThrownBy(() -> {
-                GraphAlgorithms.computeGraphDominators(graph, null);
-            }).isInstanceOf(IllegalArgumentException.class);
-
-            // Test with empty start node ID
-            assertThatThrownBy(() -> {
-                GraphAlgorithms.computeGraphDominators(graph, "");
-            }).isInstanceOf(IllegalArgumentException.class);
-
-            // Test with non-existent start node ID
-            assertThatThrownBy(() -> {
-                GraphAlgorithms.computeGraphDominators(graph, "Z");
+                GraphAlgorithms.computeGraphDominators(null);
             }).isInstanceOf(IllegalArgumentException.class);
         }
 
@@ -261,7 +275,7 @@ public class GraphAlgorithmsTest {
             edges.add(new Edge<>(nodes[250], nodes[750])); // Connect a middle node to another middle node
             edges.add(new Edge<>(nodes[999], nodes[10])); // Connect last node back to something above
             // Run 100 more edges to increase complexity
-            for (int i = 0; i < 100; i++) {
+            for (int i = 0; i < 1000; i++) {
                 int sourceIndex = (int) (Math.random() * nodesCount);
                 int targetIndex = (int) (Math.random() * nodesCount);
                 if (sourceIndex != targetIndex) {
@@ -272,7 +286,7 @@ public class GraphAlgorithmsTest {
             Graph<String> largeGraph = Graph.from(List.of(nodes), edges);
             // Compute dominators and check it terminates in a less than 1s
             int startTime = (int) System.currentTimeMillis();
-            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(largeGraph, "0");
+            Map<String, Set<String>> dominators = GraphAlgorithms.computeGraphDominators(largeGraph);
             int endTime = (int) System.currentTimeMillis();
 
 

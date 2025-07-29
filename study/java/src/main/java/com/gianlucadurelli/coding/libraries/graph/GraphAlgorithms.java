@@ -7,6 +7,48 @@ import java.util.*;
 @UtilityClass
 public class GraphAlgorithms {
     public static <T> Map<String, Set<String>> computeGraphDominators(
+            Graph<T> graph) {
+
+        if (graph == null || graph.nodes() == null || graph.nodes().isEmpty()) {
+            throw new IllegalArgumentException("Graph cannot be null or empty");
+        }
+
+        // Add dummy node and connect it to all nodes without incoming edges
+        String dummyNodeId = "dummy";
+        Node<T> dummyNode = new Node<>(dummyNodeId, "Dummy Node");
+        Map<String, Node<T>> newNodes = new HashMap<>(graph.nodes());
+        newNodes.put(dummyNodeId, dummyNode);
+
+        Set<Edge<T>> newEdges = new HashSet<>(graph.edges());
+        Set<String> nodesWithIncomingEdges = new HashSet<>();
+        // Find nodes with incoming edges
+        for (Edge<T> edge : graph.edges()) {
+            nodesWithIncomingEdges.add(edge.target().id());
+        }
+        // Connect dummy node to all nodes without incoming edges
+        for (String nodeId : graph.nodes().keySet()) {
+            if (!nodesWithIncomingEdges.contains(nodeId)) {
+                newEdges.add(new Edge<>(dummyNode, graph.nodes().get(nodeId)));
+            }
+        }
+
+        Graph<T> augmentedGraph = Graph.from(new ArrayList<>(newNodes.values()), new ArrayList<>(newEdges));
+
+        // Compute dominators starting from the dummy node
+        Map<String, Set<String>> dominators = computeGraphDominators(augmentedGraph, dummyNodeId);
+        // Remove the dummy node from the result
+        dominators.remove(dummyNodeId);
+        // Remove self-dominators for all nodes
+        for (String nodeId : dominators.keySet()) {
+            Set<String> doms = dominators.get(nodeId);
+            doms.remove(dummyNodeId);
+            dominators.put(nodeId, doms);
+        }
+
+        return dominators;
+    }
+
+    private static <T> Map<String, Set<String>> computeGraphDominators(
             Graph<T> graph, String startNodeId) {
         if (graph == null || graph.nodes() == null || graph.nodes().isEmpty()) {
             throw new IllegalArgumentException("Graph cannot be null or empty");
@@ -42,7 +84,7 @@ public class GraphAlgorithms {
                 }
 
                 // Get the current dominators for this node
-                Set<String> oldDominators = new HashSet<>(dominators.get(nodeId));
+                Set<String> oldDominators = dominators.get(nodeId);
 
                 // Compute new dominators as the intersection of dominators of all predecessors
                 Set<String> newDominators = null;
