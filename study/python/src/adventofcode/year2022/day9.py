@@ -41,16 +41,16 @@ def move(direction: Direction, knots_positions: list[tuple[int, int]]) -> list[t
 
     return knots_positions
 
-def make_knot_follow(h_position: tuple[int, int], t_position: tuple[int, int]) -> tuple[int, int]:
-    distance = (h_position[0] - t_position[0], h_position[1] - t_position[1])
+def make_knot_follow(front: tuple[int, int], back: tuple[int, int]) -> tuple[int, int]:
+    distance = (front[0] - back[0], front[1] - back[1])
 
     abs_distance = (abs(distance[0]), abs(distance[1]))
     if abs_distance == (0, 0) or abs_distance == (1, 0) or abs_distance == (0, 1) or abs_distance == (1, 1):
-        return t_position
+        return back
 
     direction_x = 0 if distance[0] == 0 else distance[0] / abs_distance[0]
     direction_y = 0 if distance[1] == 0 else distance[1] / abs_distance[1]
-    return t_position[0] + direction_x, t_position[1] + direction_y
+    return back[0] + direction_x, back[1] + direction_y
 
 def parse_day9(data: str) -> list[tuple[Direction, int]]:
     result = []
