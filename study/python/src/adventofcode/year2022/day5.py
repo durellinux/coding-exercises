@@ -1,14 +1,18 @@
 type Day5Input = tuple[list[list[str]], list[list[int]]]
 
-def solve_day5_part1(data: Day5Input) -> str:
-    return solve_day5(data, False)
+def solve_day5_part1(data: str) -> str:
+    total_stacks = get_stacks_number(data)
+    state = parse_input_day5(data, total_stacks)
+    return solve_day5(state, False)
 
-def solve_day5_part2(data: Day5Input) -> str:
-    return solve_day5(data, True)
+def solve_day5_part2(data: str) -> str:
+    total_stacks = get_stacks_number(data)
+    state = parse_input_day5(data, total_stacks)
+    return solve_day5(state, True)
 
-def solve_day5(data: Day5Input, do_reverse) -> str:
-    stacks: list[list[str]] = data[0]
-    instructions: list[list[int]] = data[1]
+def solve_day5(state: Day5Input, do_reverse) -> str:
+    stacks: list[list[str]] = state[0]
+    instructions: list[list[int]] = state[1]
 
     for instruction in instructions:
         from_stack = instruction[1]
@@ -29,7 +33,7 @@ def solve_day5(data: Day5Input, do_reverse) -> str:
 
     return "".join(top_crates)
 
-def parse_input_day5(input: str, total_stacks: int) -> Day5Input:
+def parse_input_day5(data: str, total_stacks: int) -> Day5Input:
     stacks: list[list[str]] = []
     instructions: list[list[int]] = []
 
@@ -37,7 +41,7 @@ def parse_input_day5(input: str, total_stacks: int) -> Day5Input:
         stacks.append([])
 
     parsing_stacks: bool = True
-    for line in input.splitlines():
+    for line in data.splitlines():
         if len(line.strip()) == 0:
             continue
 
@@ -60,3 +64,9 @@ def parse_input_day5(input: str, total_stacks: int) -> Day5Input:
 
     return stacks, instructions
 
+def get_stacks_number(data: str) -> int:
+    for line in data.splitlines():
+        if line.startswith(' 1'):
+            return int(line[-1])
+
+    raise ValueError

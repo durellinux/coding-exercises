@@ -1,7 +1,5 @@
-from os.path import split
-from src.adventofcode.utils import read_input_file
-
-def solve_day4_part1(pairs: list[list[str]]) -> int:
+def solve_day4_part1(data: str) -> int:
+    pairs: list[list[str]] = parse_day4_input(data)
     included = 0
 
     for pair in pairs:
@@ -14,7 +12,8 @@ def solve_day4_part1(pairs: list[list[str]]) -> int:
 
     return included
 
-def solve_day4_part2(pairs: list[list[str]]) -> int:
+def solve_day4_part2(data: str) -> int:
+    pairs: list[list[str]] = parse_day4_input(data)
     included = 0
 
     for pair in pairs:
@@ -27,8 +26,8 @@ def solve_day4_part2(pairs: list[list[str]]) -> int:
 
     return included
 
-def get_start_end(range: str) -> list[int]:
-    return list(map(int, range.strip().split("-")))
+def get_start_end(range_str: str) -> list[int]:
+    return list(map(int, range_str.strip().split("-")))
 
 def is_inside(range1: list[int], range2: list[int]) -> bool:
     return range1[0] >= range2[0] and range1[1] <= range2[1]
@@ -36,8 +35,8 @@ def is_inside(range1: list[int], range2: list[int]) -> bool:
 def do_overlap(range1: list[int], range2: list[int]) -> bool:
     return range1[0] <= range2[1] and range1[1] >= range2[0]
 
-def parse_day4_input(input: str) -> list[list[str]]:
-    lines = input.splitlines()
+def parse_day4_input(data: str) -> list[list[str]]:
+    lines = data.splitlines()
     data = []
     for line in lines:
         data.append(line.strip().split(","))

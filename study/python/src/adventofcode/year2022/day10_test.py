@@ -1,9 +1,6 @@
 from src.adventofcode.year2022.day10 import solve_day10_part1, solve_day10_part2
 from src.adventofcode.year2022.utils2022 import read_input_2022
 
-def test_debug():
-    solve_day10_part1("""noop\naddx 3\naddx -5""")
-
 def test_example_1():
     data = read_input_2022("day10_example.txt")
     result = solve_day10_part1(data)
