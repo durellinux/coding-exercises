@@ -192,7 +192,6 @@ def parse_day17(data: str) -> list[int]:
 
     return commands
 
-
 class HorizontalBrick(TetrisBrick):
     def __init__(self, position: Coordinate):
         super().__init__(position)
