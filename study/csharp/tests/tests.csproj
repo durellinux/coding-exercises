@@ -10,6 +10,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="FluentAssertions" Version="8.8.0" />
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
         <PackageReference Include="NUnit" Version="3.13.2" />
         <PackageReference Include="NUnit3TestAdapter" Version="4.0.0" />
@@ -18,6 +19,15 @@
 
     <ItemGroup>
       <ProjectReference Include="..\src\src.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day1-test.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day1.txt">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
