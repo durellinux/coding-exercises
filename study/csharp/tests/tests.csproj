@@ -28,6 +28,21 @@
       <None Update="gianlucadurelli\adventofcode\year2025\resources\day1.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+<<<<<<< Updated upstream
+=======
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day2-test.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day2.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day3.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day3-test.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+>>>>>>> Stashed changes
     </ItemGroup>
 
 </Project>
