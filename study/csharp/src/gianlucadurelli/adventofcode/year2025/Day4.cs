@@ -55,6 +55,41 @@ public class Day4
 
         return removableRolls;
     }
+    
+    
+    public int PartBonus(IList<string> input)
+    {
+        int iterations = 0;
+        
+        ISet<Position> paperRolls = new HashSet<Position>();
+        for (int r = 0; r < input.Count; r++)
+        {
+            char[] chars = input[r].ToCharArray();
+            for (int c = 0; c < chars.Length; c++)
+            {
+                if (chars[c] == '@')
+                {
+                    paperRolls.Add(new(r, c));
+                }
+            }
+        }
+
+        bool canRemoveRolls = true;
+        while (canRemoveRolls)
+        {
+            iterations++;
+            ISet<Position> paperRollsToRemove = GetAccessibleRolls(paperRolls);
+
+            foreach (Position roll in paperRollsToRemove)
+            {
+                paperRolls.Remove(roll);
+            }
+
+            canRemoveRolls = paperRollsToRemove.Count > 0;
+        }
+
+        return iterations;
+    }
 
     private ISet<Position> GetAccessibleRolls(ISet<Position> paperRolls)
     {
