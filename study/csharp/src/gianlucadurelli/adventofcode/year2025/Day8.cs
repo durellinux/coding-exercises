@@ -1,3 +1,5 @@
+using src.gianlucadurelli.datastructures.dsu;
+
 namespace src.gianlucadurelli.adventofcode.year2025;
 using System.Linq;
 
@@ -22,76 +24,28 @@ public class Day8
             OrderBy(v => EuclideanDistance(v.Item1, v.Item2))
             .ToList();
 
-        Dictionary<Coordinate3D, int> boxToCircuit = new Dictionary<Coordinate3D, int>();
-        Dictionary<int, ISet<Coordinate3D>> circuitToBox = new Dictionary<int, ISet<Coordinate3D>>();
+        DsuDummy<Coordinate3D> dsu = new();
 
-        int nextCircuitId = 1;
         for (int i = 0; i < connections; i++)
         {
             var (box1, box2) = sortedPairs[i];
-            bool box1InCircuit = boxToCircuit.ContainsKey(box1);
-            bool box2InCircuit = boxToCircuit.ContainsKey(box2);
+            long set1 = dsu.Find(box1);
+            long set2 = dsu.Find(box2);
+            dsu.Merge(set1, set2);
+        }
 
-            if (!box1InCircuit && !box2InCircuit)
-            {
-                int circuitId = nextCircuitId;
-                nextCircuitId++;
-                boxToCircuit.Add(box1, circuitId);
-                boxToCircuit.Add(box2, circuitId);
-                ISet<Coordinate3D> group = new HashSet<Coordinate3D>();
-                group.Add(box1);
-                group.Add(box2);
-                circuitToBox.Add(circuitId, group);
-            } else if (box1InCircuit && !box2InCircuit)
-            {
-                int circuitId = boxToCircuit[box1];
-                boxToCircuit.Add(box2, circuitId);
-                circuitToBox[circuitId].Add(box2);
-            } else if (!box1InCircuit && box2InCircuit)
-            {
-                int circuitId = boxToCircuit[box2];
-                boxToCircuit.Add(box1, circuitId);
-                circuitToBox[circuitId].Add(box1);
-            }
-            else
-            {
-                int circuitId1 = boxToCircuit[box1];
-                int circuitId2 = boxToCircuit[box2];
-                if (circuitId1 == circuitId2)
-                {
-                    continue;
-                }
-
-                ISet<Coordinate3D> circuit1 = circuitToBox[circuitId1];
-                ISet<Coordinate3D> circuit2 = circuitToBox[circuitId2];
-                
-
-                if (circuit1.Count <= circuit2.Count)
-                {
-                    circuit2.UnionWith(circuit1);
-                    circuitToBox.Remove(circuitId1);
-                    foreach (var box in circuit1)
-                    {
-                        boxToCircuit[box] = circuitId2;
-                    }
-                }
-                else
-                {
-                    circuit1.UnionWith(circuit2);
-                    circuitToBox.Remove(circuitId2);
-                    foreach (var box in circuit2)
-                    {
-                        boxToCircuit[box] = circuitId1;
-                    }
-                }
-            }
+        Dictionary<long, int> setsSize = new Dictionary<long, int>();
+        foreach (var box in boxes)
+        {
+            long set = dsu.Find(box);
+            setsSize[set] = dsu.Get(set).Count;
         }
 
         long result = 1;
         int count = 0;
-        foreach (var circuitEntry in circuitToBox.Values.OrderBy(v => v.Count).Reverse())
+        foreach (var size in setsSize.Values.OrderBy(v => v).Reverse())
         {
-            result *= circuitEntry.Count;
+            result *= size;
             count++;
             if (count == 3)
             {
@@ -101,7 +55,6 @@ public class Day8
 
         return result;
     }
-    
     
     public long Part2(IList<string> input)
     {
@@ -120,71 +73,16 @@ public class Day8
             OrderBy(v => EuclideanDistance(v.Item1, v.Item2))
             .ToList();
 
-        Dictionary<Coordinate3D, int> boxToCircuit = new Dictionary<Coordinate3D, int>();
-        Dictionary<int, ISet<Coordinate3D>> circuitToBox = new Dictionary<int, ISet<Coordinate3D>>();
+        Dsu<Coordinate3D> dsu = new();
 
-        int nextCircuitId = 1;
         foreach (var pair in sortedPairs)
         {
             var (box1, box2) = pair;
-            bool box1InCircuit = boxToCircuit.ContainsKey(box1);
-            bool box2InCircuit = boxToCircuit.ContainsKey(box2);
+            Coordinate3D set1 = dsu.Find(box1);
+            Coordinate3D set2 = dsu.Find(box2);
+            dsu.Merge(set1, set2);
 
-            if (!box1InCircuit && !box2InCircuit)
-            {
-                int circuitId = nextCircuitId;
-                nextCircuitId++;
-                boxToCircuit.Add(box1, circuitId);
-                boxToCircuit.Add(box2, circuitId);
-                ISet<Coordinate3D> group = new HashSet<Coordinate3D>();
-                group.Add(box1);
-                group.Add(box2);
-                circuitToBox.Add(circuitId, group);
-            } else if (box1InCircuit && !box2InCircuit)
-            {
-                int circuitId = boxToCircuit[box1];
-                boxToCircuit.Add(box2, circuitId);
-                circuitToBox[circuitId].Add(box2);
-            } else if (!box1InCircuit && box2InCircuit)
-            {
-                int circuitId = boxToCircuit[box2];
-                boxToCircuit.Add(box1, circuitId);
-                circuitToBox[circuitId].Add(box1);
-            }
-            else
-            {
-                int circuitId1 = boxToCircuit[box1];
-                int circuitId2 = boxToCircuit[box2];
-                if (circuitId1 == circuitId2)
-                {
-                    continue;
-                }
-
-                ISet<Coordinate3D> circuit1 = circuitToBox[circuitId1];
-                ISet<Coordinate3D> circuit2 = circuitToBox[circuitId2];
-                
-
-                if (circuit1.Count <= circuit2.Count)
-                {
-                    circuit2.UnionWith(circuit1);
-                    circuitToBox.Remove(circuitId1);
-                    foreach (var box in circuit1)
-                    {
-                        boxToCircuit[box] = circuitId2;
-                    }
-                }
-                else
-                {
-                    circuit1.UnionWith(circuit2);
-                    circuitToBox.Remove(circuitId2);
-                    foreach (var box in circuit2)
-                    {
-                        boxToCircuit[box] = circuitId1;
-                    }
-                }
-            }
-
-            if (circuitToBox.Count == 1 && circuitToBox.First().Value.Count == boxes.Count)
+            if (dsu.GetSize(box1).Equals(boxes.Count))
             {
                 return box1.X * (long) box2.X;
             }
