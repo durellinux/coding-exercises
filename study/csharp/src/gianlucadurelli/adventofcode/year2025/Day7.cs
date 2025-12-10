@@ -1,9 +1,8 @@
 namespace src.gianlucadurelli.adventofcode.year2025;
+using utils;
 
 public class Day7
 {
-    public record Coordinate(int Row, int Col);
-    
     public int Part1(IList<string> input)
     {
         var (start, splitters, rows, cols) = ParseInput(input);
