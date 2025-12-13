@@ -94,6 +94,12 @@
       <None Update="gianlucadurelli\adventofcode\year2025\resources\day11-part2-test.txt">
         <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day12-test.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+      <None Update="gianlucadurelli\adventofcode\year2025\resources\day12.txt">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>
